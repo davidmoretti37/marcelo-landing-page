@@ -9,6 +9,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Italiana&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script src="https://unpkg.com/topojson-client@3"></script>
 <style>
 @font-face {
   font-family: 'Makro';
@@ -18,20 +20,26 @@
 }
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 :root {
-  --navy: #0A0F1E;
-  --navy-mid: #111827;
+  --navy: #0C1220;
+  --navy-mid: #131B2B;
+  --bg: #F8F7F4;
+  --bg-alt: #EFEEE9;
   --white: #FFFFFF;
   --gold: #B8976A;
-  --text-light: rgba(255,255,255,0.50);
-  --text-dim: rgba(255,255,255,0.25);
-  --border: rgba(255,255,255,0.06);
+  --text-dark: #0C1220;
+  --text-body-dark: #3A4258;
+  --text-body: rgba(255,255,255,0.80);
+  --text-light: rgba(255,255,255,0.58);
+  --text-dim: rgba(255,255,255,0.32);
+  --border: rgba(255,255,255,0.08);
+  --border-light: rgba(12,18,32,0.08);
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
 }
 html { overflow-x: hidden; scroll-behavior: smooth; }
 body {
   font-family: 'Inter', -apple-system, sans-serif;
-  background: var(--navy);
-  color: var(--white);
+  background: var(--bg);
+  color: var(--text-dark);
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   cursor: none;
@@ -53,19 +61,19 @@ a { text-decoration: none; color: inherit; }
 }
 .mesh-orb-1 {
   width: 600px; height: 600px;
-  background: rgba(30, 60, 140, 0.06);
+  background: rgba(184, 151, 106, 0.07);
   top: -10%; left: -5%;
   animation: meshFloat1 20s ease-in-out infinite alternate;
 }
 .mesh-orb-2 {
   width: 500px; height: 500px;
-  background: rgba(184, 151, 106, 0.04);
+  background: rgba(180, 200, 230, 0.08);
   bottom: -10%; right: -5%;
   animation: meshFloat2 24s ease-in-out infinite alternate;
 }
 .mesh-orb-3 {
   width: 400px; height: 400px;
-  background: rgba(30, 60, 140, 0.04);
+  background: rgba(184, 151, 106, 0.05);
   top: 40%; left: 50%;
   animation: meshFloat3 18s ease-in-out infinite alternate;
 }
@@ -111,7 +119,7 @@ a { text-decoration: none; color: inherit; }
 /* ═══ FILM GRAIN ═══ */
 .film-grain {
   position: fixed; inset: 0; z-index: 9999;
-  pointer-events: none; opacity: 0.025;
+  pointer-events: none; opacity: 0.018;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
   background-repeat: repeat;
   background-size: 256px 256px;
@@ -128,7 +136,7 @@ a { text-decoration: none; color: inherit; }
 /* ═══ PRELOADER ═══ */
 .preloader {
   position: fixed; inset: 0; z-index: 100000;
-  background: var(--navy);
+  background: var(--bg);
   display: flex; flex-direction: column;
   align-items: center; justify-content: center;
   gap: 32px;
@@ -136,7 +144,7 @@ a { text-decoration: none; color: inherit; }
 .pre-bolt { width: 80px; height: auto; }
 .pre-bolt path {
   fill: none;
-  stroke: rgba(255,255,255,0.9);
+  stroke: rgba(12,18,32,0.7);
   stroke-width: 8;
   stroke-linecap: round;
   stroke-linejoin: round;
@@ -145,25 +153,25 @@ a { text-decoration: none; color: inherit; }
   font-family: 'Makro', Georgia, serif;
   font-size: 14px; letter-spacing: 0.35em;
   text-transform: uppercase;
-  color: rgba(255,255,255,0.4);
+  color: rgba(12,18,32,0.4);
   opacity: 0;
 }
 .pre-bar-wrap {
   width: 200px; height: 1px;
-  background: rgba(255,255,255,0.08);
+  background: rgba(12,18,32,0.08);
   border-radius: 1px;
   overflow: hidden;
   opacity: 0;
 }
 .pre-bar {
   width: 0%; height: 100%;
-  background: linear-gradient(90deg, rgba(30,60,140,0.8), var(--gold));
+  background: linear-gradient(90deg, rgba(30,60,140,0.5), var(--gold));
   border-radius: 1px;
   transition: width 0.1s linear;
 }
 .pre-pct {
   font-size: 11px; letter-spacing: 0.2em;
-  color: rgba(255,255,255,0.2);
+  color: rgba(12,18,32,0.2);
   font-weight: 300;
   opacity: 0;
 }
@@ -175,14 +183,25 @@ a { text-decoration: none; color: inherit; }
   padding: 32px 48px;
   transition: background 0.5s, padding 0.4s var(--ease-out), backdrop-filter 0.5s;
   opacity: 0;
+  color: var(--white);
+  text-shadow: 0 1px 12px rgba(0,0,0,0.25);
 }
 .nav.show { opacity: 1; transition: opacity 0.8s 0.3s, background 0.5s, padding 0.4s var(--ease-out); }
 .nav.scrolled {
   padding: 18px 48px;
-  background: rgba(10,15,30,0.85);
+  background: rgba(248,247,244,0.90);
   backdrop-filter: blur(40px);
   -webkit-backdrop-filter: blur(40px);
 }
+.nav.scrolled .nav-logo-text { color: var(--text-dark); }
+.nav.scrolled .nav-logo svg path { fill: var(--text-dark); }
+.nav.scrolled .nav-links li a { color: rgba(12,18,32,0.55); }
+.nav.scrolled .nav-links li a:hover { color: var(--text-dark); }
+.nav.scrolled .nav-links li a::after { background: var(--text-dark); }
+.nav.scrolled .nav-cta { border-color: rgba(12,18,32,0.15); color: var(--text-dark); }
+.nav.scrolled .nav-cta:hover { background: var(--navy); color: var(--white); border-color: var(--navy); }
+.nav.scrolled .mobile-toggle svg { stroke: var(--text-dark); }
+.nav.scrolled { text-shadow: none; }
 .nav-logo { display: flex; align-items: center; gap: 14px; }
 .nav-logo svg { height: 24px; width: auto; }
 .nav-logo-text {
@@ -193,7 +212,7 @@ a { text-decoration: none; color: inherit; }
 .nav-links li a {
   font-size: 11px; font-weight: 400;
   letter-spacing: 0.15em; text-transform: uppercase;
-  color: rgba(255,255,255,0.5);
+  color: rgba(255,255,255,0.6);
   transition: color 0.3s;
   position: relative;
 }
@@ -251,9 +270,9 @@ a { text-decoration: none; color: inherit; }
 .hero-overlay {
   position: absolute; inset: 0; z-index: 2;
   background: linear-gradient(180deg,
-    rgba(10,15,30,0.10) 0%,
-    rgba(10,15,30,0.20) 50%,
-    rgba(10,15,30,0.80) 100%
+    rgba(12,18,32,0.15) 0%,
+    rgba(12,18,32,0.25) 50%,
+    rgba(12,18,32,0.55) 100%
   );
 }
 /* Gradual blur at bottom of hero */
@@ -275,6 +294,8 @@ a { text-decoration: none; color: inherit; }
 .hero-content {
   position: relative; z-index: 10;
   text-align: center; padding: 0 24px;
+  color: var(--white);
+  text-shadow: 0 2px 20px rgba(0,0,0,0.3);
 }
 .hero-icon { width: 36px; margin: 0 auto 24px; }
 .hero-icon svg { width: 100%; height: auto; opacity: 0.7; }
@@ -328,9 +349,9 @@ a { text-decoration: none; color: inherit; }
 
 /* ═══ MARQUEE ═══ */
 .marquee-section {
-  border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
-  background: var(--navy);
+  border-top: 1px solid var(--border-light);
+  border-bottom: 1px solid var(--border-light);
+  background: #E2E0DA;
   overflow: hidden;
   padding: 20px 0;
 }
@@ -342,16 +363,16 @@ a { text-decoration: none; color: inherit; }
 .marquee-item {
   font-family: 'Italiana', Georgia, serif;
   font-size: 15px; letter-spacing: 0.06em;
-  color: rgba(255,255,255,0.40);
+  color: rgba(12,18,32,0.55);
   white-space: nowrap;
   padding: 0 24px;
   display: flex; align-items: center; gap: 24px;
   transition: color 0.3s;
 }
-.marquee-section:hover .marquee-item { color: rgba(255,255,255,0.55); }
+.marquee-section:hover .marquee-item { color: rgba(12,18,32,0.70); }
 .marquee-dot {
   width: 3px; height: 3px; border-radius: 50%;
-  background: rgba(255,255,255,0.25);
+  background: rgba(12,18,32,0.35);
   flex-shrink: 0;
 }
 @keyframes marqueeScroll {
@@ -362,25 +383,25 @@ a { text-decoration: none; color: inherit; }
 /* ═══ STATS BAR ═══ */
 .stats-bar {
   display: grid; grid-template-columns: repeat(4, 1fr);
-  border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
-  background: var(--navy);
+  border-top: 1px solid var(--border-light);
+  border-bottom: 1px solid var(--border-light);
+  background: var(--bg-alt);
 }
 .stat-cell {
   text-align: center; padding: 64px 32px;
-  border-right: 1px solid var(--border);
+  border-right: 1px solid var(--border-light);
 }
 .stat-cell:last-child { border-right: none; }
 .stat-num {
   font-family: 'Makro', Georgia, serif;
   font-size: clamp(44px, 5vw, 72px);
   font-weight: 500; line-height: 1;
-  color: var(--white); margin-bottom: 10px;
+  color: var(--text-dark); margin-bottom: 10px;
 }
 .stat-num .gold { color: var(--gold); }
 .stat-desc {
   font-size: 10px; letter-spacing: 0.2em;
-  text-transform: uppercase; color: var(--text-dim);
+  text-transform: uppercase; color: var(--text-body-dark);
 }
 
 /* ═══ ABOUT ═══ */
@@ -397,7 +418,7 @@ a { text-decoration: none; color: inherit; }
 }
 .about-img-reveal {
   position: absolute; inset: 0;
-  background: var(--navy);
+  background: var(--bg);
   transform-origin: right;
   z-index: 2;
 }
@@ -405,6 +426,74 @@ a { text-decoration: none; color: inherit; }
   display: flex; flex-direction: column; justify-content: center;
   padding: clamp(48px, 8vw, 100px) clamp(32px, 6vw, 80px);
   background: var(--white);
+}
+
+/* ═══ GLOBE SECTION ═══ */
+.globe-section {
+  background: var(--bg);
+  padding: clamp(80px, 10vw, 140px) clamp(24px, 5vw, 64px);
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid var(--border-light);
+}
+.globe-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(40px, 5vw, 80px);
+  align-items: center;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+.globe-text {
+  display: flex; flex-direction: column; justify-content: center;
+}
+.globe-section .section-title {
+  color: var(--text-dark);
+  margin-bottom: 20px;
+}
+.globe-subtitle {
+  font-size: 16px; font-weight: 300; line-height: 1.8;
+  color: var(--text-body-dark);
+  max-width: 440px;
+  margin-bottom: 48px;
+}
+.globe-cities {
+  display: flex; flex-direction: column; gap: 20px;
+}
+.globe-city {
+  display: flex; align-items: center; gap: 16px;
+  padding-left: 16px;
+  border-left: 2px solid var(--gold);
+}
+.globe-city-name {
+  font-family: 'Makro', Georgia, serif;
+  font-size: 16px; font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-dark);
+}
+.globe-city-dot {
+  width: 4px; height: 4px; border-radius: 50%;
+  background: var(--gold);
+  flex-shrink: 0;
+  opacity: 0.5;
+}
+.globe-city-label {
+  font-size: 10px; letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-body-dark);
+  opacity: 0.5;
+}
+.globe-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+  max-width: 580px;
+  justify-self: center;
+}
+.globe-canvas {
+  width: 100%;
+  height: 100%;
 }
 .label {
   font-size: 10px; font-weight: 500;
@@ -447,12 +536,12 @@ a { text-decoration: none; color: inherit; }
 .bolt-divider {
   padding: 80px 0;
   display: flex; justify-content: center;
-  background: var(--navy);
+  background: var(--bg);
 }
 .bolt-divider svg { width: 60px; height: auto; }
 .bolt-divider path {
   fill: none;
-  stroke: rgba(184,151,106,0.45);
+  stroke: rgba(184,151,106,0.6);
   stroke-width: 6;
 }
 
@@ -468,7 +557,7 @@ a { text-decoration: none; color: inherit; }
 }
 .vtext-overlay {
   position: absolute; inset: 0;
-  background: radial-gradient(ellipse 70% 60% at 50% 50%, rgba(10,15,30,0.3), rgba(10,15,30,0.85));
+  background: radial-gradient(ellipse 70% 60% at 50% 50%, rgba(12,18,32,0.10), rgba(12,18,32,0.45));
   z-index: 1;
 }
 .vtext-mask {
@@ -506,15 +595,16 @@ a { text-decoration: none; color: inherit; }
 }
 .svc-slide-overlay {
   position: absolute; inset: 0;
-  background: linear-gradient(90deg, rgba(10,15,30,0.88) 0%, rgba(10,15,30,0.5) 55%, transparent 100%);
+  background: linear-gradient(90deg, rgba(12,18,32,0.60) 0%, rgba(12,18,32,0.25) 55%, transparent 100%);
 }
 .svc-slide:nth-child(even) .svc-slide-overlay {
-  background: linear-gradient(270deg, rgba(10,15,30,0.88) 0%, rgba(10,15,30,0.5) 55%, transparent 100%);
+  background: linear-gradient(270deg, rgba(12,18,32,0.60) 0%, rgba(12,18,32,0.25) 55%, transparent 100%);
 }
 .svc-text {
   position: relative; z-index: 2;
   padding: 48px clamp(32px, 6vw, 100px);
   max-width: 560px;
+  color: var(--white);
   border-top: 2px solid transparent;
   transition: border-color 0.6s var(--ease-out), transform 0.5s var(--ease-out), background 0.5s;
 }
@@ -556,7 +646,7 @@ a { text-decoration: none; color: inherit; }
 }
 .svc-text p {
   font-size: 15px; font-weight: 300; line-height: 1.85;
-  color: var(--text-light); max-width: 440px;
+  color: var(--text-body); max-width: 440px;
 }
 .svc-link {
   display: inline-flex; align-items: center; gap: 12px;
@@ -569,7 +659,7 @@ a { text-decoration: none; color: inherit; }
 .svc-link svg { width: 16px; height: 16px; stroke: var(--gold); fill: none; stroke-width: 1.5; }
 
 /* ═══ FLEET GALLERY ═══ */
-.fleet { background: var(--navy-mid); }
+.fleet { background: var(--bg-alt); }
 .fleet-header {
   padding: clamp(60px, 8vw, 100px) clamp(24px, 5vw, 64px) clamp(24px, 3vw, 40px);
 }
@@ -590,13 +680,13 @@ a { text-decoration: none; color: inherit; }
   width: 100%; height: 100%; object-fit: cover;
   transition: transform 1.2s var(--ease-out);
 }
-.fleet-item video { background: var(--navy); }
+.fleet-item video { background: var(--bg-alt); }
 @media (hover: hover) {
   .fleet-item:hover img, .fleet-item:hover video { transform: scale(1.03); }
 }
 .fleet-item-overlay {
   position: absolute; inset: 0;
-  background: linear-gradient(180deg, transparent 50%, rgba(10,15,30,0.5));
+  background: linear-gradient(180deg, transparent 50%, rgba(12,18,32,0.4));
   opacity: 0; transition: opacity 0.4s; pointer-events: none;
 }
 .fleet-item:hover .fleet-item-overlay { opacity: 1; }
@@ -612,7 +702,7 @@ a { text-decoration: none; color: inherit; }
 /* ═══ QUOTE ═══ */
 .quote-section {
   position: relative; overflow: hidden;
-  background: var(--navy-mid);
+  background: var(--bg);
   padding: clamp(100px, 15vw, 200px) clamp(24px, 8vw, 120px);
   display: flex; align-items: center; justify-content: center;
 }
@@ -621,7 +711,7 @@ a { text-decoration: none; color: inherit; }
   transform: translateX(-50%);
   font-family: 'Makro', Georgia, serif;
   font-size: clamp(200px, 30vw, 500px);
-  color: rgba(255,255,255,0.03);
+  color: rgba(12,18,32,0.04);
   line-height: 1; pointer-events: none;
   user-select: none;
 }
@@ -630,7 +720,7 @@ a { text-decoration: none; color: inherit; }
   font-family: 'Makro', Georgia, serif;
   font-size: clamp(24px, 3.5vw, 44px);
   font-weight: 500; line-height: 1.5;
-  color: var(--white);
+  color: var(--text-dark);
 }
 .quote-text .word {
   opacity: 0.08;
@@ -650,7 +740,7 @@ a { text-decoration: none; color: inherit; }
 
 /* ═══ CONTACT ═══ */
 .contact {
-  background: var(--navy);
+  background: var(--bg-alt);
   padding: clamp(80px, 12vw, 160px) clamp(24px, 5vw, 64px);
 }
 .contact .container { max-width: 1280px; margin: 0 auto; }
@@ -658,8 +748,8 @@ a { text-decoration: none; color: inherit; }
   display: grid; grid-template-columns: 1fr 1fr;
   gap: 100px; align-items: start;
 }
-.contact-left .section-title { color: var(--white); margin-bottom: 28px; }
-.body-text.dim { color: var(--text-light); }
+.contact-left .section-title { color: var(--text-dark); margin-bottom: 28px; }
+.body-text.dim { color: var(--text-body-dark); }
 .contact-items { display: flex; flex-direction: column; gap: 20px; margin-top: 48px; }
 .ct-row {
   display: flex; align-items: center; gap: 16px;
@@ -668,22 +758,22 @@ a { text-decoration: none; color: inherit; }
   transition: border-color 0.4s var(--ease-out), padding-left 0.4s var(--ease-out), background 0.4s;
 }
 .ct-row:hover {
-  border-left-color: rgba(30,60,140,0.8);
+  border-left-color: var(--gold);
   padding-left: 16px;
-  background: rgba(255,255,255,0.02);
+  background: rgba(12,18,32,0.02);
 }
 .ct-row svg { width: 20px; height: 20px; min-width: 20px; stroke: var(--gold); fill: none; stroke-width: 1.5; }
-.ct-label { font-size: 9px; font-weight: 500; letter-spacing: 0.25em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 2px; }
-.ct-value { font-size: 15px; }
+.ct-label { font-size: 9px; font-weight: 500; letter-spacing: 0.25em; text-transform: uppercase; color: rgba(12,18,32,0.35); margin-bottom: 2px; }
+.ct-value { font-size: 15px; color: var(--text-dark); }
 .contact-form { display: flex; flex-direction: column; gap: 20px; }
 .form-row { display: flex; gap: 20px; }
 .fg { display: flex; flex-direction: column; gap: 8px; flex: 1; }
-.fg label { font-size: 9px; font-weight: 500; letter-spacing: 0.25em; text-transform: uppercase; color: var(--text-dim); }
+.fg label { font-size: 9px; font-weight: 500; letter-spacing: 0.25em; text-transform: uppercase; color: rgba(12,18,32,0.35); }
 .fg input, .fg textarea, .fg select {
   padding: 16px 20px;
-  background: rgba(255,255,255,0.02);
-  border: 1px solid var(--border);
-  color: var(--white); font-family: 'Inter', sans-serif;
+  background: var(--white);
+  border: 1px solid var(--border-light);
+  color: var(--text-dark); font-family: 'Inter', sans-serif;
   font-size: 14px; font-weight: 300; outline: none;
   transition: border-color 0.3s, background 0.3s;
 }
@@ -691,10 +781,10 @@ a { text-decoration: none; color: inherit; }
   border-color: var(--gold);
   background: rgba(184,151,106,0.03);
 }
-.fg input::placeholder, .fg textarea::placeholder { color: rgba(255,255,255,0.12); }
+.fg input::placeholder, .fg textarea::placeholder { color: rgba(12,18,32,0.18); }
 .fg textarea { resize: vertical; min-height: 120px; }
 .fg select { -webkit-appearance: none; cursor: pointer; }
-.fg select option { background: var(--navy); }
+.fg select option { background: var(--white); }
 .btn-gold {
   align-self: flex-start;
   padding: 16px 44px;
@@ -709,16 +799,17 @@ a { text-decoration: none; color: inherit; }
 
 /* ═══ FOOTER ═══ */
 .footer {
-  background: var(--navy-mid);
-  border-top: 1px solid var(--border);
+  background: var(--bg-alt);
+  border-top: 1px solid var(--border-light);
   padding: 40px 64px;
   display: flex; align-items: center; justify-content: space-between;
 }
 .footer-logo { display: flex; align-items: center; gap: 12px; }
-.footer-logo svg { height: 18px; opacity: 0.25; }
-.footer-logo span { font-size: 10px; font-weight: 500; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(255,255,255,0.2); }
-.footer-offices { display: flex; gap: 32px; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(255,255,255,0.15); }
-.footer-copy { font-size: 10px; color: rgba(255,255,255,0.12); }
+.footer-logo svg { height: 18px; }
+.footer-logo svg path { fill: rgba(12,18,32,0.25); }
+.footer-logo span { font-size: 10px; font-weight: 500; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(12,18,32,0.20); }
+.footer-offices { display: flex; gap: 32px; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(12,18,32,0.15); }
+.footer-copy { font-size: 10px; color: rgba(12,18,32,0.12); }
 
 /* ═══ REVEAL UTILITY ═══ */
 .reveal {
@@ -745,11 +836,16 @@ a { text-decoration: none; color: inherit; }
   .about { grid-template-columns: 1fr; }
   .about-img { min-height: 50vh; }
   .about-text { padding: 64px 32px; }
+  .globe-layout { grid-template-columns: 1fr; text-align: center; }
+  .globe-text .label { justify-content: center; }
+  .globe-wrap { max-width: 340px; }
+  .globe-cities { align-items: center; }
+  .globe-subtitle { margin-left: auto; margin-right: auto; }
   .svc-slide { min-height: auto; height: auto; padding: 80px 0; }
-  .svc-slide-overlay { background: rgba(10,15,30,0.75) !important; }
+  .svc-slide-overlay { background: rgba(12,18,32,0.50) !important; }
   .svc-text { max-width: 100%; margin: 0 !important; padding: 0 32px; }
   .stats-bar { grid-template-columns: repeat(2, 1fr); }
-  .stat-cell { border-bottom: 1px solid var(--border); }
+  .stat-cell { border-bottom: 1px solid var(--border-light); }
   .fleet-grid { grid-template-columns: 1fr 1fr; grid-auto-rows: 35vh; }
   .fleet-item:nth-child(1),
   .fleet-item:nth-child(4),
@@ -893,7 +989,7 @@ a { text-decoration: none; color: inherit; }
 <section id="about">
   <div class="about">
     <div class="about-img">
-      <img src="assets/branding/PNG/Spark_Rifle-43.jpg" alt="Gulfstream with stairs">
+      <img src="assets/branding/PNG/NBAA_Spark-3.jpg" alt="Engine turbine blades detail">
       <div class="about-img-reveal" id="aboutReveal"></div>
     </div>
     <div class="about-text">
@@ -905,6 +1001,25 @@ a { text-decoration: none; color: inherit; }
         <p>"I knew how to serve, how to fly, and how to connect with people. That's what this company is built on."</p>
         <cite>Marcelo Borin — Founder</cite>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ GLOBE — GLOBAL REACH ═══ -->
+<section class="globe-section">
+  <div class="globe-layout">
+    <div class="globe-text">
+      <div class="label reveal">Global Presence</div>
+      <h2 class="section-title reveal">Worldwide<br>Reach</h2>
+      <p class="globe-subtitle reveal">Three decades of trusted relationships across borders, connecting buyers and sellers on every continent.</p>
+      <div class="globe-cities reveal">
+        <div class="globe-city"><div><div class="globe-city-name">Boca Raton</div><div class="globe-city-label">Florida, USA</div></div></div>
+        <div class="globe-city"><div><div class="globe-city-name">São Paulo</div><div class="globe-city-label">Brazil</div></div></div>
+        <div class="globe-city"><div><div class="globe-city-name">Dallas</div><div class="globe-city-label">Texas, USA</div></div></div>
+      </div>
+    </div>
+    <div class="globe-wrap reveal">
+      <canvas id="globeCanvas" class="globe-canvas" width="1000" height="1000"></canvas>
     </div>
   </div>
 </section>
@@ -931,7 +1046,7 @@ a { text-decoration: none; color: inherit; }
 <!-- ═══ SERVICES ═══ -->
 <section id="services">
   <div class="svc-slide">
-    <img src="assets/branding/PNG/Spark_Rifle-21.jpg" alt="Luxury cabin">
+    <img src="assets/branding/PNG/Spark_Rifle-28.jpg" alt="Luxury leather cabin seats">
     <div class="svc-slide-overlay"></div>
     <div class="svc-text">
       <div class="svc-num reveal">01</div>
@@ -941,7 +1056,7 @@ a { text-decoration: none; color: inherit; }
     </div>
   </div>
   <div class="svc-slide">
-    <img src="assets/branding/PNG/Spark_Rifle-40.jpg" alt="Aircraft with mountains">
+    <img src="assets/branding/PNG/Spark_Rifle-16.jpg" alt="Jet front-on tarmac detail">
     <div class="svc-slide-overlay"></div>
     <div class="svc-text">
       <div class="svc-num reveal">02</div>
@@ -951,7 +1066,7 @@ a { text-decoration: none; color: inherit; }
     </div>
   </div>
   <div class="svc-slide">
-    <img src="assets/branding/PNG/Spark_Rifle-48.jpg" alt="Fleet on tarmac">
+    <img src="assets/branding/PNG/NBAA_Spark-20.jpg" alt="Cockpit controls close-up">
     <div class="svc-slide-overlay"></div>
     <div class="svc-text">
       <div class="svc-num reveal">03</div>
@@ -966,12 +1081,12 @@ a { text-decoration: none; color: inherit; }
 <section id="fleet" class="fleet">
   <div class="fleet-header"><div class="container"><div class="label reveal">The Fleet</div></div></div>
   <div class="fleet-grid">
-    <div class="fleet-item reveal"><img src="assets/branding/PNG/Spark_Rifle-12.jpg" alt="Three jets" loading="lazy"><div class="fleet-item-overlay"></div><span class="fleet-item-label">Fleet</span></div>
+    <div class="fleet-item reveal"><img src="assets/branding/PNG/NBAA_Spark-6.jpg" alt="Engine nacelle detail" loading="lazy"><div class="fleet-item-overlay"></div><span class="fleet-item-label">Engineering</span></div>
     <div class="fleet-item reveal"><video autoplay muted playsinline><source src="assets/branding/Videos/clip1.mp4" type="video/mp4"></video><div class="fleet-item-overlay"></div><span class="fleet-item-label">In Motion</span></div>
-    <div class="fleet-item reveal"><img src="assets/branding/PNG/Spark_Rifle-30.jpg" alt="Interior" loading="lazy"><div class="fleet-item-overlay"></div><span class="fleet-item-label">Interior</span></div>
-    <div class="fleet-item reveal"><img src="assets/branding/PNG/Spark_Rifle-5.jpg" alt="Cabin" loading="lazy"><div class="fleet-item-overlay"></div><span class="fleet-item-label">Cabin</span></div>
+    <div class="fleet-item reveal"><img src="assets/branding/PNG/NBAA_Spark-18.jpg" alt="Landing gear mechanism" loading="lazy"><div class="fleet-item-overlay"></div><span class="fleet-item-label">Precision</span></div>
+    <div class="fleet-item reveal"><img src="assets/branding/PNG/Spark_Rifle-29.jpg" alt="Chrome landing gear detail" loading="lazy"><div class="fleet-item-overlay"></div><span class="fleet-item-label">Detail</span></div>
     <div class="fleet-item reveal"><video autoplay muted playsinline><source src="assets/branding/Videos/clip5.mp4" type="video/mp4"></video><div class="fleet-item-overlay"></div><span class="fleet-item-label">Departure</span></div>
-    <div class="fleet-item reveal"><img src="assets/branding/PNG/NBAA_Spark-1.jpg" alt="Engine" loading="lazy"><div class="fleet-item-overlay"></div><span class="fleet-item-label">Engineering</span></div>
+    <div class="fleet-item reveal"><img src="assets/branding/PNG/NBAA_Spark-15.jpg" alt="Fuel port detail" loading="lazy"><div class="fleet-item-overlay"></div><span class="fleet-item-label">Craft</span></div>
   </div>
 </section>
 
@@ -990,7 +1105,7 @@ a { text-decoration: none; color: inherit; }
     <div class="contact-grid">
       <div class="contact-left">
         <div class="label reveal">Get in Touch</div>
-        <h2 class="section-title reveal" style="color:var(--white)">Let's Talk<br>Aviation</h2>
+        <h2 class="section-title reveal">Let's Talk<br>Aviation</h2>
         <p class="body-text dim reveal">Ready to buy, sell, or manage your aircraft? Reach out directly to Marcelo and the team.</p>
         <div class="contact-items reveal">
           <div class="ct-row"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg><div><div class="ct-label">Phone</div><div class="ct-value">+1 (954) 994-4466</div></div></div>
@@ -1012,7 +1127,7 @@ a { text-decoration: none; color: inherit; }
 <!-- ═══ FOOTER ═══ -->
 <footer class="footer">
   <div class="footer-logo">
-    <svg viewBox="0 0 362 448" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M200.264 1.18837L0.61804 225.27C0.262735 225.669 0.0664062 226.185 0.0664062 226.719V227.658V330.356C0.0664062 331.558 1.04122 332.533 2.24371 332.533H153.334C154.536 332.533 155.511 331.558 155.511 330.356V258.665C155.511 257.463 154.536 256.488 153.334 256.488H79.9366C78.042 256.488 77.0514 254.236 78.3318 252.839L203.494 116.334C203.862 115.933 204.067 115.408 204.067 114.863V2.63675C204.067 0.635919 201.595 -0.305547 200.264 1.18837ZM161.803 446.69L361.449 222.608C361.804 222.21 362 221.694 362 221.16V220.221V117.523C362 116.32 361.025 115.346 359.823 115.346H208.733C207.531 115.346 206.556 116.32 206.556 117.523V189.214C206.556 190.416 207.531 191.391 208.733 191.391H282.13C284.025 191.391 285.015 193.643 283.735 195.04L158.572 331.545C158.204 331.946 158 332.471 158 333.016V445.242C158 447.243 160.472 448.184 161.803 446.69Z" fill="rgba(255,255,255,0.25)"/></svg>
+    <svg viewBox="0 0 362 448" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M200.264 1.18837L0.61804 225.27C0.262735 225.669 0.0664062 226.185 0.0664062 226.719V227.658V330.356C0.0664062 331.558 1.04122 332.533 2.24371 332.533H153.334C154.536 332.533 155.511 331.558 155.511 330.356V258.665C155.511 257.463 154.536 256.488 153.334 256.488H79.9366C78.042 256.488 77.0514 254.236 78.3318 252.839L203.494 116.334C203.862 115.933 204.067 115.408 204.067 114.863V2.63675C204.067 0.635919 201.595 -0.305547 200.264 1.18837ZM161.803 446.69L361.449 222.608C361.804 222.21 362 221.694 362 221.16V220.221V117.523C362 116.32 361.025 115.346 359.823 115.346H208.733C207.531 115.346 206.556 116.32 206.556 117.523V189.214C206.556 190.416 207.531 191.391 208.733 191.391H282.13C284.025 191.391 285.015 193.643 283.735 195.04L158.572 331.545C158.204 331.946 158 332.471 158 333.016V445.242C158 447.243 160.472 448.184 161.803 446.69Z" fill="rgba(12,18,32,0.25)"/></svg>
     <span>Spark Aviation</span>
   </div>
   <div class="footer-offices"><span>Boca Raton</span><span>São Paulo</span><span>Dallas</span></div>
@@ -1076,7 +1191,7 @@ preTl
       prePct.textContent = loadPct + '%';
     }
   }, 0)
-  .to([p1, p2], { fill: 'rgba(255,255,255,0.95)', duration: 0.4, ease: 'power1.in' }, '-=0.5')
+  .to([p1, p2], { fill: 'rgba(12,18,32,0.85)', duration: 0.4, ease: 'power1.in' }, '-=0.5')
   .to('.pre-bolt', { scale: 30, opacity: 0, duration: 0.8, ease: 'expo.in' }, '-=0.2')
   .to(['#preText', '#preBarWrap', '#prePct'], { opacity: 0, duration: 0.3 }, '-=0.6');
 
@@ -1254,6 +1369,214 @@ if (vtextVid) {
   }, { threshold: 0.7 });
   vtextObs.observe(document.getElementById('vtext'));
 }
+
+// ═══ ROTATING DOTTED GLOBE ═══
+(function() {
+  const canvas = document.getElementById('globeCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const w = canvas.width, h = canvas.height;
+  const R = w * 0.45;
+  const cx = w / 2, cy = h / 2;
+  const projection = d3.geoOrthographic()
+    .scale(R)
+    .translate([cx, cy])
+    .clipAngle(90);
+  const path = d3.geoPath(projection, ctx);
+  const graticule = d3.geoGraticule().step([20, 20])();
+  let landDots = [];
+  let oceanDots = [];
+  let rotation = -30;
+  let frame = 0;
+  let globeVisible = true;
+  let animId = null;
+
+  // Pause animation when globe is off-screen
+  const observer = new IntersectionObserver(([entry]) => {
+    globeVisible = entry.isIntersecting;
+    if (globeVisible && !animId) animateGlobe();
+  }, { threshold: 0.05 });
+  observer.observe(canvas);
+
+  // Office cities
+  const cities = [
+    { name: 'Boca Raton', coords: [-80.08, 26.36] },
+    { name: 'São Paulo', coords: [-46.63, -23.55] },
+    { name: 'Dallas', coords: [-96.80, 32.78] }
+  ];
+  // City connection pairs
+  const arcs = [
+    [cities[0].coords, cities[1].coords],
+    [cities[0].coords, cities[2].coords],
+    [cities[1].coords, cities[2].coords]
+  ];
+
+  fetch('https://cdn.jsdelivr.net/npm/world-atlas@2/land-110m.json')
+    .then(r => r.json())
+    .then(world => {
+      const land = topojson.feature(world, world.objects.land);
+      for (let lat = -80; lat <= 80; lat += 2) {
+        for (let lon = -180; lon < 180; lon += 2) {
+          if (d3.geoContains(land, [lon, lat])) {
+            landDots.push([lon, lat]);
+          }
+        }
+      }
+      // Ocean dots at lower density to reduce lag
+      for (let lat = -80; lat <= 80; lat += 6) {
+        for (let lon = -180; lon < 180; lon += 6) {
+          if (!d3.geoContains(land, [lon, lat])) {
+            oceanDots.push([lon, lat]);
+          }
+        }
+      }
+      animateGlobe();
+    })
+    .catch(() => {});
+
+  function animateGlobe() {
+    ctx.clearRect(0, 0, w, h);
+    rotation += 0.12;
+    frame++;
+    projection.rotate([rotation, -15, 0]);
+    const center = projection.invert([cx, cy]);
+
+    // 1. Atmospheric glow behind globe
+    const glow = ctx.createRadialGradient(cx, cy, R * 0.6, cx, cy, R * 1.3);
+    glow.addColorStop(0, 'rgba(184,151,106,0.06)');
+    glow.addColorStop(0.5, 'rgba(184,151,106,0.03)');
+    glow.addColorStop(1, 'rgba(184,151,106,0)');
+    ctx.fillStyle = glow;
+    ctx.beginPath();
+    ctx.arc(cx, cy, R * 1.3, 0, Math.PI * 2);
+    ctx.fill();
+
+    // 2. Globe inner depth gradient
+    const depth = ctx.createRadialGradient(cx - R * 0.15, cy - R * 0.15, 0, cx, cy, R);
+    depth.addColorStop(0, 'rgba(248,247,244,0.4)');
+    depth.addColorStop(0.7, 'rgba(220,215,205,0.1)');
+    depth.addColorStop(1, 'rgba(180,175,165,0.15)');
+    ctx.fillStyle = depth;
+    ctx.beginPath();
+    ctx.arc(cx, cy, R, 0, Math.PI * 2);
+    ctx.fill();
+
+    // 3. Globe outline
+    ctx.beginPath();
+    path({ type: 'Sphere' });
+    ctx.strokeStyle = 'rgba(12,18,32,0.15)';
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+
+    // 4. Graticule
+    ctx.beginPath();
+    path(graticule);
+    ctx.strokeStyle = 'rgba(12,18,32,0.04)';
+    ctx.lineWidth = 0.5;
+    ctx.stroke();
+
+    // 5. Ocean dots (very faint)
+    oceanDots.forEach(d => {
+      const p = projection(d);
+      if (p) {
+        const dist = d3.geoDistance(d, center);
+        if (dist < Math.PI / 2) {
+          const fade = 1 - (dist / (Math.PI / 2));
+          ctx.fillStyle = `rgba(12,18,32,${0.02 + fade * 0.025})`;
+          ctx.beginPath();
+          ctx.arc(p[0], p[1], 0.8, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+    });
+
+    // 6. Land dots
+    landDots.forEach(d => {
+      const p = projection(d);
+      if (p) {
+        const dist = d3.geoDistance(d, center);
+        if (dist < Math.PI / 2) {
+          const fade = 1 - (dist / (Math.PI / 2));
+          const alpha = 0.25 + fade * 0.65;
+          ctx.fillStyle = `rgba(12,18,32,${alpha})`;
+          ctx.beginPath();
+          ctx.arc(p[0], p[1], 1.5 + fade * 0.5, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+    });
+
+    // 7. Connection arcs between cities
+    arcs.forEach(([a, b]) => {
+      const interp = d3.geoInterpolate(a, b);
+      const steps = 60;
+      const dashOffset = (frame * 0.02) % 1;
+      ctx.strokeStyle = 'rgba(184,151,106,0.85)';
+      ctx.lineWidth = 2.5;
+      for (let i = 0; i < steps; i++) {
+        const t1 = i / steps;
+        const t2 = (i + 1) / steps;
+        const p1 = projection(interp(t1));
+        const p2 = projection(interp(t2));
+        if (p1 && p2) {
+          const d1 = d3.geoDistance(interp(t1), center);
+          const d2 = d3.geoDistance(interp(t2), center);
+          if (d1 < Math.PI / 2 && d2 < Math.PI / 2) {
+            // Animated dash pattern
+            const segPhase = (t1 + dashOffset) % 0.12;
+            if (segPhase < 0.07) {
+              const fade1 = 1 - d1 / (Math.PI / 2);
+              ctx.globalAlpha = 0.5 + fade1 * 0.5;
+              ctx.beginPath();
+              ctx.moveTo(p1[0], p1[1]);
+              ctx.lineTo(p2[0], p2[1]);
+              ctx.stroke();
+            }
+          }
+        }
+      }
+      ctx.globalAlpha = 1;
+    });
+
+    // 8. Pulsing city markers
+    const pulse = Math.sin(frame * 0.04) * 0.5 + 0.5; // 0→1 oscillation
+    cities.forEach(city => {
+      const p = projection(city.coords);
+      if (p) {
+        const dist = d3.geoDistance(city.coords, center);
+        if (dist < Math.PI / 2) {
+          const fade = 1 - (dist / (Math.PI / 2));
+          // Expanding ring
+          const ringR = 6 + pulse * 12;
+          ctx.beginPath();
+          ctx.arc(p[0], p[1], ringR, 0, Math.PI * 2);
+          ctx.strokeStyle = `rgba(184,151,106,${(1 - pulse) * 0.35 * fade})`;
+          ctx.lineWidth = 1.5;
+          ctx.stroke();
+          // Second ring (offset phase)
+          const pulse2 = Math.sin(frame * 0.04 + Math.PI) * 0.5 + 0.5;
+          const ringR2 = 6 + pulse2 * 12;
+          ctx.beginPath();
+          ctx.arc(p[0], p[1], ringR2, 0, Math.PI * 2);
+          ctx.strokeStyle = `rgba(184,151,106,${(1 - pulse2) * 0.2 * fade})`;
+          ctx.stroke();
+          // Solid center dot
+          ctx.beginPath();
+          ctx.arc(p[0], p[1], 4, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(184,151,106,${0.7 + fade * 0.3})`;
+          ctx.fill();
+          // Bright core
+          ctx.beginPath();
+          ctx.arc(p[0], p[1], 2, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(255,240,220,${0.8 * fade})`;
+          ctx.fill();
+        }
+      }
+    });
+
+    animId = globeVisible ? requestAnimationFrame(animateGlobe) : null;
+  }
+})();
 </script>
 </body>
 </html>
