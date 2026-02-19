@@ -14,8 +14,7 @@
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
-<script src="assets/branding/plane-data.js"></script>
-<script src="assets/branding/plane-data-2.js"></script>
+<!-- plane-data scripts loaded lazily after preloader -->
 <style>
 @font-face {
   font-family: 'Makro';
@@ -1587,6 +1586,13 @@ const preTl = gsap.timeline({
     });
     document.getElementById('nav').classList.add('show');
     heroEntrance();
+    // Load 19.5MB of plane data in background while user reads hero
+    (function() {
+      function ld(src, cb) { const s = document.createElement('script'); s.src = src; s.onload = cb; document.body.appendChild(s); }
+      ld('assets/branding/plane-data.js', function() {
+        ld('assets/branding/plane-data-2.js', function() { initPlaneViewer(); });
+      });
+    })();
   }
 });
 preTl
@@ -1645,7 +1651,7 @@ gsap.to('#aboutReveal', {
 });
 
 // ═══ THREE.JS — GLB PLANE VIEWER (top-down, left panel) ═══
-(function() {
+function initPlaneViewer() {
   const canvas = document.getElementById('planeCanvas');
   const fallback = document.getElementById('planeFallback');
   if (!canvas || typeof THREE === 'undefined') return;
@@ -1858,7 +1864,7 @@ gsap.to('#aboutReveal', {
     renderer.render(scene, camera);
   }
   animate();
-})();
+}
 
 // ═══ SERVICE SLIDES — CLIP-PATH REVEALS ═══
 document.querySelectorAll('.svc-slide').forEach((slide, i) => {
