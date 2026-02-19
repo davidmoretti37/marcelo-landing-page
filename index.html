@@ -24,6 +24,7 @@
 }
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 :root {
+  /* Legacy colors (keep for backward compatibility) */
   --navy: #0C1220;
   --navy-mid: #131B2B;
   --bg: #F8F7F4;
@@ -38,6 +39,16 @@
   --border: rgba(255,255,255,0.08);
   --border-light: rgba(12,18,32,0.08);
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Premium Brand Colors */
+  --navy-deep: #0F1419;
+  --blue-accent: #4A90E2;
+  --silver: #C0C0C0;
+  --bg-cream: #F8F7F4;
+  --bg-dark: #0F1419;
+  --charcoal: #2A2A2A;
+  --gradient-dark: linear-gradient(135deg, #0F1419 0%, #1A2332 100%);
+  --gradient-overlay: linear-gradient(180deg, rgba(15,20,25,0.85) 0%, rgba(15,20,25,0.65) 100%);
 }
 html { overflow-x: hidden; scroll-behavior: smooth; }
 body {
@@ -52,6 +63,63 @@ body {
 ::selection { background: var(--gold); color: var(--navy); }
 img { display: block; max-width: 100%; }
 a { text-decoration: none; color: inherit; }
+
+/* ═══ PREMIUM VISUAL EFFECTS ═══ */
+.glass-card {
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,0.1);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+}
+
+.btn-premium {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--blue-accent);
+  color: white;
+  padding: 18px 48px;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  border: none;
+  cursor: pointer;
+  transition: all 0.4s var(--ease-out);
+}
+.btn-premium:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 48px rgba(74,144,226,0.3);
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 18px 48px;
+  border: 1.5px solid rgba(255,255,255,0.3);
+  background: transparent;
+  color: white;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.4s var(--ease-out);
+}
+.btn-secondary:hover {
+  border-color: white;
+  background: rgba(255,255,255,0.1);
+}
+
+.hover-lift {
+  transition: all 0.4s var(--ease-out);
+}
+.hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.2);
+}
 
 /* ═══ FLOATING GRADIENT MESH ═══ */
 .gradient-mesh {
@@ -256,120 +324,88 @@ a { text-decoration: none; color: inherit; }
   background: none; border: none; cursor: none;
 }
 
-/* ═══ HERO ═══ */
-.hero {
-  position: relative; height: 100vh; min-height: 700px;
-  display: flex; align-items: center; justify-content: flex-start;
+/* ═══ HERO — PREMIUM LUXURY ═══ */
+.hero-premium {
+  position: relative;
+  height: 100vh;
+  min-height: 700px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
   overflow: hidden;
-  background: #07080d;
+  background: var(--navy-deep);
 }
 
-/* Image composition container (replaces hero-media) */
-.hero-composition {
-  position: absolute; inset: 0;
-  will-change: transform;
-  transform: scale(1.05);
-}
-/* Main image — right side, left edge fades into dark */
-.hc-main {
+.hero-bg-image {
   position: absolute;
-  right: 0; top: 0; bottom: 0;
-  width: 60vw;
-  overflow: hidden;
-  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 16%);
-  mask-image: linear-gradient(to right, transparent 0%, black 16%);
+  inset: 0;
+  z-index: 0;
 }
-.hc-main img { width: 100%; height: 100%; object-fit: cover; object-position: center center; }
-/* Detail 1 — turbine art, upper-left */
-.hc-d1 {
-  position: absolute;
-  top: 14vh; left: 4vw;
-  width: 19vw; height: 25vh;
-  overflow: hidden;
-  clip-path: inset(0 100% 0 0);
+.hero-bg-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
 }
-.hc-d1 img { width: 100%; height: 100%; object-fit: cover; }
-/* Detail 2 — luxury interior, lower center */
-.hc-d2 {
-  position: absolute;
-  bottom: 11vh; left: 32vw;
-  width: 24vw; height: 21vh;
-  overflow: hidden;
-  clip-path: inset(100% 0 0 0);
-}
-.hc-d2 img { width: 100%; height: 100%; object-fit: cover; object-position: center top; }
 
-.hero-overlay {
-  position: absolute; inset: 0; z-index: 2;
-  background:
-    linear-gradient(90deg, rgba(7,8,13,0.96) 0%, rgba(7,8,13,0.65) 30%, rgba(7,8,13,0.15) 58%, transparent 100%),
-    linear-gradient(180deg, rgba(7,8,13,0.65) 0%, transparent 22%, transparent 72%, rgba(7,8,13,0.75) 100%);
+.hero-overlay-premium {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(180deg, rgba(15,20,25,0.75) 0%, rgba(15,20,25,0.55) 50%, rgba(15,20,25,0.75) 100%);
 }
-/* Gradual blur at bottom of hero */
-.hero-blur-wrap {
-  position: absolute; bottom: 0; left: 0; right: 0;
-  height: 180px; z-index: 3;
-  pointer-events: none;
-}
-.hero-blur-layer {
-  position: absolute; left: 0; right: 0; bottom: 0;
-}
-.hero-blur-layer:nth-child(1) { height: 100%; backdrop-filter: blur(1px); -webkit-backdrop-filter: blur(1px); mask-image: linear-gradient(to bottom, transparent 0%, black 100%); -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 100%); }
-.hero-blur-layer:nth-child(2) { height: 80%; backdrop-filter: blur(2px); -webkit-backdrop-filter: blur(2px); mask-image: linear-gradient(to bottom, transparent 0%, black 100%); -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 100%); }
-.hero-blur-layer:nth-child(3) { height: 60%; backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); mask-image: linear-gradient(to bottom, transparent 0%, black 100%); -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 100%); }
-.hero-blur-layer:nth-child(4) { height: 40%; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); mask-image: linear-gradient(to bottom, transparent 0%, black 100%); -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 100%); }
-.hero-blur-layer:nth-child(5) { height: 25%; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); mask-image: linear-gradient(to bottom, transparent 0%, black 100%); -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 100%); }
-.hero-blur-layer:nth-child(6) { height: 12%; backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); mask-image: linear-gradient(to bottom, transparent 0%, black 100%); -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 100%); }
 
-.hero-content {
-  position: relative; z-index: 10;
-  text-align: left;
-  padding: 0 0 0 clamp(48px, 7vw, 120px);
-  max-width: 52vw;
+.hero-content-premium {
+  position: relative;
+  z-index: 10;
+  max-width: 900px;
+  padding: 0 32px;
   color: var(--white);
-  text-shadow: 0 2px 24px rgba(0,0,0,0.45), 0 1px 4px rgba(0,0,0,0.2);
 }
-.hero h1 {
+
+.hero-kicker {
+  font-size: 13px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--blue-accent);
+  margin-bottom: 32px;
+  font-weight: 500;
+}
+
+.hero-premium h1 {
   font-family: 'Inter', -apple-system, sans-serif;
-  font-weight: 200; text-transform: uppercase;
-  letter-spacing: 0.06em;
-  font-size: clamp(48px, 7.5vw, 108px);
-  line-height: 1.0;
+  font-size: clamp(56px, 10vw, 140px);
+  font-weight: 300;
+  letter-spacing: 0.08em;
+  line-height: 1.05;
+  margin-bottom: 32px;
+  text-transform: uppercase;
 }
-.hero-line { display: block; overflow: hidden; }
-.hero-line-inner { display: block; transform: translateY(110%); }
-.hero-divider {
-  width: 60px; height: 1px;
-  background: rgba(255,255,255,0.2);
-  margin: 40px 0;
-  transform: scaleX(0);
+
+.hero-line {
+  display: block;
+  overflow: hidden;
 }
-.hero-sub {
-  font-size: 14px; font-weight: 300;
-  line-height: 1.7; color: rgba(255,255,255,0.7);
-  max-width: 340px; margin: 0;
+.hero-line-inner {
+  display: block;
+  transform: translateY(110%);
 }
-.hero-cta-wrap { margin-top: 40px; }
-.btn-line {
-  display: inline-flex; align-items: center; gap: 14px;
-  padding: 16px 44px;
-  border: 1px solid rgba(255,255,255,0.15);
-  font-size: 12px; font-weight: 500;
-  letter-spacing: 0.2em; text-transform: uppercase;
-  color: var(--white);
-  position: relative; overflow: hidden;
-  transition: color 0.4s, border-color 0.4s;
+
+.hero-subtitle {
+  font-size: 18px;
+  line-height: 1.7;
+  color: rgba(255,255,255,0.85);
+  margin-bottom: 48px;
+  font-weight: 300;
 }
-.btn-line::before {
-  content: ''; position: absolute; inset: 0;
-  background: var(--white);
-  transform: translateY(101%);
-  transition: transform 0.5s var(--ease-out);
+
+.hero-ctas {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
 }
-.btn-line:hover::before { transform: translateY(0); }
-.btn-line:hover { color: var(--navy); border-color: var(--white); }
-.btn-line span, .btn-line svg { position: relative; z-index: 1; }
-.btn-line svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 1.5; }
 
 /* ═══ MARQUEE ═══ */
 .marquee-section {
@@ -900,7 +936,7 @@ a { text-decoration: none; color: inherit; }
   .mobile-close { right: 24px; }
 }
 @media (max-width: 640px) {
-  .hero h1 { font-size: clamp(32px, 11vw, 52px); }
+  .hero-premium h1 { font-size: clamp(42px, 11vw, 60px); }
   .fleet-grid { grid-template-columns: 1fr; grid-auto-rows: 40vh; }
   .fleet-item:nth-child(1),
   .fleet-item:nth-child(4),
@@ -1115,23 +1151,12 @@ a { text-decoration: none; color: inherit; }
 @media (max-width: 768px) {
 
   /* ── Hero ── */
-  .hc-main {
-    width: 100%;
-    -webkit-mask-image: linear-gradient(to right, transparent 0%, black 12%);
-    mask-image: linear-gradient(to right, transparent 0%, black 12%);
-  }
-  .hc-d1, .hc-d2 { display: none; }
-  .hero-overlay {
-    background:
-      linear-gradient(90deg, rgba(7,8,13,0.92) 0%, rgba(7,8,13,0.60) 50%, rgba(7,8,13,0.28) 100%),
-      linear-gradient(180deg, rgba(7,8,13,0.55) 0%, transparent 25%, transparent 65%, rgba(7,8,13,0.75) 100%);
-  }
-  .hero-content {
+  .hero-content-premium {
     max-width: 100%;
     padding: 0 28px;
   }
-  .hero-sub { max-width: 100%; font-size: 13px; }
-  .hero-blur-wrap { height: 100px; }
+  .hero-kicker { font-size: 11px; margin-bottom: 24px; }
+  .hero-subtitle { font-size: 16px; margin-bottom: 40px; }
 
   /* ── Nav ── */
   .mobile-toggle { cursor: pointer; }
@@ -1195,11 +1220,10 @@ a { text-decoration: none; color: inherit; }
 
 @media (max-width: 480px) {
   /* ── Hero ── */
-  .hero { min-height: 100svh; }
-  .hero h1 { font-size: clamp(36px, 10vw, 52px); }
-  .hero-divider { margin: 20px 0; }
-  .hero-cta-wrap { margin-top: 28px; }
-  .btn-line { padding: 14px 28px; font-size: 11px; }
+  .hero-premium { min-height: 100svh; }
+  .hero-premium h1 { font-size: clamp(36px, 10vw, 52px); }
+  .hero-ctas { margin-top: 32px; gap: 12px; }
+  .btn-premium, .btn-secondary { padding: 14px 32px; font-size: 12px; }
 
   /* ── Services ── */
   .svc-slide { padding: 64px 0; }
@@ -1279,37 +1303,27 @@ a { text-decoration: none; color: inherit; }
   <a href="#contact" class="mob-link">Contact</a>
 </div>
 
-<!-- ═══ HERO ═══ -->
-<section class="hero" id="hero">
-  <div class="hero-composition" id="heroMedia">
-    <div class="hc-main">
-      <img src="assets/branding/PNG/Spark_Rifle-13.jpg" alt="">
-    </div>
-    <div class="hc-d1">
-      <img src="assets/branding/PNG/NBAA_Spark-1.jpg" alt="">
-    </div>
-    <div class="hc-d2">
-      <img src="assets/branding/PNG/Spark_Rifle-5.jpg" alt="">
-    </div>
+<!-- ═══ HERO — PREMIUM LUXURY ═══ -->
+<section class="hero-premium" id="hero">
+  <div class="hero-bg-image">
+    <img src="assets/branding/PNG/Spark_Rifle-41.jpg" alt="Spark Aviation luxury aircraft">
   </div>
-  <div class="hero-overlay"></div>
-  <div class="hero-blur-wrap" aria-hidden="true">
-    <div class="hero-blur-layer"></div>
-    <div class="hero-blur-layer"></div>
-    <div class="hero-blur-layer"></div>
-    <div class="hero-blur-layer"></div>
-    <div class="hero-blur-layer"></div>
-    <div class="hero-blur-layer"></div>
-  </div>
-  <div class="hero-content" id="heroContent">
+  <div class="hero-overlay-premium"></div>
+  <div class="hero-content-premium" id="heroContent">
+    <div class="hero-kicker">AIRCRAFT SALES · ACQUISITION · MANAGEMENT</div>
     <h1>
       <span class="hero-line"><span class="hero-line-inner" id="hl1">Elevating</span></span>
       <span class="hero-line"><span class="hero-line-inner" id="hl2">Excellence</span></span>
+      <span class="hero-line"><span class="hero-line-inner" id="hl3">in Aviation</span></span>
     </h1>
-    <div class="hero-divider" id="heroDiv"></div>
-    <p class="hero-sub" id="heroSub">Founded by international aviation veteran Marcelo Borin<br>with 30 years of elite global experience.</p>
-    <div class="hero-cta-wrap" id="heroCta">
-      <a href="#contact" class="btn-line"><span>Inquire Now</span><svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+    <p class="hero-subtitle" id="heroSub">
+      At Spark Aviation, we don't just move aircraft — we move dreams.<br>
+      Founded by international aviation veteran Marcelo Borin, we bring<br>
+      30 years of elite experience to every transaction, flight, and relationship.
+    </p>
+    <div class="hero-ctas" id="heroCta">
+      <a href="#contact" class="btn-premium">Get In Touch</a>
+      <a href="#services" class="btn-secondary">Explore Services</a>
     </div>
   </div>
 </section>
@@ -1616,25 +1630,24 @@ preTl
 function heroEntrance() {
   const hTl = gsap.timeline();
   hTl
-    .to('#hl1', { y: 0, duration: 1.2, ease: 'expo.out' })
-    .to('#hl2', { y: 0, duration: 1.2, ease: 'expo.out' }, '-=0.8')
-    .to('#heroDiv', { scaleX: 1, duration: 0.7, ease: 'expo.out' }, '-=0.5')
-    .from('#heroSub', { opacity: 0, y: 15, duration: 0.7, ease: 'expo.out' }, '-=0.3')
-    .from('#heroCta', { opacity: 0, y: 15, duration: 0.7, ease: 'expo.out' }, '-=0.3')
-    .to('.hc-d1', { clipPath: 'inset(0 0% 0 0)', duration: 1.1, ease: 'expo.out' }, '-=0.9')
-    .to('.hc-d2', { clipPath: 'inset(0% 0 0 0)', duration: 1.1, ease: 'expo.out' }, '-=0.75');
+    .from('.hero-kicker', { opacity: 0, y: 20, duration: 0.8, ease: 'expo.out' })
+    .to('#hl1', { y: 0, duration: 1.2, ease: 'expo.out' }, '-=0.4')
+    .to('#hl2', { y: 0, duration: 1.2, ease: 'expo.out' }, '-=0.9')
+    .to('#hl3', { y: 0, duration: 1.2, ease: 'expo.out' }, '-=0.9')
+    .from('#heroSub', { opacity: 0, y: 20, duration: 0.8, ease: 'expo.out' }, '-=0.5')
+    .from('#heroCta', { opacity: 0, y: 20, duration: 0.8, ease: 'expo.out' }, '-=0.5');
 }
 
-// ═══ HERO PARALLAX — video moves slower + zoom-out ═══
-gsap.to('#heroMedia', {
-  y: 200, scale: 1.0, ease: 'none',
-  scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true }
+// ═══ HERO PARALLAX — background image subtle movement ═══
+gsap.to('.hero-bg-image', {
+  y: 150, scale: 1.05, ease: 'none',
+  scrollTrigger: { trigger: '.hero-premium', start: 'top top', end: 'bottom top', scrub: true }
 });
 
 // Hero scroll departure — content floats up as you scroll away
 gsap.to('#heroContent', {
   y: -120, opacity: 0, ease: 'none',
-  scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true }
+  scrollTrigger: { trigger: '.hero-premium', start: 'top top', end: 'bottom top', scrub: true }
 });
 
 // ═══ NAV SCROLL ═══
