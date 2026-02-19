@@ -324,117 +324,87 @@ a { text-decoration: none; color: inherit; }
   background: none; border: none; cursor: none;
 }
 
-/* ═══ HERO — MINIMAL VIDEO WITH TRANSITIONS ═══ */
-.hero-video {
+/* ═══ HERO — PREMIUM LUXURY ═══ */
+.hero-premium {
   position: relative;
   height: 100vh;
   min-height: 700px;
   display: flex;
   align-items: center;
   justify-content: center;
+  text-align: center;
   overflow: hidden;
-  background: #000;
+  background: var(--navy-deep);
 }
 
-/* Video background */
-.hero-video-container {
+.hero-bg-image {
   position: absolute;
   inset: 0;
   z-index: 0;
 }
-.hero-video-element {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  min-width: 100%;
-  min-height: 100%;
-  width: auto;
-  height: auto;
-  transform: translate(-50%, -50%);
+.hero-bg-image img {
+  width: 100%;
+  height: 100%;
   object-fit: cover;
-  opacity: 0;
-  transition: opacity 0.5s ease;
-}
-.hero-video-element.active {
-  opacity: 1;
+  object-position: center center;
 }
 
-/* Light overlay - MUCH lighter than before */
-.hero-overlay-light {
+.hero-overlay-premium {
   position: absolute;
   inset: 0;
   z-index: 1;
-  background: linear-gradient(180deg, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.10) 50%, rgba(0,0,0,0.25) 100%);
+  background: linear-gradient(180deg, rgba(15,20,25,0.35) 0%, rgba(15,20,25,0.25) 50%, rgba(15,20,25,0.45) 100%);
 }
 
-/* Transition canvas */
-#heroTransitionCanvas {
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  pointer-events: none;
-  opacity: 0;
-}
-#heroTransitionCanvas.transitioning {
-  opacity: 1;
-}
-
-/* Minimal content */
-.hero-content-minimal {
+.hero-content-premium {
   position: relative;
   z-index: 10;
-  text-align: center;
+  max-width: 900px;
+  padding: 0 32px;
   color: var(--white);
 }
 
-.hero-logo {
-  font-size: 18px;
-  font-weight: 500;
+.hero-kicker {
+  font-size: 12px;
   letter-spacing: 0.25em;
   text-transform: uppercase;
-  margin-bottom: 12px;
-  text-shadow: 0 2px 12px rgba(0,0,0,0.3);
+  color: var(--blue-accent);
+  margin-bottom: 28px;
+  font-weight: 500;
 }
 
-.hero-tagline {
-  font-size: 13px;
+.hero-premium h1 {
+  font-family: 'Inter', -apple-system, sans-serif;
+  font-size: clamp(42px, 6.5vw, 72px);
   font-weight: 300;
-  letter-spacing: 0.15em;
+  letter-spacing: 0.05em;
+  line-height: 1.15;
+  margin-bottom: 32px;
   text-transform: uppercase;
-  color: rgba(255,255,255,0.85);
-  text-shadow: 0 2px 12px rgba(0,0,0,0.3);
 }
 
-/* Scroll indicator */
-.scroll-indicator {
-  position: absolute;
-  bottom: 40px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 10;
+.hero-line {
+  display: block;
+  overflow: hidden;
+}
+.hero-line-inner {
+  display: block;
+  transform: translateY(110%);
+}
+
+.hero-subtitle {
+  font-size: 16px;
+  line-height: 1.65;
+  color: rgba(255,255,255,0.95);
+  margin-bottom: 40px;
+  font-weight: 300;
+}
+
+.hero-ctas {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  color: rgba(255,255,255,0.7);
-  animation: bounce 2s infinite;
-}
-.scroll-indicator span {
-  font-size: 11px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-}
-.scroll-arrow {
-  width: 20px;
-  height: 20px;
-  stroke: currentColor;
-  fill: none;
-  stroke-width: 2;
-}
-
-@keyframes bounce {
-  0%, 100% { transform: translateX(-50%) translateY(0); }
-  50% { transform: translateX(-50%) translateY(8px); }
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
 }
 
 /* ═══ MARQUEE ═══ */
@@ -966,6 +936,7 @@ a { text-decoration: none; color: inherit; }
   .mobile-close { right: 24px; }
 }
 @media (max-width: 640px) {
+  .hero-premium h1 { font-size: clamp(32px, 9vw, 48px); }
   .fleet-grid { grid-template-columns: 1fr; grid-auto-rows: 40vh; }
   .fleet-item:nth-child(1),
   .fleet-item:nth-child(4),
@@ -1180,8 +1151,12 @@ a { text-decoration: none; color: inherit; }
 @media (max-width: 768px) {
 
   /* ── Hero ── */
-  .hero-logo { font-size: 16px; }
-  .hero-tagline { font-size: 12px; }
+  .hero-content-premium {
+    max-width: 100%;
+    padding: 0 28px;
+  }
+  .hero-kicker { font-size: 11px; margin-bottom: 24px; }
+  .hero-subtitle { font-size: 16px; margin-bottom: 40px; }
 
   /* ── Nav ── */
   .mobile-toggle { cursor: pointer; }
@@ -1245,10 +1220,10 @@ a { text-decoration: none; color: inherit; }
 
 @media (max-width: 480px) {
   /* ── Hero ── */
-  .hero-video { min-height: 100svh; }
-  .hero-logo { font-size: 14px; letter-spacing: 0.2em; }
-  .hero-tagline { font-size: 11px; }
-  .scroll-indicator { bottom: 32px; }
+  .hero-premium { min-height: 100svh; }
+  .hero-premium h1 { font-size: clamp(28px, 8.5vw, 42px); }
+  .hero-ctas { margin-top: 32px; gap: 12px; }
+  .btn-premium, .btn-secondary { padding: 14px 32px; font-size: 12px; }
 
   /* ── Services ── */
   .svc-slide { padding: 64px 0; }
@@ -1328,36 +1303,28 @@ a { text-decoration: none; color: inherit; }
   <a href="#contact" class="mob-link">Contact</a>
 </div>
 
-<!-- ═══ HERO — MINIMAL VIDEO WITH TRANSITIONS ═══ -->
-<section class="hero-video" id="hero">
-  <!-- Video Background -->
-  <div class="hero-video-container">
-    <video id="heroVideo1" class="hero-video-element active" autoplay muted loop playsinline>
-      <source src="assets/videos/meshy-ai-1.mp4" type="video/mp4">
-    </video>
-    <video id="heroVideo2" class="hero-video-element" muted loop playsinline>
-      <source src="assets/videos/meshy-ai-2.mp4" type="video/mp4">
-    </video>
+<!-- ═══ HERO — PREMIUM LUXURY ═══ -->
+<section class="hero-premium" id="hero">
+  <div class="hero-bg-image">
+    <img src="assets/branding/PNG/Spark_Rifle-41.jpg" alt="Spark Aviation luxury aircraft">
   </div>
-
-  <!-- Light Overlay -->
-  <div class="hero-overlay-light"></div>
-
-  <!-- Canvas for Transition Effects -->
-  <canvas id="heroTransitionCanvas"></canvas>
-
-  <!-- Minimal Content -->
-  <div class="hero-content-minimal" id="heroContent">
-    <div class="hero-logo">SPARK AVIATION</div>
-    <div class="hero-tagline">Excellence in Aviation</div>
-  </div>
-
-  <!-- Scroll Indicator -->
-  <div class="scroll-indicator">
-    <span>Scroll</span>
-    <svg class="scroll-arrow" viewBox="0 0 20 20">
-      <polyline points="5,7 10,12 15,7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-    </svg>
+  <div class="hero-overlay-premium"></div>
+  <div class="hero-content-premium" id="heroContent">
+    <div class="hero-kicker">AIRCRAFT SALES · ACQUISITION · MANAGEMENT</div>
+    <h1>
+      <span class="hero-line"><span class="hero-line-inner" id="hl1">Elevating</span></span>
+      <span class="hero-line"><span class="hero-line-inner" id="hl2">Excellence</span></span>
+      <span class="hero-line"><span class="hero-line-inner" id="hl3">in Aviation</span></span>
+    </h1>
+    <p class="hero-subtitle" id="heroSub">
+      At Spark Aviation, we don't just move aircraft — we move dreams.<br>
+      Founded by international aviation veteran Marcelo Borin, we bring<br>
+      30 years of elite experience to every transaction, flight, and relationship.
+    </p>
+    <div class="hero-ctas" id="heroCta">
+      <a href="#contact" class="btn-premium">Get In Touch</a>
+      <a href="#services" class="btn-secondary">Explore Services</a>
+    </div>
   </div>
 </section>
 
@@ -1659,139 +1626,28 @@ preTl
   .to('.pre-bolt', { scale: 30, opacity: 0, duration: 0.45, ease: 'expo.in' }, '-=0.1')
   .to(['#preText', '#preBarWrap', '#prePct'], { opacity: 0, duration: 0.2 }, '-=0.35');
 
-// ═══ HERO ENTRANCE — MINIMAL ═══
+// ═══ HERO ENTRANCE ═══
 function heroEntrance() {
-  const hTl = gsap.timeline({ delay: 0.5 });
+  const hTl = gsap.timeline();
   hTl
-    .from('.hero-logo', { opacity: 0, y: 30, duration: 1, ease: 'expo.out' })
-    .from('.hero-tagline', { opacity: 0, y: 20, duration: 0.8, ease: 'expo.out' }, '-=0.5')
-    .from('.scroll-indicator', { opacity: 0, y: 20, duration: 0.8, ease: 'expo.out' }, '-=0.5');
+    .from('.hero-kicker', { opacity: 0, y: 20, duration: 0.8, ease: 'expo.out' })
+    .to('#hl1', { y: 0, duration: 1.2, ease: 'expo.out' }, '-=0.4')
+    .to('#hl2', { y: 0, duration: 1.2, ease: 'expo.out' }, '-=0.9')
+    .to('#hl3', { y: 0, duration: 1.2, ease: 'expo.out' }, '-=0.9')
+    .from('#heroSub', { opacity: 0, y: 20, duration: 0.8, ease: 'expo.out' }, '-=0.5')
+    .from('#heroCta', { opacity: 0, y: 20, duration: 0.8, ease: 'expo.out' }, '-=0.5');
 }
 
-// ═══ HERO PARALLAX — video container subtle movement ═══
-gsap.to('.hero-video-container', {
+// ═══ HERO PARALLAX — background image subtle movement ═══
+gsap.to('.hero-bg-image', {
   y: 150, scale: 1.05, ease: 'none',
-  scrollTrigger: { trigger: '.hero-video', start: 'top top', end: 'bottom top', scrub: true }
+  scrollTrigger: { trigger: '.hero-premium', start: 'top top', end: 'bottom top', scrub: true }
 });
 
 // Hero scroll departure — content floats up as you scroll away
 gsap.to('#heroContent', {
   y: -120, opacity: 0, ease: 'none',
-  scrollTrigger: { trigger: '.hero-video', start: 'top top', end: 'bottom top', scrub: true }
-});
-
-// ═══ VIDEO TRANSITION SYSTEM ═══
-const videoTransition = {
-  canvas: null,
-  ctx: null,
-  video1: null,
-  video2: null,
-  currentVideo: 0,
-  sliceCount: 25,
-  transitionInterval: null,
-
-  init() {
-    this.canvas = document.getElementById('heroTransitionCanvas');
-    this.ctx = this.canvas.getContext('2d');
-    this.video1 = document.getElementById('heroVideo1');
-    this.video2 = document.getElementById('heroVideo2');
-
-    if (!this.canvas || !this.ctx || !this.video1 || !this.video2) return;
-
-    // Set canvas size
-    this.resize();
-    window.addEventListener('resize', () => this.resize());
-
-    // Reduce slice count on mobile for performance
-    if (window.innerWidth < 768) {
-      this.sliceCount = 15;
-    }
-
-    // Start transition cycle (every 8 seconds)
-    this.transitionInterval = setInterval(() => this.transition(), 8000);
-  },
-
-  resize() {
-    this.canvas.width = window.innerWidth;
-    this.canvas.height = window.innerHeight;
-  },
-
-  transition() {
-    const fromVideo = this.currentVideo === 0 ? this.video1 : this.video2;
-    const toVideo = this.currentVideo === 0 ? this.video2 : this.video1;
-
-    // Start playing next video
-    toVideo.currentTime = 0;
-    toVideo.play();
-
-    // Canvas transition animation
-    this.canvas.classList.add('transitioning');
-
-    // Create slice timeline with GSAP
-    const tl = gsap.timeline({
-      onUpdate: () => this.drawSlices(fromVideo, toVideo, tl.progress()),
-      onComplete: () => {
-        this.canvas.classList.remove('transitioning');
-        fromVideo.classList.remove('active');
-        toVideo.classList.add('active');
-        this.currentVideo = 1 - this.currentVideo;
-      }
-    });
-
-    // Animate slice reveal (staggered)
-    tl.to({}, {
-      duration: 1.5,
-      ease: 'expo.inOut'
-    });
-  },
-
-  drawSlices(fromVideo, toVideo, progress) {
-    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-
-    const sliceWidth = this.canvas.width / this.sliceCount;
-
-    for (let i = 0; i < this.sliceCount; i++) {
-      // Stagger effect - each slice progresses at different rate
-      const stagger = i / this.sliceCount;
-      const sliceProgress = Math.max(0, Math.min(1, (progress - stagger * 0.3) / 0.7));
-
-      const x = i * sliceWidth;
-      const y = this.canvas.height * (1 - sliceProgress); // Slide up effect
-
-      // Draw from video slice
-      if (fromVideo.readyState >= 2) {
-        this.ctx.save();
-        this.ctx.globalAlpha = 1 - sliceProgress;
-        this.ctx.drawImage(
-          fromVideo,
-          (i * fromVideo.videoWidth) / this.sliceCount, 0,
-          fromVideo.videoWidth / this.sliceCount, fromVideo.videoHeight,
-          x, 0,
-          sliceWidth, this.canvas.height
-        );
-        this.ctx.restore();
-      }
-
-      // Draw to video slice
-      if (toVideo.readyState >= 2) {
-        this.ctx.save();
-        this.ctx.globalAlpha = sliceProgress;
-        this.ctx.drawImage(
-          toVideo,
-          (i * toVideo.videoWidth) / this.sliceCount, 0,
-          toVideo.videoWidth / this.sliceCount, toVideo.videoHeight,
-          x, y,
-          sliceWidth, this.canvas.height
-        );
-        this.ctx.restore();
-      }
-    }
-  }
-};
-
-// Initialize video transition when videos are ready
-window.addEventListener('load', () => {
-  setTimeout(() => videoTransition.init(), 500);
+  scrollTrigger: { trigger: '.hero-premium', start: 'top top', end: 'bottom top', scrub: true }
 });
 
 // ═══ NAV SCROLL ═══
