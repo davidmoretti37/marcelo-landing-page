@@ -1111,6 +1111,120 @@ a { text-decoration: none; color: inherit; }
 @media (max-width: 768px) {
   .fleet-grid-sym { grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(3, 38vh); }
 }
+
+/* ═══ MOBILE — COMPREHENSIVE ═══ */
+@media (max-width: 768px) {
+
+  /* ── Hero ── */
+  .hc-main {
+    width: 100%;
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, black 12%);
+    mask-image: linear-gradient(to right, transparent 0%, black 12%);
+  }
+  .hc-d1, .hc-d2 { display: none; }
+  .hero-overlay {
+    background:
+      linear-gradient(90deg, rgba(7,8,13,0.92) 0%, rgba(7,8,13,0.60) 50%, rgba(7,8,13,0.28) 100%),
+      linear-gradient(180deg, rgba(7,8,13,0.55) 0%, transparent 25%, transparent 65%, rgba(7,8,13,0.75) 100%);
+  }
+  .hero-content {
+    max-width: 100%;
+    padding: 0 28px;
+  }
+  .hero-sub { max-width: 100%; font-size: 13px; }
+  .hero-blur-wrap { height: 100px; }
+
+  /* ── Nav ── */
+  .mobile-toggle { cursor: pointer; }
+  .mobile-close { cursor: pointer; }
+
+  /* ── About ── */
+  .about-img { min-height: 55vw; }
+  .about-text { padding: 48px 24px; }
+
+  /* ── Globe ── */
+  .globe-section { padding: clamp(60px, 8vw, 100px) 24px; }
+  .globe-wrap { max-width: 300px; }
+
+  /* ── Plane section — stack vertically ── */
+  .plane-scroll { height: auto; min-height: 100svh; }
+  .plane-scroll::before, .plane-scroll::after { height: 80px; }
+  .plane-scroll-sticky {
+    grid-template-columns: 1fr;
+    height: auto;
+    min-height: 100svh;
+  }
+  .plane-canvas-col {
+    height: 52vw;
+    min-height: 220px;
+    max-height: 340px;
+  }
+  .plane-canvas-wrap { width: 92%; height: 92%; }
+  .plane-info-col {
+    padding: 20px 28px 48px;
+    justify-content: flex-start;
+  }
+  .plane-info-name { font-size: clamp(28px, 8vw, 48px); }
+  .plane-info-desc { font-size: 13px; margin-bottom: 24px; }
+  .plane-stats { gap: 12px 20px; margin-bottom: 28px; }
+  .plane-stat-val { font-size: 18px; }
+
+  /* ── Services ── */
+  .svc-slide { padding: 80px 0; }
+  .svc-text { padding: 0 24px !important; max-width: 100%; }
+  .svc-num { font-size: clamp(48px, 12vw, 72px); }
+  .svc-text h3 { font-size: clamp(24px, 6vw, 40px); }
+
+  /* ── Story sections ── */
+  .story-text { padding: 48px 24px; }
+
+  /* ── Fleet ── */
+  .fleet-header { padding: clamp(48px, 8vw, 80px) 24px clamp(16px, 3vw, 32px); }
+
+  /* ── Quote ── */
+  .quote-section { padding: clamp(72px, 12vw, 120px) 24px; }
+  .quote-big-mark { font-size: 45vw; top: 5%; }
+
+  /* ── Contact ── */
+  .contact { padding: clamp(64px, 10vw, 120px) 24px; }
+  .contact-btn { padding: 14px 24px; font-size: 12px; }
+
+  /* ── Footer ── */
+  .footer { padding: 32px 24px; }
+  .footer-offices { display: none; }
+}
+
+@media (max-width: 480px) {
+  /* ── Hero ── */
+  .hero { min-height: 100svh; }
+  .hero h1 { font-size: clamp(36px, 10vw, 52px); }
+  .hero-divider { margin: 20px 0; }
+  .hero-cta-wrap { margin-top: 28px; }
+  .btn-line { padding: 14px 28px; font-size: 11px; }
+
+  /* ── Services ── */
+  .svc-slide { padding: 64px 0; }
+  .svc-text p { font-size: 14px; }
+
+  /* ── Plane ── */
+  .plane-canvas-col { min-height: 200px; }
+  .plane-info-col { padding: 16px 20px 40px; }
+
+  /* ── Fleet ── */
+  .fleet-grid-sym {
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(6, 56vw);
+  }
+  .fleet-item.reveal:nth-child(n) { transition-delay: 0s; }
+
+  /* ── Story ── */
+  .story-img { min-height: 60vw; }
+  .story-detail { gap: 20px; }
+  .story-detail-num { font-size: 22px; }
+
+  /* ── Contact form ── */
+  .contact-btn { padding: 16px 20px; }
+}
 </style>
 </head>
 <body>
