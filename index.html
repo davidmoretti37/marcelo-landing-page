@@ -264,35 +264,40 @@ a { text-decoration: none; color: inherit; }
   background: #07080d;
 }
 
-/* ═══ HERO — CINEMATIC DEPTH LAYERS ═══ */
-.hero-layer {
+/* Image composition container (replaces hero-media) */
+.hero-composition {
+  position: absolute; inset: 0;
+  will-change: transform;
+  transform: scale(1.05);
+}
+/* Main image — right side, left edge fades into dark */
+.hc-main {
   position: absolute;
-  inset: 0;
+  right: 0; top: 0; bottom: 0;
+  width: 60vw;
   overflow: hidden;
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 16%);
+  mask-image: linear-gradient(to right, transparent 0%, black 16%);
 }
-.hero-layer img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center center;
+.hc-main img { width: 100%; height: 100%; object-fit: cover; object-position: center center; }
+/* Detail 1 — turbine art, upper-left */
+.hc-d1 {
+  position: absolute;
+  top: 14vh; left: 4vw;
+  width: 19vw; height: 25vh;
+  overflow: hidden;
+  clip-path: inset(0 100% 0 0);
 }
-/* Background layer — sharp, full-screen upward tail shot */
-.hero-layer-bg {
-  z-index: 0;
-  filter: blur(0px);
+.hc-d1 img { width: 100%; height: 100%; object-fit: cover; }
+/* Detail 2 — luxury interior, lower center */
+.hc-d2 {
+  position: absolute;
+  bottom: 11vh; left: 32vw;
+  width: 24vw; height: 21vh;
+  overflow: hidden;
+  clip-path: inset(100% 0 0 0);
 }
-/* Midground layer — slightly blurred, full aircraft */
-.hero-layer-mid {
-  z-index: 1;
-  filter: blur(2px);
-  opacity: 0.75;
-}
-/* Foreground layer — heavily blurred turbine, left 60% only */
-.hero-layer-fg {
-  z-index: 2;
-  filter: blur(10px);
-  clip-path: inset(0 40% 0 0);
-}
+.hc-d2 img { width: 100%; height: 100%; object-fit: cover; object-position: center top; }
 
 .hero-overlay {
   position: absolute; inset: 0; z-index: 2;
@@ -319,10 +324,10 @@ a { text-decoration: none; color: inherit; }
 .hero-content {
   position: relative; z-index: 10;
   text-align: left;
-  padding: 0 clamp(48px, 6vw, 100px) 0 60%;
-  max-width: 100%;
+  padding: 0 0 0 clamp(48px, 7vw, 120px);
+  max-width: 52vw;
   color: var(--white);
-  text-shadow: 0 2px 32px rgba(0,0,0,0.6), 0 1px 6px rgba(0,0,0,0.3);
+  text-shadow: 0 2px 24px rgba(0,0,0,0.45), 0 1px 4px rgba(0,0,0,0.2);
 }
 .hero h1 {
   font-family: 'Inter', -apple-system, sans-serif;
@@ -1110,11 +1115,15 @@ a { text-decoration: none; color: inherit; }
 @media (max-width: 768px) {
 
   /* ── Hero ── */
-  .hero-layer-fg, .hero-layer-mid { display: none; }
-  .hero-layer-bg { filter: blur(0px); }
+  .hc-main {
+    width: 100%;
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, black 12%);
+    mask-image: linear-gradient(to right, transparent 0%, black 12%);
+  }
+  .hc-d1, .hc-d2 { display: none; }
   .hero-overlay {
     background:
-      linear-gradient(90deg, rgba(7,8,13,0.88) 0%, rgba(7,8,13,0.55) 50%, rgba(7,8,13,0.28) 100%),
+      linear-gradient(90deg, rgba(7,8,13,0.92) 0%, rgba(7,8,13,0.60) 50%, rgba(7,8,13,0.28) 100%),
       linear-gradient(180deg, rgba(7,8,13,0.55) 0%, transparent 25%, transparent 65%, rgba(7,8,13,0.75) 100%);
   }
   .hero-content {
@@ -1272,15 +1281,16 @@ a { text-decoration: none; color: inherit; }
 
 <!-- ═══ HERO ═══ -->
 <section class="hero" id="hero">
-  <!-- Cinematic depth-of-field hero (3 layered images, blur effect) -->
-  <div class="hero-layer hero-layer-bg">
-    <img src="assets/branding/PNG/NBAA_Spark-9.jpg" alt="">
-  </div>
-  <div class="hero-layer hero-layer-mid">
-    <img src="assets/branding/PNG/Spark_Rifle-41.jpg" alt="">
-  </div>
-  <div class="hero-layer hero-layer-fg">
-    <img src="assets/branding/PNG/NBAA_Spark-26.jpg" alt="">
+  <div class="hero-composition" id="heroMedia">
+    <div class="hc-main">
+      <img src="assets/branding/PNG/Spark_Rifle-13.jpg" alt="">
+    </div>
+    <div class="hc-d1">
+      <img src="assets/branding/PNG/NBAA_Spark-1.jpg" alt="">
+    </div>
+    <div class="hc-d2">
+      <img src="assets/branding/PNG/Spark_Rifle-5.jpg" alt="">
+    </div>
   </div>
   <div class="hero-overlay"></div>
   <div class="hero-blur-wrap" aria-hidden="true">
@@ -1412,7 +1422,7 @@ a { text-decoration: none; color: inherit; }
 <!-- ═══ SERVICES ═══ -->
 <section id="services">
   <div class="svc-slide">
-    <img src="assets/branding/PNG/Spark_Rifle-41.jpg" alt="Front-facing aircraft with majestic mountains">
+    <img src="assets/branding/PNG/Spark_Rifle-38.jpg" alt="Stairs open dark fuselage awaiting">
     <div class="svc-slide-overlay"></div>
     <div class="svc-text">
       <div class="svc-num reveal">01</div>
@@ -1422,7 +1432,7 @@ a { text-decoration: none; color: inherit; }
     </div>
   </div>
   <div class="svc-slide">
-    <img src="assets/branding/PNG/jet-landing.png" alt="Aircraft in flight majesty">
+    <img src="assets/branding/PNG/Spark_Rifle-10.jpg" alt="Three-quarter boarding angle">
     <div class="svc-slide-overlay"></div>
     <div class="svc-text">
       <div class="svc-num reveal">02</div>
@@ -1446,7 +1456,7 @@ a { text-decoration: none; color: inherit; }
 <!-- ═══ STORY SPLIT — JET VIEWS ═══ -->
 <section class="story-section">
   <div class="story-img reveal">
-    <img src="assets/branding/PNG/NBAA_Spark-6.jpg" alt="Ground-level side profile dramatic scale" loading="lazy">
+    <img src="assets/branding/PNG/Spark_Rifle-11.jpg" alt="Gulfstream G700 full side profile" loading="lazy">
   </div>
   <div class="story-text">
     <div class="label reveal">Curated Excellence</div>
@@ -1471,7 +1481,7 @@ a { text-decoration: none; color: inherit; }
 
 <section class="story-section reverse">
   <div class="story-img reveal">
-    <img src="assets/branding/PNG/Spark_Rifle-42.jpg" alt="Luxury cabin interior" loading="lazy" style="object-position: center center;">
+    <img src="assets/branding/PNG/Spark_Rifle-30.jpg" alt="White leather seat oval window clouds" loading="lazy" style="object-position: center center;">
   </div>
   <div class="story-text">
     <div class="label reveal">Pilot's Perspective</div>
@@ -1486,10 +1496,10 @@ a { text-decoration: none; color: inherit; }
   <div class="fleet-header"><div class="container"><div class="label reveal">The Gallery</div></div></div>
   <div class="fleet-grid-sym">
     <div class="fleet-item reveal"><img src="assets/branding/PNG/NBAA_Spark-2.jpg" alt="Turbine blades sculptural" loading="lazy"><div class="fleet-item-overlay"></div><span class="fleet-item-label">Engineering</span></div>
-    <div class="fleet-item reveal"><img src="assets/branding/PNG/NBAA_Spark-9.jpg" alt="Upward tail shot against blue sky" loading="lazy"><div class="fleet-item-overlay"></div><span class="fleet-item-label">Silhouette</span></div>
-    <div class="fleet-item reveal"><img src="assets/branding/PNG/NBAA_Spark-6.jpg" alt="Ground-level side profile scale" loading="lazy"><div class="fleet-item-overlay"></div><span class="fleet-item-label">Precision</span></div>
-    <div class="fleet-item reveal"><img src="assets/branding/PNG/NBAA_Spark-26.jpg" alt="Ultra-close turbine blade detail" loading="lazy"><div class="fleet-item-overlay"></div><span class="fleet-item-label">Detail</span></div>
-    <div class="fleet-item reveal"><img src="assets/branding/PNG/Spark_Rifle-42.jpg" alt="Luxury cabin interior" loading="lazy"><div class="fleet-item-overlay"></div><span class="fleet-item-label">Interior</span></div>
+    <div class="fleet-item reveal"><img src="assets/branding/PNG/NBAA_Spark-8.jpg" alt="Tail silhouette moon blue sky" loading="lazy"><div class="fleet-item-overlay"></div><span class="fleet-item-label">Silhouette</span></div>
+    <div class="fleet-item reveal"><img src="assets/branding/PNG/Spark_Rifle-7.jpg" alt="Engine nacelle mountains" loading="lazy"><div class="fleet-item-overlay"></div><span class="fleet-item-label">Precision</span></div>
+    <div class="fleet-item reveal"><img src="assets/branding/PNG/Spark_Rifle-29.jpg" alt="Chrome detail" loading="lazy"><div class="fleet-item-overlay"></div><span class="fleet-item-label">Detail</span></div>
+    <div class="fleet-item reveal"><img src="assets/branding/PNG/Spark_Rifle-21.jpg" alt="Wide cabin interior looking aft" loading="lazy"><div class="fleet-item-overlay"></div><span class="fleet-item-label">Interior</span></div>
     <div class="fleet-item reveal"><img src="assets/branding/PNG/NBAA_Spark-5.jpg" alt="Hangar dramatic strip lights" loading="lazy"><div class="fleet-item-overlay"></div><span class="fleet-item-label">Craft</span></div>
   </div>
 </section>
@@ -1611,22 +1621,13 @@ function heroEntrance() {
     .to('#heroDiv', { scaleX: 1, duration: 0.7, ease: 'expo.out' }, '-=0.5')
     .from('#heroSub', { opacity: 0, y: 15, duration: 0.7, ease: 'expo.out' }, '-=0.3')
     .from('#heroCta', { opacity: 0, y: 15, duration: 0.7, ease: 'expo.out' }, '-=0.3')
-    .from('.hero-layer-bg', { scale: 1.08, opacity: 0, duration: 1.8, ease: 'expo.out' }, 0)
-    .from('.hero-layer-mid', { scale: 1.1, opacity: 0, duration: 1.6, ease: 'expo.out' }, 0.1)
-    .from('.hero-layer-fg', { scale: 1.12, x: -40, opacity: 0, duration: 1.4, ease: 'expo.out' }, 0.2);
+    .to('.hc-d1', { clipPath: 'inset(0 0% 0 0)', duration: 1.1, ease: 'expo.out' }, '-=0.9')
+    .to('.hc-d2', { clipPath: 'inset(0% 0 0 0)', duration: 1.1, ease: 'expo.out' }, '-=0.75');
 }
 
-// ═══ HERO PARALLAX — layers move at different speeds (depth effect) ═══
-gsap.to('.hero-layer-fg', {
-  y: 80, ease: 'none',
-  scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true }
-});
-gsap.to('.hero-layer-mid', {
-  y: 40, ease: 'none',
-  scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true }
-});
-gsap.to('.hero-layer-bg', {
-  y: 15, ease: 'none',
+// ═══ HERO PARALLAX — video moves slower + zoom-out ═══
+gsap.to('#heroMedia', {
+  y: 200, scale: 1.0, ease: 'none',
   scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true }
 });
 
