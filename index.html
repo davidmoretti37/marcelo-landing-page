@@ -243,32 +243,37 @@ a { text-decoration: none; color: inherit; }
 .nav {
   position: fixed; top: 0; left: 0; right: 0; z-index: 9000;
   display: flex; align-items: center; justify-content: space-between;
-  padding: 18px 48px;
+  padding: 52px 80px;
   background: transparent;
-  transition: background 0.5s, padding 0.4s var(--ease-out), backdrop-filter 0.5s;
+  transition: background 0.5s, padding 0.5s var(--ease-out), backdrop-filter 0.5s;
   opacity: 0;
   color: var(--white);
   text-shadow: 0 1px 12px rgba(0,0,0,0.25);
 }
-.nav.show { opacity: 1; transition: opacity 0.8s 0.3s, background 0.5s, padding 0.4s var(--ease-out); }
+.nav.show { opacity: 1; transition: opacity 0.8s 0.3s, background 0.5s, padding 0.5s var(--ease-out); }
 .nav.scrolled {
   padding: 14px 48px;
   background: rgba(10,14,20,0.85);
   backdrop-filter: blur(40px);
   -webkit-backdrop-filter: blur(40px);
 }
-.nav-logo { display: flex; align-items: center; gap: 14px; }
+.nav.scrolled .nav-logo-text { font-size: 11px; letter-spacing: 0.3em; }
+.nav.scrolled .nav-links li a { font-size: 11px; }
+.nav.scrolled .nav-cta { padding: 10px 28px; font-size: 11px; }
+.nav.scrolled #logoCanvas { width: 22px; height: 22px; }
+.nav-logo { display: flex; align-items: center; gap: 18px; }
 .nav-logo svg { height: 24px; width: auto; display: none; }
 .nav-logo-text {
-  font-size: 11px; font-weight: 500;
-  letter-spacing: 0.3em; text-transform: uppercase;
+  font-size: 18px; font-weight: 500;
+  letter-spacing: 0.4em; text-transform: uppercase;
+  transition: font-size 0.5s var(--ease-out), letter-spacing 0.5s var(--ease-out);
 }
-.nav-links { display: flex; align-items: center; gap: 44px; list-style: none; }
+.nav-links { display: flex; align-items: center; gap: 56px; list-style: none; }
 .nav-links li a {
-  font-size: 11px; font-weight: 400;
-  letter-spacing: 0.15em; text-transform: uppercase;
+  font-size: 15px; font-weight: 400;
+  letter-spacing: 0.2em; text-transform: uppercase;
   color: rgba(255,255,255,0.6);
-  transition: color 0.3s;
+  transition: color 0.3s, font-size 0.5s var(--ease-out);
   position: relative;
 }
 .nav-links li a::after {
@@ -279,9 +284,9 @@ a { text-decoration: none; color: inherit; }
 .nav-links li a:hover { color: var(--white); }
 .nav-links li a:hover::after { width: 100%; }
 .nav-cta {
-  padding: 10px 28px;
+  padding: 14px 38px;
   border: 1px solid rgba(255,255,255,0.15);
-  transition: all 0.4s var(--ease-out);
+  transition: all 0.5s var(--ease-out);
 }
 .nav-cta::after { display: none; }
 .nav-cta:hover { background: var(--white); color: var(--navy); border-color: var(--white); }
@@ -341,11 +346,11 @@ a { text-decoration: none; color: inherit; }
 
 /* 3D Crystal Logo Canvas */
 #logoCanvas {
-  width: 22px;
-  height: 22px;
+  width: 42px;
+  height: 42px;
   display: block;
   opacity: 0;
-  transition: opacity 0.5s ease;
+  transition: opacity 0.5s ease, width 0.5s var(--ease-out), height 0.5s var(--ease-out);
 }
 
 /* ═══ MARQUEE ═══ */
@@ -1466,7 +1471,7 @@ a { text-decoration: none; color: inherit; }
 
 <!-- ═══ HERO — FULL-BLEED VIDEO ═══ -->
 <section class="hero-flight" id="hero">
-  <video class="hero-video" autoplay muted loop playsinline>
+  <video class="hero-video" muted loop playsinline preload="auto">
     <source src="assets/hero-video.mp4" type="video/mp4">
   </video>
   <img class="hero-img" src="assets/hero.jpg" alt="Private jet on tarmac" style="display:none;">
