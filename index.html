@@ -9,8 +9,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500&family=Italiana&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-<script src="https://d3js.org/d3.v7.min.js"></script>
-<script src="https://unpkg.com/topojson-client@3"></script>
+<script async src="https://d3js.org/d3.v7.min.js"></script>
+<script async src="https://unpkg.com/topojson-client@3"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
@@ -208,51 +208,43 @@ a { text-decoration: none; color: inherit; }
 /* ═══ PRELOADER ═══ */
 .preloader {
   position: fixed; inset: 0; z-index: 100000;
-  background: var(--bg);
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  gap: 32px;
+  background: #0a0c14;
+  display: flex; align-items: center; justify-content: center;
+  flex-direction: column;
+  gap: 40px;
 }
-.pre-bolt { width: 80px; height: auto; }
-.pre-bolt path {
+.pre-logo {
+  width: 100px; height: auto;
+  opacity: 0;
+  filter: url(#preGlow);
+}
+.pre-logo-path {
   fill: none;
-  stroke: rgba(12,18,32,0.7);
-  stroke-width: 8;
+  stroke: var(--gold);
+  stroke-width: 5;
   stroke-linecap: round;
   stroke-linejoin: round;
 }
-.pre-text {
+.pre-logo-path.glow-trail {
+  stroke: var(--gold);
+  stroke-width: 12;
+  opacity: 0.3;
+  filter: blur(6px);
+}
+.pre-counter {
   font-family: 'Makro', Georgia, serif;
-  font-size: 14px; letter-spacing: 0.35em;
+  font-size: 12px;
+  letter-spacing: 0.4em;
+  color: rgba(184,151,106,0);
   text-transform: uppercase;
-  color: rgba(12,18,32,0.4);
-  opacity: 0;
-}
-.pre-bar-wrap {
-  width: 200px; height: 1px;
-  background: rgba(12,18,32,0.08);
-  border-radius: 1px;
-  overflow: hidden;
-  opacity: 0;
-}
-.pre-bar {
-  width: 0%; height: 100%;
-  background: linear-gradient(90deg, rgba(30,60,140,0.5), var(--gold));
-  border-radius: 1px;
-  transition: width 0.1s linear;
-}
-.pre-pct {
-  font-size: 11px; letter-spacing: 0.2em;
-  color: rgba(12,18,32,0.2);
-  font-weight: 300;
-  opacity: 0;
 }
 
 /* ═══ NAV ═══ */
 .nav {
   position: fixed; top: 0; left: 0; right: 0; z-index: 9000;
   display: flex; align-items: center; justify-content: space-between;
-  padding: 32px 48px;
+  padding: 18px 48px;
+  background: transparent;
   transition: background 0.5s, padding 0.4s var(--ease-out), backdrop-filter 0.5s;
   opacity: 0;
   color: var(--white);
@@ -260,22 +252,13 @@ a { text-decoration: none; color: inherit; }
 }
 .nav.show { opacity: 1; transition: opacity 0.8s 0.3s, background 0.5s, padding 0.4s var(--ease-out); }
 .nav.scrolled {
-  padding: 18px 48px;
-  background: rgba(248,247,244,0.90);
+  padding: 14px 48px;
+  background: rgba(10,14,20,0.85);
   backdrop-filter: blur(40px);
   -webkit-backdrop-filter: blur(40px);
 }
-.nav.scrolled .nav-logo-text { color: var(--text-dark); }
-.nav.scrolled .nav-logo svg path { fill: var(--text-dark); }
-.nav.scrolled .nav-links li a { color: rgba(12,18,32,0.55); }
-.nav.scrolled .nav-links li a:hover { color: var(--text-dark); }
-.nav.scrolled .nav-links li a::after { background: var(--text-dark); }
-.nav.scrolled .nav-cta { border-color: rgba(12,18,32,0.15); color: var(--text-dark); }
-.nav.scrolled .nav-cta:hover { background: var(--navy); color: var(--white); border-color: var(--navy); }
-.nav.scrolled .mobile-toggle svg { stroke: var(--text-dark); }
-.nav.scrolled { text-shadow: none; }
 .nav-logo { display: flex; align-items: center; gap: 14px; }
-.nav-logo svg { height: 24px; width: auto; }
+.nav-logo svg { height: 24px; width: auto; display: none; }
 .nav-logo-text {
   font-size: 11px; font-weight: 500;
   letter-spacing: 0.3em; text-transform: uppercase;
@@ -302,7 +285,7 @@ a { text-decoration: none; color: inherit; }
 }
 .nav-cta::after { display: none; }
 .nav-cta:hover { background: var(--white); color: var(--navy); border-color: var(--white); }
-.mobile-toggle { display: none; background: none; border: none; cursor: none; }
+.mobile-toggle { display: none; background: none; border: none; cursor: pointer; }
 .mobile-menu {
   position: fixed; inset: 0; z-index: 8999;
   background: var(--navy);
@@ -321,90 +304,48 @@ a { text-decoration: none; color: inherit; }
 .mobile-menu a:hover { color: var(--gold); }
 .mobile-close {
   position: absolute; top: 32px; right: 48px;
-  background: none; border: none; cursor: none;
+  background: none; border: none; cursor: pointer;
 }
 
-/* ═══ HERO — PREMIUM LUXURY ═══ */
-.hero-premium {
-  position: relative;
+/* ═══ HERO — FULL-BLEED IMAGE ═══ */
+.hero-flight {
+  position: sticky;
+  top: 0;
   height: 100vh;
   min-height: 700px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
   overflow: hidden;
-  background: var(--navy-deep);
-}
-
-.hero-bg-image {
-  position: absolute;
-  inset: 0;
   z-index: 0;
 }
-.hero-bg-image img {
+.hero-flight::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 140px;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.3), transparent);
+  z-index: 2;
+  pointer-events: none;
+}
+.hero-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   object-position: center center;
 }
-
-.hero-overlay-premium {
+.hero-video {
   position: absolute;
-  inset: 0;
-  z-index: 1;
-  background: linear-gradient(180deg, rgba(15,20,25,0.35) 0%, rgba(15,20,25,0.25) 50%, rgba(15,20,25,0.45) 100%);
+  top: 50%; left: 50%;
+  min-width: 100%; min-height: 100%;
+  transform: translate(-50%, -50%) rotate(90deg);
+  object-fit: cover;
 }
 
-.hero-content-premium {
-  position: relative;
-  z-index: 10;
-  max-width: 900px;
-  padding: 0 32px;
-  color: var(--white);
-}
-
-.hero-kicker {
-  font-size: 12px;
-  letter-spacing: 0.25em;
-  text-transform: uppercase;
-  color: var(--blue-accent);
-  margin-bottom: 28px;
-  font-weight: 500;
-}
-
-.hero-premium h1 {
-  font-family: 'Inter', -apple-system, sans-serif;
-  font-size: clamp(42px, 6.5vw, 72px);
-  font-weight: 300;
-  letter-spacing: 0.05em;
-  line-height: 1.15;
-  margin-bottom: 32px;
-  text-transform: uppercase;
-}
-
-.hero-line {
+/* 3D Crystal Logo Canvas */
+#logoCanvas {
+  width: 22px;
+  height: 22px;
   display: block;
-  overflow: hidden;
-}
-.hero-line-inner {
-  display: block;
-  transform: translateY(110%);
-}
-
-.hero-subtitle {
-  font-size: 16px;
-  line-height: 1.65;
-  color: rgba(255,255,255,0.95);
-  margin-bottom: 40px;
-  font-weight: 300;
-}
-
-.hero-ctas {
-  display: flex;
-  gap: 16px;
-  justify-content: center;
-  flex-wrap: wrap;
+  opacity: 0;
+  transition: opacity 0.5s ease;
 }
 
 /* ═══ MARQUEE ═══ */
@@ -936,7 +877,6 @@ a { text-decoration: none; color: inherit; }
   .mobile-close { right: 24px; }
 }
 @media (max-width: 640px) {
-  .hero-premium h1 { font-size: clamp(32px, 9vw, 48px); }
   .fleet-grid { grid-template-columns: 1fr; grid-auto-rows: 40vh; }
   .fleet-item:nth-child(1),
   .fleet-item:nth-child(4),
@@ -1009,7 +949,7 @@ a { text-decoration: none; color: inherit; }
 }
 .plane-stats {
   display: grid; grid-template-columns: 1fr 1fr;
-  gap: 16px 28px; margin-bottom: 44px;
+  gap: 16px 28px; margin-bottom: 28px;
 }
 .plane-stat { border-top: 1px solid rgba(255,255,255,0.08); padding-top: 12px; }
 .plane-stat-val {
@@ -1046,6 +986,223 @@ a { text-decoration: none; color: inherit; }
 }
 .plane-counter-dot.active { background: var(--gold, #B8976A); transform: scale(1.5); }
 
+/* ─── BLUEPRINT TOGGLE ─── */
+.blueprint-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 24px;
+  padding: 10px 24px;
+  border: 1px solid rgba(184,151,106,0.35);
+  background: rgba(184,151,106,0.06);
+  color: var(--gold);
+  font-family: 'Inter', monospace;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s var(--ease-out);
+}
+.blueprint-toggle:hover {
+  border-color: var(--gold);
+  background: rgba(184,151,106,0.12);
+}
+
+/* ─── X-RAY SCANNER SECTION ─── */
+.xray-section {
+  background: var(--bg);
+  padding-top: clamp(60px, 8vw, 100px);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+.xray-header {
+  text-align: center;
+  margin-bottom: clamp(24px, 3vw, 40px);
+  padding: 0 clamp(24px, 5vw, 64px);
+}
+.xray-header .label { justify-content: center; }
+.xray-header .section-title { color: var(--navy); }
+.xray-viewport {
+  position: relative;
+  flex: 1;
+  overflow: hidden;
+}
+.xray-wrap {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(900px, 100%);
+}
+.xray-exterior, .xray-interior {
+  width: 100%;
+  display: block;
+}
+.xray-interior {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  clip-path: inset(0% 0 100% 0);
+}
+.xray-line {
+  position: absolute;
+  left: 5%; right: 5%;
+  height: 1.5px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  opacity: 0;
+  pointer-events: none;
+  box-shadow: 0 0 12px rgba(184,151,106,0.4);
+  transition: opacity 0.3s;
+  z-index: 2;
+}
+
+/* ─── BLUEPRINT PANEL ─── */
+.blueprint-panel {
+  background: #08090e;
+  max-height: 0;
+  overflow: hidden;
+  background-image:
+    linear-gradient(rgba(184,151,106,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(184,151,106,0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+.blueprint-panel.active {
+  max-height: none;
+  overflow: visible;
+}
+.blueprint-inner {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: clamp(40px, 6vw, 80px) clamp(24px, 5vw, 64px);
+  position: relative;
+}
+.blueprint-close {
+  position: absolute;
+  top: clamp(16px, 3vw, 40px);
+  right: clamp(16px, 3vw, 40px);
+  width: 40px;
+  height: 40px;
+  border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.03);
+  color: rgba(255,255,255,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s;
+  z-index: 2;
+}
+.blueprint-close:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+.blueprint-title-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+.blueprint-title-line {
+  flex: 1;
+  height: 1px;
+  background: rgba(184,151,106,0.2);
+}
+.blueprint-title-text {
+  font-size: 9px;
+  letter-spacing: 0.4em;
+  color: rgba(184,151,106,0.5);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.blueprint-aircraft-name {
+  font-family: 'Italiana', serif;
+  font-size: clamp(28px, 3.5vw, 44px);
+  color: #fff;
+  text-align: center;
+  margin: 0 0 4px;
+}
+.blueprint-category {
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  color: var(--gold);
+  text-transform: uppercase;
+  text-align: center;
+  margin-bottom: 40px;
+}
+.blueprint-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  flex: 1;
+}
+.blueprint-group {
+  border: 1px solid rgba(184,151,106,0.08);
+  padding: 20px;
+}
+.blueprint-group-title {
+  font-size: 9px;
+  letter-spacing: 0.35em;
+  color: var(--gold);
+  text-transform: uppercase;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.blueprint-group-title::before {
+  content: '';
+  width: 16px;
+  height: 1px;
+  background: var(--gold);
+  opacity: 0.5;
+}
+.blueprint-spec {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 7px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+.blueprint-spec:last-child { border-bottom: none; }
+.blueprint-spec-key {
+  font-size: 11px;
+  color: rgba(255,255,255,0.4);
+  letter-spacing: 0.05em;
+}
+.blueprint-spec-val {
+  font-family: 'Inter', monospace;
+  font-size: 13px;
+  font-weight: 400;
+  color: #fff;
+  letter-spacing: 0.03em;
+  font-variant-numeric: tabular-nums;
+}
+.blueprint-spec-unit {
+  font-size: 10px;
+  color: rgba(255,255,255,0.2);
+  margin-left: 6px;
+}
+.blueprint-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 40px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(184,151,106,0.12);
+  font-size: 8px;
+  letter-spacing: 0.3em;
+  color: rgba(184,151,106,0.35);
+  text-transform: uppercase;
+}
+.blueprint-footer-sep {
+  width: 20px;
+  height: 1px;
+  background: rgba(184,151,106,0.15);
+}
 /* ─── RIGHT CANVAS COL ─── */
 .plane-canvas-col {
   display: flex; align-items: center; justify-content: center;
@@ -1064,10 +1221,9 @@ a { text-decoration: none; color: inherit; }
   pointer-events: none;
 }
 #planeCanvas {
-  width: 100% !important;
-  height: 100% !important;
+  width: 100%; height: 100%;
   display: block;
-  transition: opacity 0.35s ease;
+  cursor: grab;
 }
 .plane-fallback {
   position: absolute; inset: 0;
@@ -1151,12 +1307,6 @@ a { text-decoration: none; color: inherit; }
 @media (max-width: 768px) {
 
   /* ── Hero ── */
-  .hero-content-premium {
-    max-width: 100%;
-    padding: 0 28px;
-  }
-  .hero-kicker { font-size: 11px; margin-bottom: 24px; }
-  .hero-subtitle { font-size: 16px; margin-bottom: 40px; }
 
   /* ── Nav ── */
   .mobile-toggle { cursor: pointer; }
@@ -1193,6 +1343,12 @@ a { text-decoration: none; color: inherit; }
   .plane-stats { gap: 12px 20px; margin-bottom: 28px; }
   .plane-stat-val { font-size: 18px; }
 
+  /* ── Blueprint ── */
+  .blueprint-inner { padding: 32px 20px; }
+  .blueprint-grid { grid-template-columns: 1fr; }
+  .blueprint-aircraft-name { font-size: 28px; }
+  .blueprint-close { top: 12px; right: 12px; }
+
   /* ── Services ── */
   .svc-slide { padding: 80px 0; }
   .svc-text { padding: 0 24px !important; max-width: 100%; }
@@ -1220,10 +1376,7 @@ a { text-decoration: none; color: inherit; }
 
 @media (max-width: 480px) {
   /* ── Hero ── */
-  .hero-premium { min-height: 100svh; }
-  .hero-premium h1 { font-size: clamp(28px, 8.5vw, 42px); }
-  .hero-ctas { margin-top: 32px; gap: 12px; }
-  .btn-premium, .btn-secondary { padding: 14px 32px; font-size: 12px; }
+  .hero-flight { min-height: 100svh; }
 
   /* ── Services ── */
   .svc-slide { padding: 64px 0; }
@@ -1268,20 +1421,28 @@ a { text-decoration: none; color: inherit; }
 
 <!-- ═══ PRELOADER ═══ -->
 <div class="preloader" id="preloader">
-  <svg class="pre-bolt" viewBox="0 0 362 448" fill="none">
-    <path id="boltP1" d="M200.264 1.18837L0.61804 225.27C0.262735 225.669 0.0664062 226.185 0.0664062 226.719V227.658V330.356C0.0664062 331.558 1.04122 332.533 2.24371 332.533H153.334C154.536 332.533 155.511 331.558 155.511 330.356V258.665C155.511 257.463 154.536 256.488 153.334 256.488H79.9366C78.042 256.488 77.0514 254.236 78.3318 252.839L203.494 116.334C203.862 115.933 204.067 115.408 204.067 114.863V2.63675C204.067 0.635919 201.595 -0.305547 200.264 1.18837Z"/>
-    <path id="boltP2" d="M161.803 446.69L361.449 222.608C361.804 222.21 362 221.694 362 221.16V220.221V117.523C362 116.32 361.025 115.346 359.823 115.346H208.733C207.531 115.346 206.556 116.32 206.556 117.523V189.214C206.556 190.416 207.531 191.391 208.733 191.391H282.13C284.025 191.391 285.015 193.643 283.735 195.04L158.572 331.545C158.204 331.946 158 332.471 158 333.016V445.242C158 447.243 160.472 448.184 161.803 446.69Z"/>
+  <svg class="pre-logo" id="preLogo" viewBox="0 0 362 448" fill="none">
+    <defs>
+      <filter id="preGlow" x="-50%" y="-50%" width="200%" height="200%">
+        <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="blur"/>
+        <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+      </filter>
+    </defs>
+    <!-- Glow trail layer -->
+    <path class="pre-logo-path glow-trail" d="M200.264 1.188L0.618 225.27C0.263 225.669 0.066 226.185 0.066 226.719V330.356C0.066 331.558 1.041 332.533 2.244 332.533H153.334C154.536 332.533 155.511 331.558 155.511 330.356V258.665C155.511 257.463 154.536 256.488 153.334 256.488H79.937C78.042 256.488 77.051 254.236 78.332 252.839L203.494 116.334C203.862 115.933 204.067 115.408 204.067 114.863V2.637C204.067 0.636 201.595-0.306 200.264 1.188Z"/>
+    <path class="pre-logo-path glow-trail" d="M161.803 446.69L361.449 222.608C361.804 222.21 362 221.694 362 221.16V117.523C362 116.32 361.025 115.346 359.823 115.346H208.733C207.531 115.346 206.556 116.32 206.556 117.523V189.214C206.556 190.416 207.531 191.391 208.733 191.391H282.13C284.025 191.391 285.015 193.643 283.735 195.04L158.572 331.545C158.204 331.946 158 332.471 158 333.016V445.242C158 447.243 160.472 448.184 161.803 446.69Z"/>
+    <!-- Main crisp stroke layer -->
+    <path class="pre-logo-path" id="prePath1" d="M200.264 1.188L0.618 225.27C0.263 225.669 0.066 226.185 0.066 226.719V330.356C0.066 331.558 1.041 332.533 2.244 332.533H153.334C154.536 332.533 155.511 331.558 155.511 330.356V258.665C155.511 257.463 154.536 256.488 153.334 256.488H79.937C78.042 256.488 77.051 254.236 78.332 252.839L203.494 116.334C203.862 115.933 204.067 115.408 204.067 114.863V2.637C204.067 0.636 201.595-0.306 200.264 1.188Z"/>
+    <path class="pre-logo-path" id="prePath2" d="M161.803 446.69L361.449 222.608C361.804 222.21 362 221.694 362 221.16V117.523C362 116.32 361.025 115.346 359.823 115.346H208.733C207.531 115.346 206.556 116.32 206.556 117.523V189.214C206.556 190.416 207.531 191.391 208.733 191.391H282.13C284.025 191.391 285.015 193.643 283.735 195.04L158.572 331.545C158.204 331.946 158 332.471 158 333.016V445.242C158 447.243 160.472 448.184 161.803 446.69Z"/>
   </svg>
-  <div class="pre-text" id="preText">Spark Aviation</div>
-  <div class="pre-bar-wrap" id="preBarWrap"><div class="pre-bar" id="preBar"></div></div>
-  <div class="pre-pct" id="prePct">0%</div>
+  <div class="pre-counter" id="preCounter">Loading</div>
 </div>
 
 <!-- ═══ NAV ═══ -->
 <nav class="nav" id="nav">
-  <a href="#" class="nav-logo">
-    <svg viewBox="0 0 362 448" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M200.264 1.18837L0.61804 225.27C0.262735 225.669 0.0664062 226.185 0.0664062 226.719V227.658V330.356C0.0664062 331.558 1.04122 332.533 2.24371 332.533H153.334C154.536 332.533 155.511 331.558 155.511 330.356V258.665C155.511 257.463 154.536 256.488 153.334 256.488H79.9366C78.042 256.488 77.0514 254.236 78.3318 252.839L203.494 116.334C203.862 115.933 204.067 115.408 204.067 114.863V2.63675C204.067 0.635919 201.595 -0.305547 200.264 1.18837ZM161.803 446.69L361.449 222.608C361.804 222.21 362 221.694 362 221.16V220.221V117.523C362 116.32 361.025 115.346 359.823 115.346H208.733C207.531 115.346 206.556 116.32 206.556 117.523V189.214C206.556 190.416 207.531 191.391 208.733 191.391H282.13C284.025 191.391 285.015 193.643 283.735 195.04L158.572 331.545C158.204 331.946 158 332.471 158 333.016V445.242C158 447.243 160.472 448.184 161.803 446.69Z" fill="white"/></svg>
-    <span class="nav-logo-text">Spark Aviation</span>
+  <a href="#" class="nav-logo" id="navLogoLink">
+    <canvas id="logoCanvas" width="64" height="64"></canvas>
+    <span class="nav-logo-text">Spark</span>
   </a>
   <ul class="nav-links">
     <li><a href="#about">About</a></li>
@@ -1303,29 +1464,12 @@ a { text-decoration: none; color: inherit; }
   <a href="#contact" class="mob-link">Contact</a>
 </div>
 
-<!-- ═══ HERO — PREMIUM LUXURY ═══ -->
-<section class="hero-premium" id="hero">
-  <div class="hero-bg-image">
-    <img src="assets/branding/PNG/Spark_Rifle-41.jpg" alt="Spark Aviation luxury aircraft">
-  </div>
-  <div class="hero-overlay-premium"></div>
-  <div class="hero-content-premium" id="heroContent">
-    <div class="hero-kicker">AIRCRAFT SALES · ACQUISITION · MANAGEMENT</div>
-    <h1>
-      <span class="hero-line"><span class="hero-line-inner" id="hl1">Elevating</span></span>
-      <span class="hero-line"><span class="hero-line-inner" id="hl2">Excellence</span></span>
-      <span class="hero-line"><span class="hero-line-inner" id="hl3">in Aviation</span></span>
-    </h1>
-    <p class="hero-subtitle" id="heroSub">
-      At Spark Aviation, we don't just move aircraft — we move dreams.<br>
-      Founded by international aviation veteran Marcelo Borin, we bring<br>
-      30 years of elite experience to every transaction, flight, and relationship.
-    </p>
-    <div class="hero-ctas" id="heroCta">
-      <a href="#contact" class="btn-premium">Get In Touch</a>
-      <a href="#services" class="btn-secondary">Explore Services</a>
-    </div>
-  </div>
+<!-- ═══ HERO — FULL-BLEED VIDEO ═══ -->
+<section class="hero-flight" id="hero">
+  <video class="hero-video" autoplay muted loop playsinline>
+    <source src="assets/hero-video.mp4" type="video/mp4">
+  </video>
+  <img class="hero-img" src="assets/hero.jpg" alt="Private jet on tarmac" style="display:none;">
 </section>
 
 <!-- ═══ MARQUEE ═══ -->
@@ -1355,7 +1499,7 @@ a { text-decoration: none; color: inherit; }
 <section id="about">
   <div class="about">
     <div class="about-img">
-      <img src="assets/branding/PNG/Spark_Rifle-17.jpg" alt="Low-angle wing tail engine mountains" style="object-position: center bottom;">
+      <img src="assets/branding/PNG/NBAA_Spark-11.jpg" alt="Blue jet fuselage close-up" style="object-position: center center;">
       <div class="about-img-reveal" id="aboutReveal"></div>
     </div>
     <div class="about-text">
@@ -1401,11 +1545,17 @@ a { text-decoration: none; color: inherit; }
       <h2 class="plane-info-name" id="planeName">Gulfstream G700</h2>
       <p class="plane-info-desc" id="planeDesc">The pinnacle of ultra-long-range aviation. Engineered for those who demand the extraordinary on every journey.</p>
       <div class="plane-stats" id="planeStats">
-        <div class="plane-stat"><div class="plane-stat-val">7,500</div><div class="plane-stat-key">Range (nm)</div></div>
-        <div class="plane-stat"><div class="plane-stat-val">Mach .925</div><div class="plane-stat-key">Top Speed</div></div>
+        <div class="plane-stat"><div class="plane-stat-val">7,750</div><div class="plane-stat-key">Range (nm)</div></div>
+        <div class="plane-stat"><div class="plane-stat-val">Mach .935</div><div class="plane-stat-key">Top Speed</div></div>
         <div class="plane-stat"><div class="plane-stat-val">19</div><div class="plane-stat-key">Passengers</div></div>
         <div class="plane-stat"><div class="plane-stat-val">51,000</div><div class="plane-stat-key">Max Altitude (ft)</div></div>
       </div>
+      <button class="blueprint-toggle" id="blueprintToggle">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" width="16" height="16">
+          <rect x="3" y="3" width="18" height="18" rx="1"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="3" x2="9" y2="21"/>
+        </svg>
+        View Blueprint
+      </button>
       <div class="plane-nav-row">
         <button class="plane-nav" id="planePrev" aria-label="Previous">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M15 18l-6-6 6-6"/></svg>
@@ -1432,6 +1582,34 @@ a { text-decoration: none; color: inherit; }
 
   </div>
 </section>
+
+<!-- ═══ BLUEPRINT PANEL ═══ -->
+<div class="blueprint-panel" id="blueprintOverlay">
+  <div class="blueprint-inner">
+    <button class="blueprint-close" id="blueprintClose" aria-label="Close blueprint">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="20" height="20">
+        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+    <div class="blueprint-header">
+      <div class="blueprint-title-row">
+        <span class="blueprint-title-line"></span>
+        <span class="blueprint-title-text">Technical Specification</span>
+        <span class="blueprint-title-line"></span>
+      </div>
+      <h3 class="blueprint-aircraft-name" id="blueprintName"></h3>
+      <div class="blueprint-category" id="blueprintCategory"></div>
+    </div>
+    <div class="blueprint-grid" id="blueprintGrid"></div>
+    <div class="blueprint-footer">
+      <span>Spark Aviation</span>
+      <span class="blueprint-footer-sep"></span>
+      <span id="blueprintDwg">DWG NO: SA-G700-001</span>
+      <span class="blueprint-footer-sep"></span>
+      <span>Scale: NTS</span>
+    </div>
+  </div>
+</div>
 
 <!-- ═══ SERVICES ═══ -->
 <section id="services">
@@ -1470,7 +1648,7 @@ a { text-decoration: none; color: inherit; }
 <!-- ═══ STORY SPLIT — JET VIEWS ═══ -->
 <section class="story-section">
   <div class="story-img reveal">
-    <img src="assets/branding/PNG/Spark_Rifle-11.jpg" alt="Gulfstream G700 full side profile" loading="lazy">
+    <img src="assets/branding/PNG/Spark_Rifle-34.jpg" alt="Turbine engine close-up" loading="lazy">
   </div>
   <div class="story-text">
     <div class="label reveal">Curated Excellence</div>
@@ -1502,6 +1680,22 @@ a { text-decoration: none; color: inherit; }
     <h2 class="section-title reveal">Above the World,<br>Below the Clouds</h2>
     <p class="body-text reveal">Marcelo Borin flew from this vantage point for three decades — including transporting heads of state. He understands what it means to be at altitude, and what it takes to get there.</p>
     <p class="body-text reveal" style="margin-top:16px;">That perspective shapes every acquisition, every negotiation, every relationship Spark Aviation builds.</p>
+  </div>
+</section>
+
+<!-- ═══ X-RAY CABIN SCANNER ═══ -->
+<section class="xray-section">
+  <div class="xray-header">
+    <div class="label reveal" style="justify-content:center;">Interior Layout</div>
+    <h2 class="section-title reveal" style="color:var(--navy);text-align:center;">Cabin<br>Revealed</h2>
+  </div>
+  <div class="xray-viewport" id="xrayViewport">
+    <div class="xray-wrap" id="xrayWrap">
+      <img class="xray-exterior" src="assets/plane-top.png" alt="Top view exterior">
+      <img class="xray-interior" id="xrayInterior" src="assets/plane_interior_only.png" alt="Cabin interior cutaway">
+    </div>
+    <div class="xray-line xray-line--top" id="xrayLineTop"></div>
+    <div class="xray-line xray-line--bottom" id="xrayLineBot"></div>
   </div>
 </section>
 
@@ -1580,75 +1774,72 @@ if (window.innerWidth > 1024) {
   });
 }
 
-// ═══ PRELOADER — BOLT DRAWS + LOADING BAR + CLIP-PATH WIPE ═══
-const p1 = document.getElementById('boltP1');
-const p2 = document.getElementById('boltP2');
-const l1 = p1.getTotalLength();
-const l2 = p2.getTotalLength();
-gsap.set([p1, p2], { strokeDasharray: i => [l1, l2][i], strokeDashoffset: i => [l1, l2][i] });
+// ═══ START LOADING PLANE DATA IMMEDIATELY ═══
+(function() {
+  function ld(src, cb) {
+    var s = document.createElement('script'); s.src = src;
+    s.onload = cb;
+    s.onerror = function() { console.warn('Failed to load:', src); };
+    document.body.appendChild(s);
+  }
+  ld('assets/branding/plane-data.js', function() {
+    PLANE_SOURCES[0] = (typeof PLANE_DATA !== 'undefined') ? PLANE_DATA : PLANE_SOURCES[0];
+    window._planeDataReady = true;
+  });
+})();
 
-const preBar = document.getElementById('preBar');
-const prePct = document.getElementById('prePct');
+// ═══ PRELOADER — CINEMATIC LOGO DRAW ═══
 const preloader = document.getElementById('preloader');
-let loadPct = 0;
+const preLogo = document.getElementById('preLogo');
+const prePaths = document.querySelectorAll('.pre-logo-path');
+const preCounter = document.getElementById('preCounter');
+
+// Set stroke-dash values from actual path lengths
+prePaths.forEach(function(p) {
+  var len = p.getTotalLength();
+  p.style.strokeDasharray = len;
+  p.style.strokeDashoffset = len;
+});
 
 const preTl = gsap.timeline({
   onComplete: () => {
-    gsap.to(preloader, {
-      clipPath: 'inset(0 0 100% 0)', duration: 0.5, ease: 'expo.inOut',
-      onComplete: () => { preloader.style.display = 'none'; }
-    });
     document.getElementById('nav').classList.add('show');
-    heroEntrance();
-    // Load 19.5MB of plane data in background while user reads hero
-    (function() {
-      function ld(src, cb) { const s = document.createElement('script'); s.src = src; s.onload = cb; document.body.appendChild(s); }
-      ld('assets/branding/plane-data.js', function() {
-        ld('assets/branding/plane-data-2.js', function() { initPlaneViewer(); });
-      });
-    })();
+    initCrystalLogo();
+    if (window._planeDataReady) {
+      initPlaneViewer();
+    } else {
+      var checkPlane = setInterval(function() {
+        if (window._planeDataReady) { clearInterval(checkPlane); initPlaneViewer(); }
+      }, 100);
+    }
+    // Reset hero video to sync with page load
+    var heroVideo = document.querySelector('.hero-video');
+    if (heroVideo) { heroVideo.currentTime = 0; heroVideo.play(); }
   }
 });
 preTl
-  .to('#preText', { opacity: 1, duration: 0.2 }, 0)
-  .to('#preBarWrap', { opacity: 1, duration: 0.2 }, 0.1)
-  .to('#prePct', { opacity: 1, duration: 0.2 }, 0.1)
-  .to(p1, { strokeDashoffset: 0, duration: 0.55, ease: 'power2.inOut' }, 0)
-  .to(p2, { strokeDashoffset: 0, duration: 0.55, ease: 'power2.inOut' }, 0.08)
-  .to({ v: 0 }, { v: 100, duration: 0.8, ease: 'power2.inOut',
+  // Counter fades in
+  .to(preCounter, { color: 'rgba(184,151,106,0.5)', duration: 0.4 }, 0)
+  // Percentage count-up
+  .to({ v: 0 }, { v: 100, duration: 2.2, ease: 'power1.inOut',
     onUpdate: function() {
-      loadPct = Math.round(this.targets()[0].v);
-      preBar.style.width = loadPct + '%';
-      prePct.textContent = loadPct + '%';
+      preCounter.textContent = Math.round(this.targets()[0].v) + '%';
     }
-  }, 0)
-  .to([p1, p2], { fill: 'rgba(12,18,32,0.85)', duration: 0.2, ease: 'power1.in' }, '-=0.2')
-  .to('.pre-bolt', { scale: 30, opacity: 0, duration: 0.45, ease: 'expo.in' }, '-=0.1')
-  .to(['#preText', '#preBarWrap', '#prePct'], { opacity: 0, duration: 0.2 }, '-=0.35');
-
-// ═══ HERO ENTRANCE ═══
-function heroEntrance() {
-  const hTl = gsap.timeline();
-  hTl
-    .from('.hero-kicker', { opacity: 0, y: 20, duration: 0.8, ease: 'expo.out' })
-    .to('#hl1', { y: 0, duration: 1.2, ease: 'expo.out' }, '-=0.4')
-    .to('#hl2', { y: 0, duration: 1.2, ease: 'expo.out' }, '-=0.9')
-    .to('#hl3', { y: 0, duration: 1.2, ease: 'expo.out' }, '-=0.9')
-    .from('#heroSub', { opacity: 0, y: 20, duration: 0.8, ease: 'expo.out' }, '-=0.5')
-    .from('#heroCta', { opacity: 0, y: 20, duration: 0.8, ease: 'expo.out' }, '-=0.5');
-}
-
-// ═══ HERO PARALLAX — background image subtle movement ═══
-gsap.to('.hero-bg-image', {
-  y: 150, scale: 1.05, ease: 'none',
-  scrollTrigger: { trigger: '.hero-premium', start: 'top top', end: 'bottom top', scrub: true }
-});
-
-// Hero scroll departure — content floats up as you scroll away
-gsap.to('#heroContent', {
-  y: -120, opacity: 0, ease: 'none',
-  scrollTrigger: { trigger: '.hero-premium', start: 'top top', end: 'bottom top', scrub: true }
-});
+  }, 0.2)
+  // Logo fades in while slowly scaling from small
+  .fromTo(preLogo, { opacity: 0, scale: 0.8 }, { opacity: 1, scale: 1, duration: 0.6, ease: 'power2.out' }, 0.3)
+  // Draw all paths (both glow trails and crisp strokes together)
+  .to(prePaths, { strokeDashoffset: 0, duration: 2, ease: 'power2.inOut', stagger: 0.08 }, 0.4)
+  // Counter fades out
+  .to(preCounter, { color: 'rgba(184,151,106,0)', duration: 0.3 }, 2.2)
+  // Brief pause, then fill reveals
+  .to('#prePath1, #prePath2', { fill: 'rgba(184,151,106,0.9)', duration: 0.5, ease: 'power1.in' }, 2.5)
+  .to(prePaths, { stroke: 'rgba(184,151,106,0)', duration: 0.4 }, 2.6)
+  // Logo zooms in dramatically
+  .to(preLogo, { scale: 20, opacity: 0, duration: 0.8, ease: 'expo.in' }, 3.1)
+  // Background transitions from dark to site color and fades
+  .to(preloader, { background: 'var(--bg)', duration: 0.3 }, 3.1)
+  .to(preloader, { opacity: 0, duration: 0.4, onComplete: () => { preloader.style.display = 'none'; } }, 3.4);
 
 // ═══ NAV SCROLL ═══
 ScrollTrigger.create({
@@ -1663,221 +1854,518 @@ gsap.to('#aboutReveal', {
   scrollTrigger: { trigger: '#about', start: 'top 60%', toggleActions: 'play none none none' }
 });
 
-// ═══ THREE.JS — GLB PLANE VIEWER (top-down, left panel) ═══
-function initPlaneViewer() {
-  const canvas = document.getElementById('planeCanvas');
-  const fallback = document.getElementById('planeFallback');
-  if (!canvas || typeof THREE === 'undefined') return;
+// ═══ SHARED MODEL DATA ═══
+var PLANE_SOURCES = [
+  (typeof PLANE_DATA   !== 'undefined') ? PLANE_DATA   : 'assets/branding/plane.glb',
+  (typeof PLANE_DATA_2 !== 'undefined') ? PLANE_DATA_2 : 'assets/branding/plane2.glb',
+];
+var PLANE_INFO = [
+  { name: 'Gulfstream G700', desc: 'The pinnacle of ultra-long-range aviation. Engineered for those who demand the extraordinary on every journey.',
+    stats: [ { val: '7,750', key: 'Range (nm)' }, { val: 'Mach .935', key: 'Top Speed' }, { val: '19', key: 'Passengers' }, { val: '51,000 ft', key: 'Max Altitude' } ],
+    blueprint: {
+      label: 'G700', category: 'Ultra Long Range',
+      specGroups: [
+        { title: 'Dimensions', specs: [
+          { key: 'Overall Length', val: '109 ft 10 in', unit: '33.50 m' },
+          { key: 'Wingspan', val: '103 ft 0 in', unit: '31.39 m' },
+          { key: 'Overall Height', val: '25 ft 5 in', unit: '7.75 m' },
+          { key: 'Wing Area', val: '1,283 sq ft', unit: null }
+        ]},
+        { title: 'Cabin', specs: [
+          { key: 'Cabin Length', val: '56 ft 11 in', unit: '17.35 m' },
+          { key: 'Cabin Width', val: '8 ft 2 in', unit: '2.49 m' },
+          { key: 'Cabin Height', val: '6 ft 5 in', unit: '1.96 m' },
+          { key: 'Cabin Volume', val: '2,948 cu ft', unit: null },
+          { key: 'Living Areas', val: 'Up to 5', unit: null },
+          { key: 'Baggage', val: '195 cu ft', unit: '5.52 cu m' }
+        ]},
+        { title: 'Performance', specs: [
+          { key: 'Max Range', val: '7,750 nm', unit: '14,353 km' },
+          { key: 'High-Speed Cruise', val: 'Mach 0.90', unit: null },
+          { key: 'Max Operating Speed', val: 'Mach 0.935', unit: null },
+          { key: 'Ceiling', val: '51,000 ft', unit: '15,545 m' },
+          { key: 'Takeoff Distance', val: '6,250 ft', unit: '1,905 m' },
+          { key: 'Landing Distance', val: '2,500 ft', unit: '762 m' }
+        ]},
+        { title: 'Powerplant', specs: [
+          { key: 'Engines', val: '2× Rolls-Royce Pearl 700', unit: null },
+          { key: 'Thrust (each)', val: '18,250 lbf', unit: '81.2 kN' },
+          { key: 'MTOW', val: '107,600 lb', unit: '48,807 kg' }
+        ]}
+      ]
+    }
+  },
+  { name: 'Embraer Praetor 600', desc: 'Super-midsize performance with intercontinental reach. The ideal balance of cabin comfort and operational efficiency.',
+    stats: [ { val: '4,018', key: 'Range (nm)' }, { val: 'Mach .83', key: 'Top Speed' }, { val: '12', key: 'Passengers' }, { val: '45,000 ft', key: 'Max Altitude' } ],
+    blueprint: {
+      label: 'P600', category: 'Super Midsize',
+      specGroups: [
+        { title: 'Dimensions', specs: [
+          { key: 'Overall Length', val: '68 ft 2 in', unit: '20.74 m' },
+          { key: 'Wingspan', val: '70 ft 6 in', unit: '21.49 m' },
+          { key: 'Overall Height', val: '21 ft 1 in', unit: '6.43 m' },
+          { key: 'Wing Area', val: '551 sq ft', unit: null }
+        ]},
+        { title: 'Cabin', specs: [
+          { key: 'Cabin Length', val: '27 ft 6 in', unit: '8.38 m' },
+          { key: 'Cabin Width', val: '6 ft 10 in', unit: '2.08 m' },
+          { key: 'Cabin Height', val: '6 ft 0 in', unit: '1.83 m' },
+          { key: 'Cabin Volume', val: '1,105 cu ft', unit: null },
+          { key: 'Baggage', val: '155 cu ft', unit: '4.39 cu m' }
+        ]},
+        { title: 'Performance', specs: [
+          { key: 'Max Range', val: '4,018 nm', unit: '7,441 km' },
+          { key: 'High-Speed Cruise', val: 'Mach 0.80', unit: null },
+          { key: 'Max Operating Speed', val: 'Mach 0.83', unit: null },
+          { key: 'Ceiling', val: '45,000 ft', unit: '13,716 m' },
+          { key: 'Takeoff Distance', val: '4,717 ft', unit: '1,438 m' },
+          { key: 'Landing Distance', val: '2,086 ft', unit: '636 m' }
+        ]},
+        { title: 'Powerplant', specs: [
+          { key: 'Engines', val: '2× Honeywell HTF7500E', unit: null },
+          { key: 'Thrust (each)', val: '7,528 lbf', unit: '33.5 kN' },
+          { key: 'MTOW', val: '42,858 lb', unit: '19,440 kg' }
+        ]}
+      ]
+    }
+  },
+];
 
-  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+// ═══ 3D CRYSTAL LOGO — spinning in nav ═══
+function initCrystalLogo() {
+  var canvas = document.getElementById('logoCanvas');
+  if (!canvas || typeof THREE === 'undefined') { showLogoFallback(); return; }
+
+  var size = 64;
+  var renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   renderer.outputEncoding = THREE.sRGBEncoding;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1.4;
-  renderer.setClearColor(0x000000, 0); // transparent
-  renderer.shadowMap.enabled = true;
-  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  renderer.setClearColor(0x000000, 0);
+  renderer.setSize(size, size);
 
-  const scene = new THREE.Scene();
-  scene.background = null; // transparent — page background shows through
+  var scene = new THREE.Scene();
+  scene.background = null;
 
-  const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 200);
-  camera.position.set(0, 2.2, 4.0); // lower perspective — more eye-level view
-
-  // Lights
-  const ambient = new THREE.AmbientLight(0xffffff, 0.55);
-  scene.add(ambient);
-  const key = new THREE.DirectionalLight(0xfff8f0, 2.6);
-  key.position.set(2, 10, 4);
-  key.castShadow = true;
-  key.shadow.mapSize.width  = 1024;
-  key.shadow.mapSize.height = 1024;
-  key.shadow.camera.near = 1;
-  key.shadow.camera.far  = 20;
-  key.shadow.camera.left = key.shadow.camera.bottom = -4;
-  key.shadow.camera.right = key.shadow.camera.top   =  4;
-  key.shadow.bias = -0.001;
-  scene.add(key);
-  const fill = new THREE.DirectionalLight(0xd0e8ff, 0.7);
-  fill.position.set(-5, 5, -3); scene.add(fill);
-  const rim = new THREE.DirectionalLight(0xB8976A, 0.5);
-  rim.position.set(3, -2, 5); scene.add(rim);
-
-  // Fixed camera
+  var camera = new THREE.PerspectiveCamera(35, 1, 0.1, 100);
+  camera.position.set(0, 0, 4);
   camera.lookAt(0, 0, 0);
 
-  // Drag state — rotating only the plane mesh
-  let isDragging = false;
-  let lastX = 0;
-  let spinVelocity = 0;
-  let autoSpin = true;
+  scene.add(new THREE.AmbientLight(0xffffff, 0.8));
+  var keyL = new THREE.DirectionalLight(0xffffff, 1.2);
+  keyL.position.set(2, 3, 4);
+  scene.add(keyL);
+  var fillL = new THREE.DirectionalLight(0xddeeff, 0.5);
+  fillL.position.set(-3, 1, 2);
+  scene.add(fillL);
 
-  canvas.style.cursor = 'grab';
-  canvas.addEventListener('pointerdown', e => {
-    isDragging = true;
-    autoSpin = false;
-    lastX = e.clientX;
-    spinVelocity = 0;
+  var crystalModel = null;
+  var loaded = false;
+
+  // Timeout fallback — if GLB takes too long, show SVG
+  var fallbackTimer = setTimeout(function() {
+    if (!loaded) showLogoFallback();
+  }, 4000);
+
+  var loader = new THREE.GLTFLoader();
+  loader.load('assets/branding/crystal-logo.glb', function(gltf) {
+    loaded = true;
+    clearTimeout(fallbackTimer);
+    var model = gltf.scene;
+    var meshes = [];
+    model.traverse(function(child) {
+      if (child.isMesh && child.material) meshes.push(child);
+    });
+    meshes.forEach(function(m) {
+      m.material = new THREE.MeshStandardMaterial({
+        color: 0xffffff,
+        metalness: 0.3,
+        roughness: 0.15,
+        side: THREE.DoubleSide
+      });
+    });
+    var box = new THREE.Box3().setFromObject(model);
+    var center = box.getCenter(new THREE.Vector3());
+    var bsize = box.getSize(new THREE.Vector3());
+    var maxDim = Math.max(bsize.x, bsize.y, bsize.z);
+    var s = 1.8 / maxDim;
+    model.scale.setScalar(s);
+    model.position.sub(center.multiplyScalar(s));
+    model.rotation.x = 0;
+    model.rotation.z = 0;
+    scene.add(model);
+    crystalModel = model;
+    canvas.style.opacity = '1';
+  }, undefined, function() {
+    // GLB load error — show fallback
+    loaded = true;
+    clearTimeout(fallbackTimer);
+    showLogoFallback();
+  });
+
+  var running = true;
+  function animate() {
+    if (!running) return;
+    requestAnimationFrame(animate);
+    if (crystalModel) crystalModel.rotation.y += 0.006;
+    renderer.render(scene, camera);
+  }
+  animate();
+  // Pause when tab hidden
+  document.addEventListener('visibilitychange', function() {
+    if (document.hidden) { running = false; }
+    else { running = true; animate(); }
+  });
+}
+function showLogoFallback() {
+  var canvas = document.getElementById('logoCanvas');
+  if (canvas) canvas.style.display = 'none';
+  var link = document.getElementById('navLogoLink');
+  if (!link || link.querySelector('.logo-fallback')) return;
+  var svg = document.createElement('div');
+  svg.className = 'logo-fallback';
+  svg.innerHTML = '<svg viewBox="0 0 362 448" width="16" height="20" fill="currentColor"><path d="M200.264 1.188L0.618 225.27C0.263 225.669 0.066 226.185 0.066 226.719V330.356C0.066 331.558 1.041 332.533 2.244 332.533H153.334C154.536 332.533 155.511 331.558 155.511 330.356V258.665C155.511 257.463 154.536 256.488 153.334 256.488H79.937C78.042 256.488 77.051 254.236 78.332 252.839L203.494 116.334C203.862 115.933 204.067 115.408 204.067 114.863V2.637C204.067 0.636 201.595-0.306 200.264 1.188Z"/><path d="M161.803 446.69L361.449 222.608C361.804 222.21 362 221.694 362 221.16V117.523C362 116.32 361.025 115.346 359.823 115.346H208.733C207.531 115.346 206.556 116.32 206.556 117.523V189.214C206.556 190.416 207.531 191.391 208.733 191.391H282.13C284.025 191.391 285.015 193.643 283.735 195.04L158.572 331.545C158.204 331.946 158 332.471 158 333.016V445.242C158 447.243 160.472 448.184 161.803 446.69Z"/></svg>';
+  link.insertBefore(svg, link.firstChild);
+}
+
+// ═══ PLANE SPECS VIEWER — separate 3D viewer in specs section ═══
+function initPlaneViewer() {
+  var canvas = document.getElementById('planeCanvas');
+  if (!canvas || typeof THREE === 'undefined') return;
+
+  var wrap = canvas.parentElement;
+  var w = wrap.offsetWidth || 640;
+  var h = wrap.offsetHeight || 640;
+
+  /* ── Renderer ── */
+  var renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.outputEncoding = THREE.sRGBEncoding;
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.4;
+  renderer.setClearColor(0x000000, 0);
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  renderer.setSize(w, h);
+
+  var scene = new THREE.Scene();
+  scene.background = null;
+
+  var camera = new THREE.PerspectiveCamera(42, w / h, 0.1, 200);
+  camera.position.set(0, 1.5, 8);
+  camera.lookAt(0, 0, 0);
+
+  /* ── Lights ── */
+  scene.add(new THREE.AmbientLight(0xffffff, 0.55));
+  var key = new THREE.DirectionalLight(0xfff8f0, 2.6);
+  key.position.set(2, 10, 4);
+  key.castShadow = true;
+  key.shadow.mapSize.set(1024, 1024);
+  key.shadow.camera.near = 1; key.shadow.camera.far = 20;
+  key.shadow.camera.left = key.shadow.camera.bottom = -4;
+  key.shadow.camera.right = key.shadow.camera.top = 4;
+  key.shadow.bias = -0.001;
+  scene.add(key);
+  scene.add(new THREE.DirectionalLight(0xd0e8ff, 0.7).translateX(-5).translateY(5).translateZ(-3));
+  scene.add(new THREE.DirectionalLight(0xB8976A, 0.5).translateX(3).translateY(-2).translateZ(5));
+
+  // Generate environment map for realistic plane reflections
+  var pmrem = new THREE.PMREMGenerator(renderer);
+  pmrem.compileEquirectangularShader();
+  var envScene = new THREE.Scene();
+  var envGeo = new THREE.SphereGeometry(10, 32, 32);
+  var envColors = [];
+  var posAt = envGeo.getAttribute('position');
+  for (var ei = 0; ei < posAt.count; ei++) {
+    var ey = posAt.getY(ei);
+    var et = (ey / 10 + 1) * 0.5;
+    // Sky gradient: warm bottom, blue top
+    envColors.push(0.95 - et * 0.15, 0.92 - et * 0.05, 0.88 + et * 0.12);
+  }
+  envGeo.setAttribute('color', new THREE.Float32BufferAttribute(envColors, 3));
+  envScene.add(new THREE.Mesh(envGeo, new THREE.MeshBasicMaterial({ vertexColors: true, side: THREE.BackSide })));
+  // Bright spots for specular highlights
+  var spotG = new THREE.SphereGeometry(0.8, 8, 8);
+  var spotM = new THREE.MeshBasicMaterial({ color: 0xffffff });
+  var sp1 = new THREE.Mesh(spotG, spotM); sp1.position.set(4, 6, 5); envScene.add(sp1);
+  var sp2 = new THREE.Mesh(spotG, spotM); sp2.position.set(-5, 3, 4); envScene.add(sp2);
+  var planeEnvMap = pmrem.fromScene(envScene, 0.04).texture;
+  pmrem.dispose();
+
+  var currentIdx = 0;
+  var planeRef = null;
+  var isLoading = false;
+  var isDragging = false;
+  var autoSpin = true;
+  var lastX = 0;
+  var spinVelocity = 0;
+
+  var loader = new THREE.GLTFLoader();
+
+  function loadPlane(idx, onDone) {
+    if (isLoading) return;
+    isLoading = true;
+    var infoCol = document.querySelector('.plane-info-col');
+    if (infoCol) infoCol.classList.add('is-switching');
+
+    setTimeout(function() {
+      if (planeRef) { scene.remove(planeRef); planeRef = null; }
+      loader.load(PLANE_SOURCES[idx], function(gltf) {
+        isLoading = false;
+        var model = gltf.scene;
+        var box = new THREE.Box3().setFromObject(model);
+        var center = box.getCenter(new THREE.Vector3());
+        var size = box.getSize(new THREE.Vector3());
+        var maxDim = Math.max(size.x, size.y, size.z);
+        var s = 3.8 / maxDim;
+        model.scale.setScalar(s);
+        model.position.sub(center.multiplyScalar(s));
+        model.position.y += 0.22;
+        model.traverse(function(n) {
+          if (n.isMesh) {
+            n.castShadow = true;
+            if (n.material) {
+              n.material.envMap = planeEnvMap;
+              n.material.envMapIntensity = 1.2;
+              n.material.metalness = Math.max(n.material.metalness || 0, 0.4);
+              n.material.roughness = Math.min(n.material.roughness || 1, 0.35);
+              n.material.needsUpdate = true;
+            }
+          }
+        });
+        scene.add(model);
+        planeRef = model;
+
+        document.querySelectorAll('.plane-counter-dot').forEach(function(d, i) { d.classList.toggle('active', i === idx); });
+        var info = PLANE_INFO[idx];
+        if (info) {
+          var nameEl = document.getElementById('planeName');
+          var descEl = document.getElementById('planeDesc');
+          var statsEl = document.getElementById('planeStats');
+          if (nameEl) nameEl.textContent = info.name;
+          if (descEl) descEl.textContent = info.desc;
+          if (statsEl) statsEl.innerHTML = info.stats.map(function(st) {
+            return '<div class="plane-stat"><div class="plane-stat-val">' + st.val + '</div><div class="plane-stat-key">' + st.key + '</div></div>';
+          }).join('');
+        }
+        requestAnimationFrame(function() { if (infoCol) infoCol.classList.remove('is-switching'); });
+        if (onDone) onDone();
+      }, undefined, function(err) {
+        isLoading = false;
+        if (infoCol) infoCol.classList.remove('is-switching');
+      });
+    }, 150);
+  }
+
+  /* ── Lazy-load plane-data-2 on demand ── */
+  var plane2Loaded = false;
+  function ensurePlane2(cb) {
+    if (plane2Loaded) { cb(); return; }
+    var s = document.createElement('script');
+    s.src = 'assets/branding/plane-data-2.js';
+    s.onload = function() {
+      PLANE_SOURCES[1] = (typeof PLANE_DATA_2 !== 'undefined') ? PLANE_DATA_2 : PLANE_SOURCES[1];
+      plane2Loaded = true;
+      cb();
+    };
+    s.onerror = function() { console.warn('Failed to load plane-data-2'); };
+    document.body.appendChild(s);
+  }
+
+  /* ── Nav buttons ── */
+  var prevBtn = document.getElementById('planePrev');
+  var nextBtn = document.getElementById('planeNext');
+  function switchPlane(newIdx) {
+    closeBlueprint();
+    if (newIdx !== 0 && !plane2Loaded) {
+      ensurePlane2(function() { currentIdx = newIdx; loadPlane(currentIdx); });
+    } else {
+      currentIdx = newIdx;
+      loadPlane(currentIdx);
+    }
+  }
+  if (prevBtn) prevBtn.addEventListener('click', function() {
+    switchPlane((currentIdx - 1 + PLANE_SOURCES.length) % PLANE_SOURCES.length);
+  });
+  if (nextBtn) nextBtn.addEventListener('click', function() {
+    switchPlane((currentIdx + 1) % PLANE_SOURCES.length);
+  });
+
+  /* ── Blueprint overlay ── */
+  function openBlueprint() {
+    var panel = document.getElementById('blueprintOverlay');
+    var info = PLANE_INFO[currentIdx];
+    if (!panel || !info || !info.blueprint) return;
+
+    document.getElementById('blueprintName').textContent = info.name;
+    document.getElementById('blueprintCategory').textContent = info.blueprint.category;
+    document.getElementById('blueprintDwg').textContent = 'DWG NO: SA-' + info.blueprint.label + '-001';
+
+    var gridEl = document.getElementById('blueprintGrid');
+    gridEl.innerHTML = info.blueprint.specGroups.map(function(group) {
+      return '<div class="blueprint-group">' +
+        '<div class="blueprint-group-title">' + group.title + '</div>' +
+        group.specs.map(function(s) {
+          return '<div class="blueprint-spec">' +
+            '<span class="blueprint-spec-key">' + s.key + '</span>' +
+            '<span class="blueprint-spec-val">' + s.val +
+              (s.unit ? '<span class="blueprint-spec-unit">' + s.unit + '</span>' : '') +
+            '</span></div>';
+        }).join('') +
+      '</div>';
+    }).join('');
+
+    // Expand panel
+    panel.classList.add('active');
+
+    // Scroll down to the blueprint
+    setTimeout(function() {
+      panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 50);
+
+    // Animate contents in
+    var tl = gsap.timeline();
+    tl.from('.blueprint-header', { opacity: 0, y: -20, duration: 0.5, ease: 'power2.out' });
+    tl.from('.blueprint-group', { opacity: 0, y: 30, duration: 0.4, stagger: 0.1, ease: 'power2.out' }, '-=0.2');
+    tl.from('.blueprint-footer', { opacity: 0, duration: 0.4, ease: 'power2.out' }, '-=0.1');
+    document.querySelectorAll('.blueprint-spec').forEach(function(spec, i) {
+      gsap.from(spec, { opacity: 0, x: -10, duration: 0.3, delay: 0.4 + i * 0.03, ease: 'power2.out' });
+    });
+  }
+
+  function closeBlueprint() {
+    var panel = document.getElementById('blueprintOverlay');
+    if (!panel || !panel.classList.contains('active')) return;
+    // Scroll back up to the plane viewer
+    document.getElementById('planeScroll').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    gsap.to(panel.querySelector('.blueprint-inner'), {
+      opacity: 0, y: -20, duration: 0.35, ease: 'power2.in',
+      onComplete: function() {
+        panel.classList.remove('active');
+        gsap.set(panel.querySelector('.blueprint-inner'), { clearProps: 'all' });
+      }
+    });
+  }
+
+  var bpToggle = document.getElementById('blueprintToggle');
+  var bpClose = document.getElementById('blueprintClose');
+  if (bpToggle) bpToggle.addEventListener('click', openBlueprint);
+  if (bpClose) bpClose.addEventListener('click', closeBlueprint);
+
+  /* ── Drag interaction ── */
+  canvas.addEventListener('pointerdown', function(e) {
+    isDragging = true; autoSpin = false; lastX = e.clientX; spinVelocity = 0;
     canvas.style.cursor = 'grabbing';
     canvas.setPointerCapture(e.pointerId);
   });
-  canvas.addEventListener('pointermove', e => {
+  canvas.addEventListener('pointermove', function(e) {
     if (!isDragging || !planeRef) return;
-    const dx = e.clientX - lastX;
+    var dx = e.clientX - lastX;
     planeRef.rotation.y += dx * 0.012;
     spinVelocity = dx * 0.012;
     lastX = e.clientX;
   });
-  canvas.addEventListener('pointerup', () => {
-    isDragging = false;
-    canvas.style.cursor = 'grab';
-    setTimeout(() => { autoSpin = true; }, 2000);
-  });
-  canvas.addEventListener('pointerleave', () => {
-    isDragging = false;
-    canvas.style.cursor = 'grab';
+  canvas.addEventListener('pointerup', function() {
+    isDragging = false; canvas.style.cursor = 'grab';
+    setTimeout(function() { autoSpin = true; }, 2000);
   });
 
-  // Multi-model carousel
-  const PLANE_SOURCES = [
-    (typeof PLANE_DATA   !== 'undefined') ? PLANE_DATA   : 'assets/branding/plane.glb',
-    (typeof PLANE_DATA_2 !== 'undefined') ? PLANE_DATA_2 : 'assets/branding/plane2.glb',
-  ];
-
-  const PLANE_INFO = [
-    {
-      name: 'Gulfstream G700',
-      desc: 'The pinnacle of ultra-long-range aviation. Engineered for those who demand the extraordinary on every journey.',
-      stats: [
-        { val: '7,500', key: 'Range (nm)' },
-        { val: 'Mach .925', key: 'Top Speed' },
-        { val: '19', key: 'Passengers' },
-        { val: '51,000 ft', key: 'Max Altitude' },
-      ]
-    },
-    {
-      name: 'Embraer Praetor 600',
-      desc: 'Super-midsize performance with intercontinental reach. The ideal balance of cabin comfort and operational efficiency.',
-      stats: [
-        { val: '4,018', key: 'Range (nm)' },
-        { val: 'Mach .83', key: 'Top Speed' },
-        { val: '12', key: 'Passengers' },
-        { val: '45,000 ft', key: 'Max Altitude' },
-      ]
-    },
-  ];
-
-  let currentIdx = 0;
-  let planeRef = null;
-  let isLoading = false;
-
-  const loader = new THREE.GLTFLoader();
-
-  function loadPlane(idx) {
-    if (isLoading) return;
-    isLoading = true;
-
-    // Fade out text panel + canvas simultaneously
-    const infoCol = document.querySelector('.plane-info-col');
-    if (infoCol) infoCol.classList.add('is-switching');
-    canvas.style.opacity = '0';
-
-    // Small delay so fade-out starts before we pull the model
-    setTimeout(() => {
-      if (planeRef) { scene.remove(planeRef); planeRef = null; }
-      if (fallback) fallback.style.display = 'flex';
-
-      loader.load(PLANE_SOURCES[idx],
-        gltf => {
-          isLoading = false;
-          if (fallback) fallback.style.display = 'none';
-          const model = gltf.scene;
-          const box = new THREE.Box3().setFromObject(model);
-          const center = box.getCenter(new THREE.Vector3());
-          const size = box.getSize(new THREE.Vector3());
-          const maxDim = Math.max(size.x, size.y, size.z);
-          const scale = 2.6 / maxDim;
-          model.scale.setScalar(scale);
-          model.position.sub(center.multiplyScalar(scale));
-          model.position.y += 0.22;
-          model.traverse(n => { if (n.isMesh) n.castShadow = true; });
-          scene.add(model);
-          planeRef = model;
-          autoSpin = true;
-
-          // Update dots
-          document.querySelectorAll('.plane-counter-dot').forEach((d, i) =>
-            d.classList.toggle('active', i === idx));
-
-          // Update info panel text while still faded out
-          const info = PLANE_INFO[idx];
-          if (info) {
-            const nameEl = document.getElementById('planeName');
-            const descEl = document.getElementById('planeDesc');
-            const statsEl = document.getElementById('planeStats');
-            if (nameEl) nameEl.textContent = info.name;
-            if (descEl) descEl.textContent = info.desc;
-            if (statsEl) statsEl.innerHTML = info.stats.map(s =>
-              `<div class="plane-stat"><div class="plane-stat-val">${s.val}</div><div class="plane-stat-key">${s.key}</div></div>`
-            ).join('');
-          }
-
-          // Fade everything back in on the next frame so transitions trigger
-          requestAnimationFrame(() => {
-            canvas.style.opacity = '1';
-            if (infoCol) infoCol.classList.remove('is-switching');
-          });
-        },
-        undefined,
-        err => {
-          isLoading = false;
-          canvas.style.opacity = '1';
-          if (infoCol) infoCol.classList.remove('is-switching');
-          console.warn('GLB load error:', err);
-        }
-      );
-    }, 180); // let fade-out animate before swapping
-  }
-
-  loadPlane(0);
-
-  // Arrow navigation
-  document.getElementById('planePrev')?.addEventListener('click', () => {
-    currentIdx = (currentIdx - 1 + PLANE_SOURCES.length) % PLANE_SOURCES.length;
-    loadPlane(currentIdx);
-  });
-  document.getElementById('planeNext')?.addEventListener('click', () => {
-    currentIdx = (currentIdx + 1) % PLANE_SOURCES.length;
-    loadPlane(currentIdx);
-  });
-
-  // Resize — use the canvas-wrap as reference
-  function resize() {
-    const wrap = document.querySelector('.plane-canvas-wrap') || canvas.parentElement;
-    const w = wrap.clientWidth;
-    const h = wrap.clientHeight;
-    if (w === 0 || h === 0) return;
-    renderer.setSize(w, h, false);
-    camera.aspect = w / h;
+  /* ── Resize ── */
+  function onResize() {
+    var nw = wrap.offsetWidth || 640;
+    var nh = wrap.offsetHeight || 640;
+    renderer.setSize(nw, nh);
+    camera.aspect = nw / nh;
     camera.updateProjectionMatrix();
   }
-  setTimeout(resize, 80);
-  window.addEventListener('resize', resize);
+  window.addEventListener('resize', onResize);
+
+  /* ── Render loop (only when visible) ── */
+  var sectionVisible = false;
+  var secObs = new IntersectionObserver(function(entries) {
+    sectionVisible = entries[0].isIntersecting;
+  }, { threshold: 0 });
+  secObs.observe(document.getElementById('planeScroll'));
 
   function animate() {
     requestAnimationFrame(animate);
+    if (!sectionVisible) return;
     if (planeRef) {
-      if (autoSpin) {
+      if (autoSpin && !isDragging) {
         planeRef.rotation.y += 0.004;
       } else if (!isDragging && Math.abs(spinVelocity) > 0.0001) {
         planeRef.rotation.y += spinVelocity;
-        spinVelocity *= 0.92; // momentum decay
+        spinVelocity *= 0.92;
       }
     }
     renderer.render(scene, camera);
   }
+
+  loadPlane(0);
   animate();
 }
+
+// ═══ X-RAY CABIN SCANNER ═══
+(function() {
+  var viewport = document.getElementById('xrayViewport');
+  var wrap     = document.getElementById('xrayWrap');
+  var exterior = document.querySelector('.xray-exterior');
+  var interior = document.getElementById('xrayInterior');
+  var lineTop  = document.getElementById('xrayLineTop');
+  var lineBot  = document.getElementById('xrayLineBot');
+  if (!interior || !wrap || !viewport || !exterior) return;
+
+  var stripPct = 12;
+  var parallax = 0.35; // exterior moves at 65% speed of interior
+  var Hv, Hi, stripPx, scannerTopPx;
+
+  function measure() {
+    Hv = viewport.offsetHeight;
+    Hi = wrap.offsetHeight;
+    stripPx = stripPct / 100 * Hi;
+    scannerTopPx = Hv / 2 - stripPx / 2;
+    lineTop.style.top = scannerTopPx + 'px';
+    lineBot.style.top = (scannerTopPx + stripPx) + 'px';
+  }
+
+  measure();
+  window.addEventListener('resize', function() {
+    measure();
+    ScrollTrigger.refresh();
+  });
+
+  ScrollTrigger.create({
+    trigger: '.xray-section',
+    start: 'top top',
+    end: '+=200%',
+    pin: true,
+    scrub: 1,
+    onUpdate: function(self) {
+      var p = self.progress;
+      var tyInterior = scannerTopPx - p * (Hi - stripPx);
+      var tyExterior = tyInterior * (1 - parallax);
+
+      wrap.style.transform = 'translateX(-50%)';
+      exterior.style.transform = 'translateY(' + tyExterior + 'px)';
+      interior.style.transform = 'translateY(' + tyInterior + 'px)';
+
+      var topPct = ((scannerTopPx - tyInterior) / Hi) * 100;
+      var botPct = 100 - topPct - stripPct;
+      interior.style.clipPath = 'inset(' + topPct + '% 0 ' + botPct + '% 0)';
+
+      // Fade in first 8%, fade out last 8%
+      var fade = 0.08;
+      var alpha = 1;
+      if (p < fade) alpha = p / fade;
+      else if (p > 1 - fade) alpha = (1 - p) / fade;
+      if (p <= 0.001 || p >= 0.999) alpha = 0;
+      lineTop.style.opacity = alpha;
+      lineBot.style.opacity = alpha;
+      interior.style.opacity = alpha;
+    }
+  });
+})();
 
 // ═══ SERVICE SLIDES — CLIP-PATH REVEALS ═══
 document.querySelectorAll('.svc-slide').forEach((slide, i) => {
@@ -1943,14 +2431,6 @@ document.getElementById('menuBtn').addEventListener('click', () => document.getE
 document.getElementById('menuClose').addEventListener('click', () => document.getElementById('mobileMenu').classList.remove('open'));
 document.querySelectorAll('.mob-link').forEach(a => a.addEventListener('click', () => document.getElementById('mobileMenu').classList.remove('open')));
 
-// ═══ VIDEO ═══
-const hv = document.getElementById('heroVid');
-const hp = document.getElementById('heroPoster');
-if (hv) {
-  hv.loop = false;
-  hv.addEventListener('playing', () => hp.style.display = 'none');
-  hv.addEventListener('error', () => hv.style.display = 'none');
-}
 // Fleet videos — play once and freeze on last frame
 document.querySelectorAll('.fleet-item video').forEach(v => {
   v.muted = true; v.playsInline = true;
@@ -1962,6 +2442,18 @@ document.querySelectorAll('.fleet-item video').forEach(v => {
 (function() {
   const canvas = document.getElementById('globeCanvas');
   if (!canvas) return;
+
+  // Wait for async d3 + topojson to be ready
+  function waitForD3() {
+    if (typeof d3 !== 'undefined' && typeof topojson !== 'undefined') {
+      initGlobe();
+    } else {
+      setTimeout(waitForD3, 100);
+    }
+  }
+  waitForD3();
+
+  function initGlobe() {
   const ctx = canvas.getContext('2d');
   const w = canvas.width, h = canvas.height;
   const R = w * 0.45;
@@ -1974,7 +2466,7 @@ document.querySelectorAll('.fleet-item video').forEach(v => {
   const graticule = d3.geoGraticule().step([20, 20])();
   let landDots = [];
   let oceanDots = [];
-  let rotation = -30;
+  let rotation = 70; // start facing Americas (Boca Raton, São Paulo, Dallas)
   let frame = 0;
   let globeVisible = true;
   let animId = null;
@@ -2164,7 +2656,9 @@ document.querySelectorAll('.fleet-item video').forEach(v => {
 
     animId = globeVisible ? requestAnimationFrame(animateGlobe) : null;
   }
+  } // end initGlobe
 })();
+
 </script>
 </body>
 </html>
