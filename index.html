@@ -2009,18 +2009,17 @@ function initCrystalLogo() {
     showLogoFallback();
   });
 
-  var running = true;
+  var rafId = null;
   function animate() {
-    if (!running) return;
-    requestAnimationFrame(animate);
+    rafId = requestAnimationFrame(animate);
     if (crystalModel) crystalModel.rotation.y += 0.006;
     renderer.render(scene, camera);
   }
   animate();
   // Pause when tab hidden
   document.addEventListener('visibilitychange', function() {
-    if (document.hidden) { running = false; }
-    else { running = true; animate(); }
+    if (document.hidden) { cancelAnimationFrame(rafId); rafId = null; }
+    else if (!rafId) { animate(); }
   });
 }
 function showLogoFallback() {
