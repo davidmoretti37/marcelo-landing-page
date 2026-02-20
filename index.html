@@ -2334,6 +2334,20 @@ function initPlaneViewer() {
     lineBot.style.top = (scannerTopPx + stripPx) + 'px';
   }
 
+  // Wait for both images to load before measuring & initializing
+  var imgs = [exterior, interior];
+  var loaded = 0;
+  function onImgReady() {
+    loaded++;
+    if (loaded < imgs.length) return;
+    init();
+  }
+  imgs.forEach(function(img) {
+    if (img.complete) { onImgReady(); }
+    else { img.addEventListener('load', onImgReady); img.addEventListener('error', onImgReady); }
+  });
+
+  function init() {
   measure();
   window.addEventListener('resize', function() {
     measure();
@@ -2370,6 +2384,7 @@ function initPlaneViewer() {
       interior.style.opacity = alpha;
     }
   });
+  } // end init
 })();
 
 // ═══ SERVICE SLIDES — CLIP-PATH REVEALS ═══
