@@ -1,3 +1,5 @@
 raw-assets/
 *.mov
 .DS_Store
+node_modules/
+.next/

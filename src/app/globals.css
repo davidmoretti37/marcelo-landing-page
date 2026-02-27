@@ -1,0 +1,63 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: "Makro";
+  src: url("/fonts/MakroMedium.ttf") format("truetype");
+  font-weight: 500;
+  font-display: swap;
+}
+
+:root {
+  --gold: #B8976A;
+  --navy: #0C1220;
+  --cream: #F8F7F4;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+::selection {
+  background: var(--gold);
+  color: white;
+}
+
+html {
+  overflow-x: hidden;
+}
+
+body {
+  background: #0b1a35;
+  color: #0C1220;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 4px;
+}
+::-webkit-scrollbar-track {
+  background: #F8F7F4;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(184, 151, 106, 0.4);
+  border-radius: 2px;
+}
+
+@layer components {
+  .glass-card {
+    @apply bg-white/60 backdrop-blur-xl border border-black/5;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+  }
+  .glass-card-dark {
+    @apply bg-white/5 backdrop-blur-xl border border-white/10;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  }
+}
+
+@layer base {
+  a, button {
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+}
