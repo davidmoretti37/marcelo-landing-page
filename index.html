@@ -610,8 +610,7 @@ a { text-decoration: none; color: inherit; }
   font-size: 36px;
   color: var(--gold);
   margin-left: 2px;
-  align-self: flex-start;
-  margin-top: 16px;
+  margin-top: -8px;
   opacity: 0;
 }
 .story-counter-label {
@@ -1562,22 +1561,91 @@ a { text-decoration: none; color: inherit; }
 /* ═══ MOBILE — COMPREHENSIVE ═══ */
 @media (max-width: 768px) {
 
+  /* ── Overflow protection ── */
+  .gradient-mesh { overflow: hidden; }
+
+  /* ── Decorative: reduce GPU load ── */
+  .mesh-orb-1 { width: 300px; height: 300px; filter: blur(80px); }
+  .mesh-orb-2 { width: 250px; height: 250px; filter: blur(80px); }
+  .mesh-orb-3 { width: 200px; height: 200px; filter: blur(80px); }
+  .film-grain { display: none; }
+  .quote-glow { width: 280px; height: 280px; }
+
   /* ── Hero ── */
 
   /* ── Nav ── */
   .mobile-toggle { cursor: pointer; }
   .mobile-close { cursor: pointer; }
 
-  /* ── About ── */
+  /* ── Horizontal scroll → vertical stack ── */
+  .hscroll { overflow: visible; height: auto; }
+  .hscroll-track {
+    flex-direction: column;
+    width: 100%;
+  }
+  .hscroll-panel {
+    width: 100%;
+    height: auto;
+    min-height: 80svh;
+    padding: 60px 0;
+  }
+  .hscroll-panel-inner {
+    max-width: 100%;
+    padding: 0 24px;
+  }
+  .hscroll-progress { display: none; }
+  .hscroll-dots { display: none; }
+  .kinetic-overlay { display: none; }
+
+  /* ── Quote: keep sizing, let JS animate visibility ── */
+  .hscroll-quote-mark { font-size: clamp(60px, 10vw, 100px); }
+  .hscroll-quote {
+    font-size: clamp(18px, 5vw, 28px);
+    line-height: 1.7;
+  }
+
+  /* ── Story sections ── */
+  .story-grid { padding: 0 20px; }
+  .story-corner { display: none; }
+  .story-services { gap: 12px; }
+  .story-service-word { font-size: 15px; }
+
+  /* ── Typography scaling ── */
+  .hscroll-title { font-size: clamp(28px, 7vw, 44px); }
+  .hscroll-body { font-size: 14px; }
+  .fullbleed-line { font-size: clamp(24px, 6vw, 40px); }
+  .label { font-size: 9px; margin-bottom: 20px; }
+  .section-title { font-size: clamp(28px, 7vw, 48px); }
+  .globe-subtitle { font-size: 14px; }
+  .body-text { font-size: 15px; }
+
+  /* ── Marquee ── */
+  .marquee-section { padding: 14px 0; }
+  .marquee-item { font-size: 13px; padding: 0 18px; gap: 18px; }
 
   /* ── Globe ── */
   .globe-journey { padding: clamp(60px, 8vw, 100px) 24px; }
   .globe-wrap { max-width: 300px; }
-  .globe-cards { min-height: 320px; }
+  .globe-cards { min-height: auto; position: relative; }
+  .globe-card { position: relative; padding: 20px 0; opacity: 1; transform: none; }
+  .globe-card-desc { font-size: 14px; max-width: 100%; }
+  .globe-card-city { font-size: 28px; }
+  .globe-summary {
+    position: relative;
+    bottom: auto;
+    left: auto;
+    transform: none !important;
+    margin-top: 40px;
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* ── Fullbleed ── */
+  .fullbleed-cta { padding: 12px 28px; font-size: 10px; }
 
   /* ── Plane section — stack vertically ── */
   .plane-scroll { height: auto; min-height: 100svh; }
-  .plane-scroll::before, .plane-scroll::after { height: 80px; }
+  .plane-scroll::before, .plane-scroll::after { height: 60px; }
   .plane-scroll-sticky {
     grid-template-columns: 1fr;
     height: auto;
@@ -1588,7 +1656,7 @@ a { text-decoration: none; color: inherit; }
     min-height: 220px;
     max-height: 340px;
   }
-  .plane-canvas-wrap { width: 92%; height: 92%; }
+  .plane-canvas-wrap { width: 100%; height: 100%; }
   .plane-info-col {
     padding: 20px 28px 48px;
     justify-content: flex-start;
@@ -1597,20 +1665,14 @@ a { text-decoration: none; color: inherit; }
   .plane-info-desc { font-size: 13px; margin-bottom: 24px; }
   .plane-stats { gap: 12px 20px; margin-bottom: 28px; }
   .plane-stat-val { font-size: 18px; }
+  .blueprint-toggle { width: 100%; justify-content: center; }
+  .plane-nav-row { margin-top: 16px; }
 
   /* ── Blueprint ── */
   .blueprint-inner { padding: 32px 20px; }
   .blueprint-grid { grid-template-columns: 1fr; }
   .blueprint-aircraft-name { font-size: 28px; }
   .blueprint-close { top: 12px; right: 12px; }
-
-  /* ── Services ── */
-
-  /* ── Story sections ── */
-
-  /* ── Fleet ── */
-
-  /* ── Quote ── */
 
   /* ── Contact ── */
   .contact { padding: clamp(64px, 10vw, 120px) 24px; }
@@ -1622,17 +1684,50 @@ a { text-decoration: none; color: inherit; }
 }
 
 @media (max-width: 480px) {
+  /* ── Decorative: hide entirely on small phones ── */
+  .mesh-orb-1, .mesh-orb-2, .mesh-orb-3 { display: none; }
+  .quote-glow { width: 200px; height: 200px; }
+
   /* ── Hero ── */
   .hero-flight { min-height: 100svh; }
 
-  /* ── Services ── */
+  /* ── Nav ── */
+  .nav-logo-text { font-size: 14px; letter-spacing: 0.25em; }
+
+  /* ── Story counter ── */
+  .story-counter-wrap { width: 160px; height: 160px; }
+  .story-counter-num { font-size: 56px; }
+  .story-counter-plus { font-size: 28px; }
+
+  /* ── Typography ── */
+  .hscroll-quote { font-size: 18px; }
+  .kinetic-word { font-size: clamp(36px, 12vw, 60px); }
+
+  /* ── VText ── */
+  .vtext-frame { width: 95%; }
+  .vtext-sub {
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    white-space: normal;
+    text-align: center;
+    padding: 0 16px;
+  }
+
+  /* ── Globe ── */
+  .globe-wrap { max-width: 240px; }
+  .globe-cards { min-height: 280px; }
+  .globe-card-city { font-size: 24px; }
 
   /* ── Plane ── */
   .plane-canvas-col { min-height: 200px; }
   .plane-info-col { padding: 16px 20px 40px; }
 
-  /* ── Contact form ── */
+  /* ── Contact ── */
   .contact-btn { padding: 16px 20px; }
+
+  /* ── Footer ── */
+  .footer { padding: 24px 16px; gap: 16px; }
+  .footer-logo span { font-size: 9px; letter-spacing: 0.2em; }
 }
 </style>
 </head>
@@ -2087,74 +2182,83 @@ ScrollTrigger.create({
   if (!track || !section) return;
 
   var isMobile = window.innerWidth <= 1024;
+  var isMobileSmall = window.innerWidth <= 768;
 
-  // ─── Kinetic overlay refs ───
-  var overlay = document.getElementById('kineticOverlay');
-  var kWord0 = document.getElementById('kWord0');
-  var kWord1 = document.getElementById('kWord1');
-  var kWord2 = document.getElementById('kWord2');
-  var curtainLeft = document.getElementById('curtainLeft');
-  var curtainRight = document.getElementById('curtainRight');
-  var runwayLeft = document.getElementById('runwayLeft');
-  var runwayRight = document.getElementById('runwayRight');
-
-  // Split "Excellence" into chars
+  // ─── Kinetic overlay refs (desktop only) ───
+  var overlay = null, kWord0 = null, kWord1 = null, kWord2 = null;
+  var curtainLeft = null, curtainRight = null, runwayLeft = null, runwayRight = null;
   var kChars = [], lChars = [], otherChars = [];
-  if (kWord1) {
-    var kText = kWord1.textContent;
-    kWord1.innerHTML = '';
-    for (var ci = 0; ci < kText.length; ci++) {
-      var sp = document.createElement('span');
-      sp.className = 'kinetic-char';
-      sp.textContent = kText[ci];
-      if (kText[ci] === 'l') { sp.classList.add('kinetic-char--l'); lChars.push(sp); }
-      kWord1.appendChild(sp);
-      kChars.push(sp);
+  var kineticTlRef = null;
+
+  if (!isMobileSmall) {
+    overlay = document.getElementById('kineticOverlay');
+    kWord0 = document.getElementById('kWord0');
+    kWord1 = document.getElementById('kWord1');
+    kWord2 = document.getElementById('kWord2');
+    curtainLeft = document.getElementById('curtainLeft');
+    curtainRight = document.getElementById('curtainRight');
+    runwayLeft = document.getElementById('runwayLeft');
+    runwayRight = document.getElementById('runwayRight');
+
+    // Split "Excellence" into chars
+    if (kWord1) {
+      var kText = kWord1.textContent;
+      kWord1.innerHTML = '';
+      for (var ci = 0; ci < kText.length; ci++) {
+        var sp = document.createElement('span');
+        sp.className = 'kinetic-char';
+        sp.textContent = kText[ci];
+        if (kText[ci] === 'l') { sp.classList.add('kinetic-char--l'); lChars.push(sp); }
+        kWord1.appendChild(sp);
+        kChars.push(sp);
+      }
+      otherChars = kChars.filter(function(c) { return lChars.indexOf(c) === -1; });
     }
-    otherChars = kChars.filter(function(c) { return lChars.indexOf(c) === -1; });
+
+    // Align runway divs to l-char center positions
+    function alignRunways() {
+      if (!lChars.length || !runwayLeft) return;
+      var prevOp = kWord1.style.opacity;
+      kWord1.style.opacity = '1';
+      kWord1.style.visibility = 'hidden';
+      var secRect = section.getBoundingClientRect();
+      var r0 = lChars[0].getBoundingClientRect();
+      var r1 = lChars[1].getBoundingClientRect();
+      kWord1.style.opacity = prevOp;
+      kWord1.style.visibility = '';
+      runwayLeft.style.left = (r0.left - secRect.left + r0.width / 2 - 2) + 'px';
+      runwayLeft.style.width = '4px';
+      runwayRight.style.left = (r1.left - secRect.left + r1.width / 2 - 2) + 'px';
+      runwayRight.style.width = '4px';
+    }
+    alignRunways();
+    window.addEventListener('resize', alignRunways);
+  } else {
+    // Hide kinetic overlay on mobile
+    var mobileOverlay = document.getElementById('kineticOverlay');
+    if (mobileOverlay) mobileOverlay.style.display = 'none';
   }
 
-  // Align runway divs to l-char center positions
-  function alignRunways() {
-    if (!lChars.length || !runwayLeft) return;
-    var prevOp = kWord1.style.opacity;
-    kWord1.style.opacity = '1';
-    kWord1.style.visibility = 'hidden';
-    var secRect = section.getBoundingClientRect();
-    var r0 = lChars[0].getBoundingClientRect();
-    var r1 = lChars[1].getBoundingClientRect();
-    kWord1.style.opacity = prevOp;
-    kWord1.style.visibility = '';
-    runwayLeft.style.left = (r0.left - secRect.left + r0.width / 2 - 2) + 'px';
-    runwayLeft.style.width = '4px';
-    runwayRight.style.left = (r1.left - secRect.left + r1.width / 2 - 2) + 'px';
-    runwayRight.style.width = '4px';
+  // ─── Paused kinetic timeline (desktop only) ───
+  var kineticTl = null;
+  if (!isMobileSmall) {
+    kineticTl = gsap.timeline({ paused: true });
+    kineticTl.to(kWord0, { opacity: 1, duration: 0.04, ease: 'power2.out' }, 0);
+    kineticTl.to(kWord1, { opacity: 1, duration: 0.04, ease: 'power2.out' }, 0.04);
+    kineticTl.to(kWord2, { opacity: 1, duration: 0.04, ease: 'power2.out' }, 0.08);
+    kineticTl.to(kWord0, { opacity: 0, duration: 0.08, ease: 'power2.in' }, 0.22);
+    kineticTl.to(kWord2, { opacity: 0, duration: 0.08, ease: 'power2.in' }, 0.22);
+    kineticTl.to(otherChars, { opacity: 0, duration: 0.08, stagger: 0.004, ease: 'power2.in' }, 0.24);
+    kineticTl.to(lChars, { color: 'rgba(184,151,106,1)', duration: 0.06, ease: 'none' }, 0.36);
+    kineticTl.to(lChars, { opacity: 0, duration: 0.06, ease: 'power2.in' }, 0.44);
+    kineticTl.to([runwayLeft, runwayRight], { opacity: 1, duration: 0.06, ease: 'power2.out' }, 0.42);
+    kineticTl.to(runwayLeft, { left: '15%', duration: 0.4, ease: 'power3.inOut' }, 0.55);
+    kineticTl.to(runwayRight, { left: '85%', duration: 0.4, ease: 'power3.inOut' }, 0.55);
+    kineticTl.to(curtainLeft, { x: '-100%', duration: 0.4, ease: 'power3.inOut' }, 0.58);
+    kineticTl.to(curtainRight, { x: '100%', duration: 0.4, ease: 'power3.inOut' }, 0.58);
+    kineticTl.to([runwayLeft, runwayRight], { opacity: 0, duration: 0.08, ease: 'power2.in' }, 0.92);
+    kineticTl.set(overlay, { autoAlpha: 0, pointerEvents: 'none' }, 0.99);
   }
-  alignRunways();
-  window.addEventListener('resize', alignRunways);
-
-  // ─── Paused kinetic timeline (driven by progress in onUpdate) ───
-  var kineticTl = gsap.timeline({ paused: true });
-  // Phase 1: type in
-  kineticTl.to(kWord0, { opacity: 1, duration: 0.04, ease: 'power2.out' }, 0);
-  kineticTl.to(kWord1, { opacity: 1, duration: 0.04, ease: 'power2.out' }, 0.04);
-  kineticTl.to(kWord2, { opacity: 1, duration: 0.04, ease: 'power2.out' }, 0.08);
-  // Phase 3: dissolve
-  kineticTl.to(kWord0, { opacity: 0, duration: 0.08, ease: 'power2.in' }, 0.22);
-  kineticTl.to(kWord2, { opacity: 0, duration: 0.08, ease: 'power2.in' }, 0.22);
-  kineticTl.to(otherChars, { opacity: 0, duration: 0.08, stagger: 0.004, ease: 'power2.in' }, 0.24);
-  // Phase 4: gold + handoff
-  kineticTl.to(lChars, { color: 'rgba(184,151,106,1)', duration: 0.06, ease: 'none' }, 0.36);
-  kineticTl.to(lChars, { opacity: 0, duration: 0.06, ease: 'power2.in' }, 0.44);
-  kineticTl.to([runwayLeft, runwayRight], { opacity: 1, duration: 0.06, ease: 'power2.out' }, 0.42);
-  // Phase 5: split + curtains
-  kineticTl.to(runwayLeft, { left: '15%', duration: 0.4, ease: 'power3.inOut' }, 0.55);
-  kineticTl.to(runwayRight, { left: '85%', duration: 0.4, ease: 'power3.inOut' }, 0.55);
-  kineticTl.to(curtainLeft, { x: '-100%', duration: 0.4, ease: 'power3.inOut' }, 0.58);
-  kineticTl.to(curtainRight, { x: '100%', duration: 0.4, ease: 'power3.inOut' }, 0.58);
-  kineticTl.to([runwayLeft, runwayRight], { opacity: 0, duration: 0.08, ease: 'power2.in' }, 0.92);
-  // End: hide overlay
-  kineticTl.set(overlay, { autoAlpha: 0, pointerEvents: 'none' }, 0.99);
 
   // ─── Quote panel: scroll-driven word-by-word reveal ───
   var quoteEl = document.getElementById('quoteText');
@@ -2430,7 +2534,59 @@ ScrollTrigger.create({
   }
 
 
-  // ─── Single ScrollTrigger: kinetic + horizontal scroll ───
+  // ─── Mobile: IntersectionObserver-driven animations ───
+  if (isMobileSmall) {
+    track.style.transform = 'none';
+
+    var quotePanel = document.querySelector('.hscroll-panel--quote');
+    var storyPanelEl = document.querySelector('.hscroll-panel--story');
+
+    // Animate quote when it scrolls into view
+    if (quotePanel) {
+      var quoteTriggered = false;
+      var quoteObs = new IntersectionObserver(function(entries) {
+        if (entries[0].isIntersecting && !quoteTriggered) {
+          quoteTriggered = true;
+          var start = performance.now();
+          var duration = 3500; // 3.5 seconds
+          function tickQuote() {
+            var elapsed = performance.now() - start;
+            var v = Math.min(elapsed / duration, 1);
+            animateQuote(v);
+            if (v < 1) requestAnimationFrame(tickQuote);
+          }
+          tickQuote();
+          quoteObs.disconnect();
+        }
+      }, { threshold: 0.25 });
+      quoteObs.observe(quotePanel);
+    }
+
+    // Animate story when it scrolls into view
+    if (storyPanelEl) {
+      var storyTriggered = false;
+      var storyObs = new IntersectionObserver(function(entries) {
+        if (entries[0].isIntersecting && !storyTriggered) {
+          storyTriggered = true;
+          var start = performance.now();
+          var duration = 4000; // 4 seconds
+          function tickStory() {
+            var elapsed = performance.now() - start;
+            var v = Math.min(elapsed / duration, 1);
+            animateStory(v);
+            if (v < 1) requestAnimationFrame(tickStory);
+          }
+          tickStory();
+          storyObs.disconnect();
+        }
+      }, { threshold: 0.2 });
+      storyObs.observe(storyPanelEl);
+    }
+
+    return; // Skip ScrollTrigger on mobile
+  }
+
+  // ─── Single ScrollTrigger: kinetic + horizontal scroll (desktop) ───
   ScrollTrigger.create({
     trigger: section,
     pin: true,
@@ -2550,6 +2706,14 @@ ScrollTrigger.create({
     opacity: 1, y: 0,
     scrollTrigger: { trigger: fb, start: 'top 25%', end: 'top 5%', scrub: true }
   });
+
+  // Pause video when off-screen on mobile to save battery/performance
+  if (window.innerWidth <= 768 && vid) {
+    var vidObs = new IntersectionObserver(function(entries) {
+      if (entries[0].isIntersecting) { vid.play(); } else { vid.pause(); }
+    }, { threshold: 0.1 });
+    vidObs.observe(fb);
+  }
 })();
 
 // ═══ GLOBE SCROLL-DRIVEN JOURNEY ═══
@@ -2588,6 +2752,66 @@ ScrollTrigger.create({
     }
   });
 
+  // ─── Mobile: animated reveals instead of pinned scroll ───
+  if (window.innerWidth <= 768) {
+    // Animate header when section enters viewport
+    if (header) {
+      gsap.set(header, { opacity: 0, y: 30 });
+      var headerObs = new IntersectionObserver(function(entries) {
+        if (entries[0].isIntersecting) {
+          gsap.to(header, { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out' });
+          if (wrap) gsap.to(wrap, { opacity: 1, scale: 1, duration: 0.8, ease: 'power2.out', delay: 0.2 });
+          headerObs.disconnect();
+        }
+      }, { threshold: 0.2 });
+      headerObs.observe(header);
+    }
+    if (wrap) gsap.set(wrap, { opacity: 0, scale: 0.9 });
+
+    // Stagger card reveals as user scrolls
+    cards.forEach(function(card, idx) {
+      if (!card) return;
+      var cardObs = new IntersectionObserver(function(entries) {
+        if (entries[0].isIntersecting) {
+          setTimeout(function() {
+            card.classList.add('active');
+            // Draw arc progressively
+            window._globeArcProgress[idx] = 1;
+            window._globeActiveCity = idx;
+          }, idx * 300);
+          cardObs.disconnect();
+        }
+      }, { threshold: 0.15 });
+      cardObs.observe(card);
+    });
+
+    // Animate summary with counting numbers when visible
+    if (summary) {
+      gsap.set(summary, { xPercent: -50, opacity: 0, y: 20 });
+      var sumObs = new IntersectionObserver(function(entries) {
+        if (entries[0].isIntersecting) {
+          gsap.to(summary, { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out' });
+          // Count up numbers
+          var start = performance.now();
+          function tickNums() {
+            var elapsed = performance.now() - start;
+            var p = Math.min(elapsed / 1500, 1);
+            summaryNums.forEach(function(el) {
+              var target = parseInt(el.getAttribute('data-target'));
+              el.textContent = Math.round(target * p);
+            });
+            if (p < 1) requestAnimationFrame(tickNums);
+          }
+          tickNums();
+          window._globeArcProgress = [1, 1, 1];
+          sumObs.disconnect();
+        }
+      }, { threshold: 0.3 });
+      sumObs.observe(summary);
+    }
+    return;
+  }
+
   // Track active card
   var activeCard = -1;
   function activateCard(idx) {
@@ -2605,7 +2829,7 @@ ScrollTrigger.create({
     pin: true,
     scrub: 0.8,
     start: 'top top',
-    end: '+=500%',
+    end: window.innerWidth <= 768 ? '+=300%' : '+=500%',
     invalidateOnRefresh: true,
     onUpdate: function(self) {
       var p = self.progress;
@@ -2828,8 +3052,8 @@ function heroRevealSequence() {
 
         frameCount++;
 
-        // Spawn contrail particle every 3 frames
-        if (frameCount % 3 === 0 && p < 0.95 && window._cloudTex && window._spriteGeo) {
+        // Spawn contrail particle every 3 frames (skip on mobile — canvas texture causes rainbow artifacts)
+        if (frameCount % 3 === 0 && p < 0.95 && window.innerWidth > 768 && window._cloudTex && window._spriteGeo) {
           var tMat = new THREE.MeshBasicMaterial({
             map: window._cloudTex,
             transparent: true,
@@ -2887,12 +3111,13 @@ function initSkyCanvas() {
   var canvas = document.getElementById('skyCanvas');
   if (!canvas || typeof THREE === 'undefined') return;
 
+  var isMobileHero = window.innerWidth <= 768;
   var hero = document.getElementById('hero');
   var w = hero.clientWidth;
   var h = hero.clientHeight;
 
-  var renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: false });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  var renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: !isMobileHero, alpha: false });
+  renderer.setPixelRatio(isMobileHero ? 1 : Math.min(window.devicePixelRatio, 2));
   renderer.setSize(w, h);
   if (renderer.outputEncoding !== undefined) renderer.outputEncoding = THREE.sRGBEncoding;
 
@@ -2954,12 +3179,14 @@ function initSkyCanvas() {
   }
 
   var cloudTex = new THREE.CanvasTexture(tCanvas);
+  if (cloudTex.encoding !== undefined) cloudTex.encoding = THREE.sRGBEncoding;
+  cloudTex.needsUpdate = true;
   window._cloudTex = cloudTex;
 
   // Cloud system — distant clouds drifting sideways
   var spriteGeo = new THREE.PlaneGeometry(1, 1);
   window._spriteGeo = spriteGeo;
-  var CLOUD_COUNT = 80;
+  var CLOUD_COUNT = isMobileHero ? 0 : 80;
   var SPREAD_X = 120;      // very wide horizontal field
   var SPREAD_Y = 14;
   var SPREAD_Z = 80;       // deep depth layers
@@ -2977,7 +3204,7 @@ function initSkyCanvas() {
       transparent: true,
       depthWrite: false,
       side: THREE.DoubleSide,
-      blending: THREE.NormalBlending,
+      blending: isMobileHero ? THREE.AdditiveBlending : THREE.NormalBlending,
       opacity: opacity,
     });
 
@@ -3113,7 +3340,8 @@ function initSkyCanvas() {
 
   // Foreground clouds — static, in front of the jet (Z=-12 vs plane at Z=-15)
   // These DON'T drift so they stay in the flight path
-  var fgClouds = [
+  // Skip on mobile (canvas texture causes rainbow artifacts on mobile Safari)
+  var fgClouds = isMobileHero ? [] : [
     { x: -8,  y: -2.8, z: -12, scale: 22, opacity: 0.55 },
     { x: 5,   y: -3.0, z: -11, scale: 24, opacity: 0.60 },
     { x: 16,  y: -2.5, z: -12, scale: 20, opacity: 0.50 },
@@ -3333,13 +3561,14 @@ function initPlaneViewer() {
   var h = wrap.offsetHeight || 640;
 
   /* ── Renderer ── */
-  var renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  var isMobilePlane = window.innerWidth <= 768;
+  var renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: !isMobilePlane, alpha: true });
+  renderer.setPixelRatio(isMobilePlane ? 1 : Math.min(window.devicePixelRatio, 2));
   renderer.outputEncoding = THREE.sRGBEncoding;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1.4;
   renderer.setClearColor(0x000000, 0);
-  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.enabled = !isMobilePlane;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   renderer.setSize(w, h);
 
@@ -3684,15 +3913,17 @@ document.querySelectorAll('.mob-link').forEach(a => a.addEventListener('click', 
     .then(r => r.json())
     .then(world => {
       const land = topojson.feature(world, world.objects.land);
-      for (let lat = -80; lat <= 80; lat += 2) {
-        for (let lon = -180; lon < 180; lon += 2) {
+      var dotStep = window.innerWidth <= 768 ? 3 : 2;
+      var oceanStep = window.innerWidth <= 768 ? 8 : 6;
+      for (let lat = -80; lat <= 80; lat += dotStep) {
+        for (let lon = -180; lon < 180; lon += dotStep) {
           if (d3.geoContains(land, [lon, lat])) {
             landDots.push([lon, lat]);
           }
         }
       }
-      for (let lat = -80; lat <= 80; lat += 6) {
-        for (let lon = -180; lon < 180; lon += 6) {
+      for (let lat = -80; lat <= 80; lat += oceanStep) {
+        for (let lon = -180; lon < 180; lon += oceanStep) {
           if (!d3.geoContains(land, [lon, lat])) {
             oceanDots.push([lon, lat]);
           }
