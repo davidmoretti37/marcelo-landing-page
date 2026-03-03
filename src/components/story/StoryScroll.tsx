@@ -6,10 +6,10 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { planeProxy } from "@/components/three/PlaneCanvas";
 
 /*
-  8-Act cinematic scroll journey.
-  Camera physically ascends through clouds → space → globe → descent → aircraft.
-  Every proxy value is read by the Three.js render loop each frame.
-  2000vh scroll height = slow, cinematic pacing. Each act has room to breathe.
+  5-Act Descent Briefing.
+  Camera: cruise (Y=50) → globe orbit → descent through stars → cloud break + plane → landing.
+  Globe at Y=48. Clouds at Y=-3 to Y=22. Plane at Y=0.
+  3000vh scroll height = slow, cinematic pacing.
 */
 export default function StoryScroll() {
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -28,204 +28,125 @@ export default function StoryScroll() {
       });
 
       /* ═══════════════════════════════════════════════════════
-         ACT 1: SPARK Brand Reveal (0–15%)
-         Camera among close clouds. Gentle rise. Looking horizontal.
+         ACT 1: THE ALTITUDE (0–20%)
+         Cruise at 45,000 ft. Stars. Globe below. Brand panel.
        ═══════════════════════════════════════════════════════ */
       tl.to(planeProxy, {
-        camY: 3,
-        lookY: 1,
-        showPlane: 0,
-        duration: 0.15,
-        ease: "sine.inOut",
+        camX: 0.5,
+        camY: 48,
+        lookY: 46,
+        globeRotY: Math.PI * 1.2,
+        duration: 0.20,
+        ease: "none",
       }, 0);
 
       /* ═══════════════════════════════════════════════════════
-         ACT 2: The Mission (15–30%)
-         Camera ascends through near clouds. Sky starts hinting dark.
+         ACT 2: THE REACH (20–40%)
+         Orbit globe. Arcs animate. Global scale.
        ═══════════════════════════════════════════════════════ */
       tl.to(planeProxy, {
-        camY: 15,
-        lookY: 5,
-        skyDarkness: 0.3,
-        duration: 0.15,
-        ease: "power1.inOut",
-      }, 0.15);
+        camX: 0.8,
+        camY: 46,
+        camZ: 4.5,
+        lookX: 0,
+        lookY: 45,
+        globeRotY: Math.PI * 2.2,
+        arcProgress: 1,
+        duration: 0.20,
+        ease: "none",
+      }, 0.20);
 
       /* ═══════════════════════════════════════════════════════
-         ACT 3: Into Space — The Story (30–48%)
-         Camera rises above clouds into the star sphere.
-         Globe made visible early — appears as distant speck.
-         Camera smoothly flies toward the globe through stars.
+         ACT 3: THE MAN (40–60%)
+         Globe fades. Descend through stars into atmosphere.
        ═══════════════════════════════════════════════════════ */
-      // Phase 1 (30-38%): Rise through clouds into stars, sky darkens
+      // Globe exits
       tl.to(planeProxy, {
-        camY: 50,
-        camZ: 6,
-        lookY: 110,
-        skyDarkness: 1,
-        duration: 0.08,
-        ease: "power1.inOut",
-      }, 0.30);
-
-      // Position globe early (still invisible — globeVisible is 0)
-      tl.to(planeProxy, {
-        globePosY: 110,
-        globePosX: 0,
-        duration: 0.01,
-        ease: "none",
-      }, 0.35);
-
-      // Globe fades in as camera approaches (40–48%)
-      tl.to(planeProxy, {
-        globeVisible: 1,
-        duration: 0.08,
+        globeVisible: 0,
+        globePosX: -2,
+        duration: 0.04,
         ease: "power1.in",
       }, 0.40);
 
-      // Phase 2 (38-48%): Zoom toward the globe through the stars
+      // Camera drops through stars
       tl.to(planeProxy, {
-        camY: 110,
-        camZ: 5,
-        lookY: 110,
-        duration: 0.10,
-        ease: "power1.out",
-      }, 0.38);
-
-      /* ═══════════════════════════════════════════════════════
-         ACT 4: Discover Earth — Globe (48–62%)
-         Camera already at globe altitude. Gently frame it.
-       ═══════════════════════════════════════════════════════ */
-      // Slide to framing position (already at Y≈110)
-      tl.to(planeProxy, {
-        camX: -1.0,
-        camY: 110.8,
-        camZ: 4.2,
+        camX: 0,
+        camY: 25,
+        camZ: 6,
         lookX: 0,
-        lookY: 110,
-        lookZ: 0,
-        duration: 0.06,
-        ease: "power2.out",
-      }, 0.48);
-
-      // Orbit the globe slowly
-      tl.to(planeProxy, {
-        camX: 1.0,
-        camY: 109.8,
-        camZ: 3.8,
-        lookY: 110,
-        globeRotY: Math.PI * 1.8,
-        duration: 0.08,
-        ease: "none",
-      }, 0.54);
-
-      // Flight arcs draw during orbit
-      tl.to(planeProxy, {
-        arcProgress: 1,
-        duration: 0.10,
-        ease: "power1.inOut",
-      }, 0.50);
-
-      /* ═══════════════════════════════════════════════════════
-         ACT 5: What We Do — Services (62–74%)
-         Continue orbiting globe among the stars.
-       ═══════════════════════════════════════════════════════ */
-      tl.to(planeProxy, {
-        camX: -0.5,
-        camY: 110.5,
-        camZ: 4.0,
-        lookY: 110,
-        globeRotY: Math.PI * 2.4,
-        duration: 0.12,
-        ease: "none",
-      }, 0.62);
-
-      /* ═══════════════════════════════════════════════════════
-         ACT 6: Descent — Marcelo's Quote (74–84%)
-         Globe exits. Camera descends back through clouds.
-         Sky brightens. Stars scroll away.
-       ═══════════════════════════════════════════════════════ */
-      // Phase 1 (74-80%): Globe fades, camera tilts down, sky starts brightening
-      // Mirrors the ascent — slow, cinematic descent
-      tl.to(planeProxy, {
-        globeVisible: 0,
-        globePosX: -3,
-        camX: 0,
-        camY: 50,
-        camZ: 6,
-        lookY: 5,
+        lookY: 22,
         skyDarkness: 0.3,
-        duration: 0.06,
-        ease: "power1.inOut",
-      }, 0.74);
-
-      // Phase 2 (80-84%): Descend through stars into clouds, sky fully bright
-      tl.to(planeProxy, {
-        camY: 8,
-        camZ: 5,
-        lookY: 2,
-        skyDarkness: 0,
-        duration: 0.04,
-        ease: "power1.inOut",
-      }, 0.80);
-
-      /* ═══════════════════════════════════════════════════════
-         ACT 7: Terrain Flyover (84–93%)
-         Camera flies over GLSL Perlin-noise terrain hills.
-       ═══════════════════════════════════════════════════════ */
-      // Terrain fades in
-      tl.to(planeProxy, {
-        terrainOpacity: 1,
-        duration: 0.04,
+        cloudOpacity: 0.3,
+        duration: 0.20,
         ease: "power2.in",
-      }, 0.82);
-
-      // Terrain scrolls forward (flyover effect)
-      tl.to(planeProxy, {
-        terrainScroll: 1,
-        duration: 0.16,
-        ease: "none",
-      }, 0.84);
-
-      // Camera flies over terrain — low altitude, looking forward
-      tl.to(planeProxy, {
-        camX: 0,
-        camY: 4,
-        camZ: 6,
-        lookY: 0,
-        duration: 0.05,
-        ease: "power1.inOut",
-      }, 0.84);
-
-      // Slight drift for cinematic feel
-      tl.to(planeProxy, {
-        camX: -1,
-        camY: 3,
-        camZ: 7,
-        lookY: -0.5,
-        duration: 0.04,
-        ease: "power1.inOut",
-      }, 0.89);
-
-      // Terrain fades out before contact
-      tl.to(planeProxy, {
-        terrainOpacity: 0,
-        duration: 0.02,
-        ease: "power2.out",
-      }, 0.91);
+      }, 0.40);
 
       /* ═══════════════════════════════════════════════════════
-         ACT 8: Contact (93–100%)
-         Camera settles among close clouds. Final framing.
+         ACT 4: THE FLEET — The Climax (60–85%)
+         Phase A: Cloud wall. Phase B: Cloud break + plane.
+         Phase C: Showcase orbit.
        ═══════════════════════════════════════════════════════ */
+      // Phase A: Descend into thick cloud wall (60-68%)
       tl.to(planeProxy, {
+        camY: 10,
+        lookY: 5,
+        skyDarkness: 0.05,
+        cloudOpacity: 0.8,
+        duration: 0.08,
+        ease: "power1.in",
+      }, 0.60);
+
+      // Phase B: Clouds break, plane revealed (68-72%)
+      tl.to(planeProxy, {
+        camY: 4,
+        camZ: 9,
+        lookY: 0.5,
+        cloudOpacity: 0.2,
+        duration: 0.04,
+        ease: "power2.out",
+      }, 0.68);
+
+      tl.to(planeProxy, {
+        showPlane: 1,
+        autoRotate: true,
+        duration: 0.03,
+        ease: "power2.in",
+      }, 0.68);
+
+      // Phase C: Showcase — camera drifts, plane rotates (72-85%)
+      tl.to(planeProxy, {
+        camX: 0.3,
+        camY: 3,
         camZ: 10,
+        lookY: 0.3,
+        lookZ: -2,
+        cloudOpacity: 0.15,
+        duration: 0.13,
+        ease: "none",
+      }, 0.72);
+
+      /* ═══════════════════════════════════════════════════════
+         ACT 5: THE DOOR (85–100%)
+         Plane fades. Settle into soft clouds. Landing.
+       ═══════════════════════════════════════════════════════ */
+      // Plane fades out
+      tl.to(planeProxy, {
+        showPlane: 0,
+        duration: 0.02,
+      }, 0.85);
+
+      // Settle into clouds
+      tl.to(planeProxy, {
         camX: 0,
         camY: 1,
+        camZ: 10,
         lookY: 0,
-        rotY: Math.PI * 0.5,
-        duration: 0.07,
+        lookZ: 0,
+        cloudOpacity: 1,
+        skyDarkness: 0,
+        duration: 0.15,
         ease: "power2.inOut",
-      }, 0.93);
+      }, 0.85);
     }, scrollRef);
 
     return () => ctx.revert();
@@ -236,7 +157,7 @@ export default function StoryScroll() {
       ref={scrollRef}
       className="scroll-driver"
       style={{
-        height: "2000vh",
+        height: "3000vh",
         position: "relative",
         pointerEvents: "none",
       }}

@@ -232,7 +232,7 @@ a { text-decoration: none; color: inherit; }
   filter: blur(6px);
 }
 .pre-counter {
-  font-family: 'Makro', Georgia, serif;
+  font-family: 'Italiana', Georgia, serif;
   font-size: 12px;
   letter-spacing: 0.4em;
   color: rgba(184,151,106,0);
@@ -301,7 +301,7 @@ a { text-decoration: none; color: inherit; }
 }
 .mobile-menu.open { opacity: 1; pointer-events: all; }
 .mobile-menu a {
-  font-family: 'Makro', Georgia, serif;
+  font-family: 'Italiana', Georgia, serif;
   font-size: 28px; font-weight: 500;
   letter-spacing: 0.06em; text-transform: uppercase;
   transition: color 0.3s;
@@ -320,28 +320,588 @@ a { text-decoration: none; color: inherit; }
   min-height: 700px;
   overflow: hidden;
   z-index: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-.hero-flight::before {
+#skyCanvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+.hero-vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 85% 85% at 50% 50%, transparent 40%, rgba(0,0,0,0.2) 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+.hero-scroll-indicator {
+  position: absolute;
+  bottom: 36px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  z-index: 2;
+}
+.hero-scroll-indicator span {
+  font-family: 'Inter', sans-serif;
+  font-size: 8px;
+  letter-spacing: 0.3em;
+  color: rgba(12,18,32,0.3);
+  text-transform: uppercase;
+}
+.hero-scroll-line {
+  width: 1px;
+  height: 28px;
+  background: linear-gradient(to bottom, rgba(12,18,32,0.3), transparent);
+  animation: scrollPulse 2s ease-in-out infinite;
+}
+@keyframes scrollPulse {
+  0%, 100% { opacity: 0.3; transform: scaleY(1); }
+  50% { opacity: 0.8; transform: scaleY(1.15); }
+}
+
+/* ═══ HORIZONTAL SCROLL ═══ */
+.hscroll {
+  position: relative;
+  overflow: hidden;
+}
+.hscroll-track {
+  display: flex;
+  width: 200vw;
+}
+.hscroll-panel {
+  width: 100vw;
+  height: 100vh;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.hscroll-panel--dark {
+  background: var(--navy, #0C1220);
+  color: #fff;
+}
+.hscroll-panel--light {
+  background: #f8f6f3;
+  color: var(--navy, #0C1220);
+}
+.hscroll-panel-inner {
+  max-width: 700px;
+  padding: 0 40px;
+  text-align: center;
+}
+.hscroll-quote-mark {
+  font-family: 'Italiana', serif;
+  font-size: clamp(80px, 12vw, 140px);
+  color: rgba(184,151,106,0.3);
+  line-height: 0.6;
+  margin-bottom: 24px;
+}
+.hscroll-quote {
+  font-family: 'Italiana', serif;
+  font-size: clamp(22px, 3vw, 32px);
+  font-weight: 400;
+  line-height: 1.6;
+  color: rgba(255,255,255,0.9);
+  margin: 0 0 32px;
+}
+.hscroll-cite {
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(184,151,106,0.8);
+  font-style: normal;
+}
+.hscroll-title {
+  font-family: 'Italiana', serif;
+  font-size: clamp(36px, 5vw, 56px);
+  font-weight: 400;
+  line-height: 1.15;
+  margin: 16px 0 28px;
+  color: var(--navy, #0C1220);
+}
+.hscroll-body {
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  font-weight: 300;
+  line-height: 1.7;
+  color: rgba(12,18,32,0.65);
+  margin: 0 0 16px;
+}
+/* ═══ HSCROLL ENHANCEMENTS ═══ */
+
+/* Golden particle dust on quote panel */
+.hscroll-panel--quote { position: relative; overflow: hidden; }
+.hscroll-panel--quote::before {
   content: '';
   position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 140px;
-  background: linear-gradient(to bottom, rgba(0,0,0,0.3), transparent);
-  z-index: 2;
+  inset: -50% -50%;
+  width: 200%;
+  height: 200%;
+  background-image:
+    radial-gradient(1px 1px at 10% 15%, rgba(184,151,106,0.5) 50%, transparent 50%),
+    radial-gradient(1.5px 1.5px at 30% 65%, rgba(184,151,106,0.35) 50%, transparent 50%),
+    radial-gradient(1px 1px at 55% 25%, rgba(184,151,106,0.4) 50%, transparent 50%),
+    radial-gradient(1.5px 1.5px at 75% 70%, rgba(184,151,106,0.3) 50%, transparent 50%),
+    radial-gradient(1px 1px at 90% 40%, rgba(184,151,106,0.45) 50%, transparent 50%),
+    radial-gradient(1px 1px at 45% 85%, rgba(184,151,106,0.35) 50%, transparent 50%);
+  background-size: 280px 280px, 360px 360px, 320px 320px, 400px 400px, 300px 300px, 340px 340px;
+  animation: dustFloat 25s ease-in-out infinite alternate;
   pointer-events: none;
+  z-index: 0;
 }
-.hero-img {
+@keyframes dustFloat {
+  0% { transform: translate(0, 0); opacity: 0.5; }
+  33% { transform: translate(-30px, -20px); opacity: 0.7; }
+  66% { transform: translate(15px, -10px); opacity: 0.6; }
+  100% { transform: translate(-10px, 25px); opacity: 0.5; }
+}
+
+/* Quote mark parallax */
+.hscroll-quote-mark {
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+}
+
+/* Quote word spans — scroll-driven reveal */
+.q-word {
+  display: inline-block;
+  margin-right: 0.25em;
+  opacity: 0;
+  filter: blur(4px);
+  transform: translateY(8px);
+  will-change: opacity, filter, transform;
+  transition: color 0.3s ease;
+}
+
+/* Quote glow — radial gold behind text */
+.quote-glow {
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle, rgba(184,151,106,0.10) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0;
+}
+
+/* Cite — starts hidden, scroll-driven reveal */
+.hscroll-cite {
+  opacity: 0;
+  transform: translateY(12px);
+  display: block;
+  position: relative;
+}
+.hscroll-cite::after {
+  content: '';
+  display: block;
+  width: 80px;
+  height: 1px;
+  background: linear-gradient(90deg, var(--gold), transparent);
+  margin: 12px auto 0;
+  transform: scaleX(var(--line-scale, 0));
+  transform-origin: left;
+  transition: none;
+}
+
+/* Story panel background image */
+.hscroll-panel--story { position: relative; overflow: hidden; }
+.hscroll-panel--story::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: url('assets/plane_interior_only.png') center/cover no-repeat;
+  opacity: var(--story-bg-opacity, 0.02);
+  filter: grayscale(100%);
+  pointer-events: none;
+  z-index: 0;
+}
+.hscroll-panel--story::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(248,246,243,0.93) 0%, rgba(248,246,243,0.88) 100%);
+  pointer-events: none;
+  z-index: 0;
+}
+.hscroll-panel--story .hscroll-panel-inner { position: relative; z-index: 1; }
+.hscroll-panel--story .story-grid { position: relative; z-index: 1; }
+
+/* Gold divider lines — scroll-driven, no transition */
+.story-divider {
+  width: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  margin: 20px auto;
+}
+
+/* Decorative corner brackets */
+.story-corner {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  border-color: rgba(184,151,106,0.12);
+  border-style: solid;
+  border-width: 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0;
+}
+.story-corner--tl { top: 12%; left: 8%; border-top-width: 1px; border-left-width: 1px; }
+.story-corner--br { bottom: 12%; right: 8%; border-bottom-width: 1px; border-right-width: 1px; }
+
+/* Story text initial states */
+#storyLabel, #storyTitle { opacity: 0; transform: translateY(25px); }
+.hscroll-body { opacity: 0; transform: translateY(20px); }
+
+/* Story grid layout */
+.story-grid {
+  max-width: 700px;
+  width: 100%;
+  text-align: center;
+  padding: 0 40px;
+  position: relative;
+  z-index: 1;
+}
+
+/* Counter centerpiece */
+.story-counter-wrap {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  margin: 16px auto 8px;
+  opacity: 0;
+  transform: scale(0.85);
+}
+.story-arc {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.story-counter-inner {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.story-counter-num {
+  font-family: 'Italiana', serif;
+  font-size: 72px;
+  font-weight: 400;
+  color: var(--navy, #0C1220);
+  line-height: 1;
+}
+.story-counter-plus {
+  font-family: 'Italiana', serif;
+  font-size: 36px;
+  color: var(--gold);
+  margin-left: 2px;
+  align-self: flex-start;
+  margin-top: 16px;
+  opacity: 0;
+}
+.story-counter-label {
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  right: 0;
+  font-family: 'Inter', sans-serif;
+  font-size: 9px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgba(184,151,106,0.7);
+  text-align: center;
+  opacity: 0;
+}
+
+/* Story beats — stacked, crossfade via scroll */
+.story-beats {
+  position: relative;
+  min-height: 120px;
+}
+.story-beat {
+  opacity: 0;
+  transform: translateY(20px);
+  will-change: opacity, transform;
+}
+
+/* Accent underline on "U.S. Presidents" */
+.story-accent {
+  position: relative;
+  white-space: nowrap;
+}
+.story-accent::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: var(--gold);
+  transform: scaleX(var(--accent-scale, 0));
+  transform-origin: left;
+}
+
+/* Service words row */
+.story-services {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 24px;
+  flex-wrap: wrap;
+}
+.story-service-word {
+  font-family: 'Italiana', serif;
+  font-size: 18px;
+  color: var(--navy, #0C1220);
+  opacity: 0;
+  transform: translateY(12px);
+  will-change: opacity, transform;
+}
+.story-service-sep {
+  width: 4px;
+  height: 4px;
+  background: var(--gold);
+  transform: rotate(45deg);
+  opacity: 0;
+  flex-shrink: 0;
+}
+
+/* Story gold rule */
+.story-rule {
+  width: 0;
+  height: 1px;
+  background: linear-gradient(90deg, var(--gold), transparent);
+  margin: 20px auto 0;
+}
+
+@media (max-width: 1024px) {
+  .story-services { justify-content: center; }
+}
+
+/* Progress bar */
+.hscroll-progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  width: 0%;
+  background: linear-gradient(90deg, var(--gold), rgba(184,151,106,0.4));
+  z-index: 20;
+}
+
+/* Panel dots */
+.hscroll-dots {
+  position: absolute;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 12px;
+  z-index: 20;
+}
+.hscroll-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.2);
+  transition: all 0.4s var(--ease-out);
+}
+.hscroll-dot.active {
+  background: var(--gold);
+  transform: scale(1.5);
+  box-shadow: 0 0 10px rgba(184,151,106,0.5);
+}
+
+/* Plane scroll clip-path reveal */
+.plane-scroll {
+  clip-path: inset(0 0 100% 0);
+  transition: clip-path 1.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.plane-scroll.revealed {
+  clip-path: inset(0 0 0% 0);
+}
+
+/* ═══ KINETIC TYPOGRAPHY + RUNWAY ═══ */
+.kinetic-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.kinetic-curtain {
+  position: absolute;
+  top: 0;
+  width: 50%;
+  height: 100%;
+  background: var(--navy);
+  z-index: 0;
+  will-change: transform;
+}
+.kinetic-curtain--left { left: 0; }
+.kinetic-curtain--right { right: 0; }
+.kinetic-inner {
+  text-align: center;
+  position: relative;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(8px, 2vw, 16px);
+}
+.kinetic-word {
+  font-family: 'Italiana', serif;
+  font-size: clamp(48px, 10vw, 120px);
+  font-weight: 400;
+  color: #fff;
+  line-height: 1.1;
+  margin: 0;
+  opacity: 0;
+  will-change: opacity;
+}
+.kinetic-char {
+  display: inline-block;
+}
+.kinetic-char--l {
+  will-change: transform, color;
+}
+.kinetic-runway {
+  position: absolute;
+  top: 0;
+  width: 4px;
+  height: 100%;
+  background: var(--gold);
+  z-index: 2;
+  opacity: 0;
+  will-change: transform, opacity;
+}
+/* left + width set dynamically in JS to match the l-chars */
+
+/* ═══ FULL-BLEED VIDEO MOMENT ═══ */
+.fullbleed {
+  position: relative;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.fullbleed-video {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center center;
+  will-change: transform;
 }
-.hero-video {
+.fullbleed-overlay {
   position: absolute;
-  top: 50%; left: 50%;
-  min-width: 100%; min-height: 100%;
-  transform: translate(-50%, -50%) rotate(90deg);
-  object-fit: cover;
+  inset: 0;
+  background: rgba(12,18,32,0.55);
+  pointer-events: none;
+  z-index: 1;
+}
+.fullbleed::before {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: 0; right: 0;
+  height: 120px;
+  background: linear-gradient(to bottom, var(--navy), transparent);
+  z-index: 3;
+  pointer-events: none;
+}
+.fullbleed::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0; right: 0;
+  height: 120px;
+  background: linear-gradient(to top, var(--bg), transparent);
+  z-index: 3;
+  pointer-events: none;
+}
+.fullbleed-content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+}
+.fullbleed-line {
+  font-family: 'Italiana', serif;
+  font-size: clamp(32px, 5vw, 56px);
+  font-weight: 400;
+  color: #fff;
+  line-height: 1.3;
+  margin: 0 0 8px;
+  opacity: 0;
+  transform: translateY(30px);
+  text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+}
+.fullbleed-line--gold { margin-top: 4px; }
+.fullbleed-accent {
+  color: var(--gold);
+  position: relative;
+}
+.fullbleed-accent::after {
+  content: '';
+  position: absolute;
+  bottom: -3px;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: var(--gold);
+  transform: scaleX(var(--accent-scale, 0));
+  transform-origin: left;
+}
+.fullbleed-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 36px;
+  padding: 14px 36px;
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.25);
+  text-decoration: none;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: background 0.3s, border-color 0.3s;
+  pointer-events: auto;
+  cursor: pointer;
+}
+.fullbleed-cta:hover {
+  background: rgba(255,255,255,0.08);
+  border-color: rgba(255,255,255,0.5);
+}
+
+/* Globe section clip-path reveal */
+.globe-section {
+  clip-path: circle(0% at 50% 0%);
+  transition: clip-path 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.globe-section.revealed {
+  clip-path: circle(150% at 50% 0%);
 }
 
 /* 3D Crystal Logo Canvas */
@@ -394,48 +954,39 @@ a { text-decoration: none; color: inherit; }
 .stat-desc { display: none; }
 */
 
-/* ═══ ABOUT ═══ */
-.about {
-  display: grid; grid-template-columns: 1fr 1fr;
-  min-height: 90vh;
-}
-.about-img {
-  position: relative; overflow: hidden; min-height: 600px;
-}
-.about-img img {
-  position: absolute; inset: 0;
-  width: 100%; height: 100%; object-fit: cover;
-}
-.about-img-reveal {
-  position: absolute; inset: 0;
-  background: var(--bg);
-  transform-origin: right;
-  z-index: 2;
-}
-.about-text {
-  display: flex; flex-direction: column; justify-content: center;
-  padding: clamp(48px, 8vw, 100px) clamp(32px, 6vw, 80px);
-  background: var(--white);
-}
-
-/* ═══ GLOBE SECTION ═══ */
+/* ═══ GLOBE JOURNEY ═══ */
 .globe-section {
   background: var(--bg);
-  padding: clamp(80px, 10vw, 140px) clamp(24px, 5vw, 64px);
   position: relative;
   overflow: hidden;
-  border-bottom: 1px solid var(--border-light);
 }
-.globe-layout {
+.globe-journey {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: clamp(40px, 5vw, 80px);
   align-items: center;
   max-width: 1280px;
   margin: 0 auto;
+  padding: clamp(80px, 10vw, 140px) clamp(24px, 5vw, 64px);
+  min-height: 100vh;
+  position: relative;
 }
-.globe-text {
-  display: flex; flex-direction: column; justify-content: center;
+.globe-left {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  min-height: 400px;
+}
+.globe-header {
+  opacity: 0;
+  transform: translateY(30px);
+}
+.globe-right {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .globe-section .section-title {
   color: var(--text-dark);
@@ -445,34 +996,7 @@ a { text-decoration: none; color: inherit; }
   font-size: 16px; font-weight: 300; line-height: 1.8;
   color: var(--text-body-dark);
   max-width: 440px;
-  margin-bottom: 48px;
-}
-.globe-cities {
-  display: flex; flex-direction: column; gap: 20px;
-}
-.globe-city {
-  display: flex; align-items: center; gap: 16px;
-  padding-left: 16px;
-  border-left: 2px solid var(--gold);
-}
-.globe-city-name {
-  font-family: 'Makro', Georgia, serif;
-  font-size: 16px; font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--text-dark);
-}
-.globe-city-dot {
-  width: 4px; height: 4px; border-radius: 50%;
-  background: var(--gold);
-  flex-shrink: 0;
-  opacity: 0.5;
-}
-.globe-city-label {
-  font-size: 10px; letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--text-body-dark);
-  opacity: 0.5;
+  margin-bottom: 0;
 }
 .globe-wrap {
   position: relative;
@@ -480,10 +1004,121 @@ a { text-decoration: none; color: inherit; }
   aspect-ratio: 1;
   max-width: 580px;
   justify-self: center;
+  opacity: 0;
+  transform: scale(0.85);
 }
 .globe-canvas {
   width: 100%;
   height: 100%;
+}
+
+/* City cards — stacked, absolutely positioned */
+.globe-cards {
+  position: relative;
+  min-height: 280px;
+  margin-top: 40px;
+}
+.globe-card {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  opacity: 0;
+  transform: translateX(-30px);
+  padding-left: 24px;
+  transition: opacity 0.5s ease, transform 0.5s ease;
+  pointer-events: none;
+}
+.globe-card.active {
+  opacity: 1;
+  transform: translateX(0);
+  pointer-events: auto;
+}
+.globe-card-accent {
+  position: absolute;
+  left: 0; top: 0;
+  width: 3px; height: 100%;
+  background: var(--gold);
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.globe-card.active .globe-card-accent {
+  transform: scaleY(1);
+}
+.globe-card-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 10px; font-weight: 500;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 12px;
+}
+.globe-card-city {
+  font-family: 'Italiana', Georgia, serif;
+  font-size: clamp(28px, 3vw, 40px);
+  color: var(--text-dark);
+  line-height: 1.1;
+  margin-bottom: 4px;
+}
+.globe-card-region {
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-body-dark);
+  opacity: 0.5;
+  margin-bottom: 20px;
+}
+.globe-card-desc {
+  font-size: 15px; font-weight: 300;
+  line-height: 1.75;
+  color: var(--text-body-dark);
+  max-width: 400px;
+  margin-bottom: 20px;
+}
+.globe-card-pill {
+  display: inline-block;
+  font-size: 10px; font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--gold);
+  border: 1px solid rgba(184,151,106,0.3);
+  padding: 8px 16px;
+  border-radius: 100px;
+}
+
+/* Summary stats bar */
+.globe-summary {
+  position: absolute;
+  bottom: clamp(40px, 5vw, 80px);
+  left: 50%;
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  opacity: 0;
+}
+.globe-summary-stat { text-align: center; }
+.globe-summary-num {
+  font-family: 'Italiana', Georgia, serif;
+  font-size: clamp(36px, 4vw, 52px);
+  color: var(--text-dark);
+}
+.globe-summary-prefix,
+.globe-summary-plus {
+  font-family: 'Italiana', Georgia, serif;
+  font-size: clamp(28px, 3vw, 40px);
+  color: var(--gold);
+}
+.globe-summary-label {
+  display: block;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-body-dark);
+  opacity: 0.6;
+  margin-top: 4px;
+}
+.globe-summary-div {
+  width: 1px; height: 40px;
+  background: linear-gradient(to bottom, transparent, rgba(184,151,106,0.4), transparent);
 }
 .label {
   font-size: 10px; font-weight: 500;
@@ -494,33 +1129,16 @@ a { text-decoration: none; color: inherit; }
 }
 .label::before { content: ''; width: 32px; height: 1px; background: var(--gold); }
 .section-title {
-  font-family: 'Makro', Georgia, serif;
-  font-weight: 500; text-transform: uppercase;
-  letter-spacing: 0.02em; line-height: 1.05;
+  font-family: 'Italiana', Georgia, serif;
+  font-weight: 400; text-transform: none;
+  letter-spacing: 0.02em; line-height: 1.1;
   font-size: clamp(32px, 4.5vw, 60px);
 }
-.about-text .section-title { color: var(--navy); margin-bottom: 32px; }
 .body-text {
   font-size: 17px; font-weight: 300; line-height: 1.8;
   color: #4A5568; max-width: 480px;
 }
 .body-text + .body-text { margin-top: 20px; }
-.about-quote {
-  margin-top: 48px; padding-top: 40px;
-  border-top: 1px solid rgba(0,0,0,0.08);
-}
-.about-quote p {
-  font-family: 'Makro', Georgia, serif;
-  font-size: 20px; font-weight: 500;
-  line-height: 1.6; color: var(--navy);
-  font-style: italic;
-}
-.about-quote cite {
-  display: block; margin-top: 16px;
-  font-style: normal; font-size: 10px;
-  letter-spacing: 0.25em; text-transform: uppercase;
-  color: var(--gold);
-}
 
 /* ═══ BOLT DIVIDER ═══ */
 .bolt-divider {
@@ -590,240 +1208,7 @@ a { text-decoration: none; color: inherit; }
   .vtext-frame { width: 90%; }
 }
 
-/* ═══ SERVICES ═══ */
-.svc-slide {
-  position: relative; height: 100vh; min-height: 700px;
-  overflow: hidden;
-  display: flex; align-items: center;
-}
-.svc-slide img {
-  position: absolute; inset: 0;
-  width: 100%; height: 100%; object-fit: cover;
-}
-.svc-slide-overlay {
-  position: absolute; inset: 0;
-  background: linear-gradient(90deg, rgba(12,18,32,0.60) 0%, rgba(12,18,32,0.25) 55%, transparent 100%);
-}
-.svc-slide:nth-child(even) .svc-slide-overlay {
-  background: linear-gradient(270deg, rgba(12,18,32,0.60) 0%, rgba(12,18,32,0.25) 55%, transparent 100%);
-}
-.svc-text {
-  position: relative; z-index: 2;
-  padding: 48px clamp(32px, 6vw, 100px);
-  max-width: 560px;
-  color: var(--white);
-  border-top: 2px solid transparent;
-  transition: border-color 0.6s var(--ease-out), transform 0.5s var(--ease-out), background 0.5s;
-}
-.svc-text::before {
-  content: ''; position: absolute; top: 0; left: 0;
-  width: 0; height: 2px;
-  background: linear-gradient(90deg, rgba(30,60,140,0.8), var(--gold));
-  transition: width 0.6s var(--ease-out);
-}
-.svc-text::after {
-  content: ''; position: absolute; top: 0; left: 0; right: 0;
-  height: 0; background: linear-gradient(180deg, rgba(184,151,106,0.06), transparent);
-  transition: height 0.5s var(--ease-out);
-  pointer-events: none;
-}
-@media (hover: hover) {
-  .svc-text:hover { transform: translateY(-4px); }
-  .svc-text:hover::before { width: 100%; }
-  .svc-text:hover::after { height: 200px; }
-  .svc-text:hover h3 { color: rgba(140,170,255,0.9); }
-}
-.svc-slide:nth-child(even) .svc-text {
-  margin-left: auto;
-}
-.svc-num {
-  font-family: 'Makro', Georgia, serif;
-  font-size: clamp(60px, 8vw, 100px);
-  font-weight: 500;
-  color: rgba(255,255,255,0.25);
-  line-height: 1; margin-bottom: -8px;
-}
-.svc-text h3 {
-  font-family: 'Makro', Georgia, serif;
-  font-size: clamp(28px, 4vw, 52px);
-  font-weight: 500; text-transform: uppercase;
-  letter-spacing: 0.02em; line-height: 1.1;
-  margin-bottom: 24px;
-  transition: color 0.4s;
-}
-.svc-text p {
-  font-size: 15px; font-weight: 300; line-height: 1.85;
-  color: var(--text-body); max-width: 440px;
-}
-.svc-link {
-  display: inline-flex; align-items: center; gap: 12px;
-  margin-top: 36px; font-size: 11px; font-weight: 500;
-  letter-spacing: 0.25em; text-transform: uppercase;
-  color: var(--gold);
-  transition: gap 0.4s var(--ease-out);
-}
-.svc-link:hover { gap: 20px; }
-.svc-link svg { width: 16px; height: 16px; stroke: var(--gold); fill: none; stroke-width: 1.5; }
 
-/* ═══ FLEET GALLERY ═══ */
-.fleet { background: var(--bg-alt); }
-.fleet-header {
-  padding: clamp(60px, 8vw, 100px) clamp(24px, 5vw, 64px) clamp(24px, 3vw, 40px);
-}
-.fleet-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-auto-rows: 45vh;
-  gap: 4px;
-  padding: 0 4px 4px;
-}
-.fleet-item {
-  position: relative; overflow: hidden;
-}
-.fleet-item:nth-child(1) { grid-column: span 2; }
-.fleet-item:nth-child(4) { grid-column: span 2; }
-.fleet-item:nth-child(5) { grid-column: span 2; }
-.fleet-item img, .fleet-item video {
-  width: 100%; height: 100%; object-fit: cover;
-  transition: transform 1.2s var(--ease-out);
-}
-.fleet-item video { background: var(--bg-alt); }
-@media (hover: hover) {
-  .fleet-item:hover img, .fleet-item:hover video { transform: scale(1.03); }
-}
-.fleet-item-overlay {
-  position: absolute; inset: 0;
-  background: linear-gradient(180deg, transparent 50%, rgba(12,18,32,0.4));
-  opacity: 0; transition: opacity 0.4s; pointer-events: none;
-}
-.fleet-item:hover .fleet-item-overlay { opacity: 1; }
-.fleet-item-label {
-  position: absolute; bottom: 20px; left: 20px;
-  font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
-  color: var(--white);
-  opacity: 0; transform: translateY(6px);
-  transition: all 0.4s var(--ease-out); pointer-events: none;
-}
-.fleet-item:hover .fleet-item-label { opacity: 1; transform: translateY(0); }
-
-/* ═══ QUOTE ═══ */
-.quote-section {
-  position: relative; overflow: hidden;
-  background: var(--bg);
-  padding: clamp(100px, 15vw, 200px) clamp(24px, 8vw, 120px);
-  display: flex; align-items: center; justify-content: center;
-}
-.quote-big-mark {
-  position: absolute; top: 10%; left: 50%;
-  transform: translateX(-50%);
-  font-family: 'Makro', Georgia, serif;
-  font-size: clamp(200px, 30vw, 500px);
-  color: rgba(12,18,32,0.04);
-  line-height: 1; pointer-events: none;
-  user-select: none;
-}
-.quote-inner { max-width: 900px; text-align: center; position: relative; z-index: 1; }
-.quote-text {
-  font-family: 'Makro', Georgia, serif;
-  font-size: clamp(24px, 3.5vw, 44px);
-  font-weight: 500; line-height: 1.5;
-  color: var(--text-dark);
-}
-.quote-text .word {
-  opacity: 0.08;
-  transition: opacity 0.5s;
-}
-.quote-text .word.lit { opacity: 1; }
-.quote-text .word.em { color: var(--gold); font-style: italic; }
-.quote-cite {
-  text-align: center; margin-top: 40px;
-  font-size: 10px; letter-spacing: 0.3em;
-  text-transform: uppercase;
-  color: var(--gold);
-  opacity: 0;
-  transition: opacity 0.6s;
-}
-.quote-cite.vis { opacity: 1; }
-
-/* ═══ CONTACT ═══ */
-.contact {
-  background: var(--navy);
-  padding: clamp(80px, 12vw, 160px) clamp(24px, 5vw, 64px);
-}
-.contact .container { max-width: 680px; margin: 0 auto; text-align: center; }
-.contact .label { color: var(--gold); justify-content: center; }
-.contact .label::before { background: var(--gold); }
-.contact .section-title { color: var(--white); margin-bottom: 20px; }
-.contact-subtitle {
-  font-size: clamp(15px, 1.2vw, 17px); font-weight: 300;
-  color: var(--text-body); line-height: 1.7; margin-bottom: 48px;
-}
-.contact-actions {
-  display: flex; gap: 16px; justify-content: center;
-  flex-wrap: wrap; margin-bottom: 20px;
-}
-.contact-btn {
-  display: inline-flex; align-items: center; gap: 10px;
-  padding: 16px 32px;
-  font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 500;
-  letter-spacing: 0.15em; text-transform: uppercase;
-  text-decoration: none; cursor: pointer;
-  transition: transform 0.3s var(--ease-out), box-shadow 0.3s, background 0.3s;
-}
-.contact-btn:hover { transform: translateY(-2px); }
-.contact-btn svg { width: 18px; height: 18px; }
-.contact-btn--call {
-  background: transparent; border: 1.5px solid var(--gold);
-  color: var(--gold);
-}
-.contact-btn--call:hover { background: rgba(184,151,106,0.1); box-shadow: 0 12px 40px rgba(184,151,106,0.15); }
-.contact-btn--call svg { stroke: var(--gold); fill: none; stroke-width: 1.5; }
-.contact-btn--email {
-  background: transparent; border: 1.5px solid rgba(255,255,255,0.15);
-  color: rgba(255,255,255,0.7);
-}
-.contact-btn--email:hover { border-color: rgba(255,255,255,0.3); color: var(--white); box-shadow: 0 12px 40px rgba(255,255,255,0.05); }
-.contact-btn--email svg { stroke: currentColor; fill: none; stroke-width: 1.5; }
-.contact-availability {
-  font-size: 12px; letter-spacing: 0.15em; text-transform: uppercase;
-  color: rgba(255,255,255,0.3); margin-bottom: 64px;
-}
-.contact-divider {
-  display: flex; align-items: center; gap: 20px;
-  margin-bottom: 40px; color: rgba(255,255,255,0.2);
-  font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
-}
-.contact-divider::before, .contact-divider::after {
-  content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.08);
-}
-.contact-form { display: flex; flex-direction: column; gap: 20px; max-width: 100%; }
-.fg { display: flex; flex-direction: column; gap: 8px; flex: 1; }
-.fg label { font-size: 9px; font-weight: 500; letter-spacing: 0.25em; text-transform: uppercase; color: rgba(255,255,255,0.3); text-align: left; }
-.fg input, .fg textarea {
-  padding: 16px 20px;
-  background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(255,255,255,0.08);
-  color: var(--white); font-family: 'Inter', sans-serif;
-  font-size: 14px; font-weight: 300; outline: none;
-  transition: border-color 0.3s, background 0.3s;
-}
-.fg input:focus, .fg textarea:focus {
-  border-color: var(--gold);
-  background: rgba(184,151,106,0.06);
-}
-.fg input::placeholder, .fg textarea::placeholder { color: rgba(255,255,255,0.18); }
-.fg textarea { resize: vertical; min-height: 120px; }
-.btn-gold {
-  align-self: center;
-  padding: 16px 44px;
-  background: var(--gold); border: none;
-  color: var(--navy); font-family: 'Inter', sans-serif;
-  font-size: 12px; font-weight: 500;
-  letter-spacing: 0.2em; text-transform: uppercase;
-  cursor: pointer;
-  transition: transform 0.3s var(--ease-out), box-shadow 0.3s;
-}
-.btn-gold:hover { transform: translateY(-2px); box-shadow: 0 16px 48px rgba(184,151,106,0.2); }
 
 /* ═══ FOOTER ═══ */
 .footer {
@@ -845,12 +1230,6 @@ a { text-decoration: none; color: inherit; }
   transition: opacity 0.9s var(--ease-out), transform 0.9s var(--ease-out);
 }
 .reveal.vis { opacity: 1; transform: translateY(0); }
-/* Stagger delays for grouped elements */
-.fleet-item.reveal:nth-child(2) { transition-delay: 0.08s; }
-.fleet-item.reveal:nth-child(3) { transition-delay: 0.16s; }
-.fleet-item.reveal:nth-child(4) { transition-delay: 0.24s; }
-.fleet-item.reveal:nth-child(5) { transition-delay: 0.32s; }
-.fleet-item.reveal:nth-child(6) { transition-delay: 0.40s; }
 
 /* ═══ RESPONSIVE ═══ */
 @media (max-width: 1024px) {
@@ -858,36 +1237,19 @@ a { text-decoration: none; color: inherit; }
   .nav.scrolled { padding: 14px 24px; }
   .nav-links { display: none; }
   .mobile-toggle { display: block; }
-  .about { grid-template-columns: 1fr; }
-  .about-img { min-height: 50vh; }
-  .about-text { padding: 64px 32px; }
-  .globe-layout { grid-template-columns: 1fr; text-align: center; }
-  .globe-text .label { justify-content: center; }
+  .globe-journey { grid-template-columns: 1fr; text-align: center; }
+  .globe-left { align-items: center; }
+  .globe-left .label { justify-content: center; }
   .globe-wrap { max-width: 340px; }
-  .globe-cities { align-items: center; }
+  .globe-card { padding-left: 0; text-align: center; }
+  .globe-card-accent { display: none; }
+  .globe-card-desc { margin: 0 auto 20px; }
   .globe-subtitle { margin-left: auto; margin-right: auto; }
-  .svc-slide { min-height: auto; height: auto; padding: 80px 0; }
-  .svc-slide-overlay { background: rgba(12,18,32,0.50) !important; }
-  .svc-text { max-width: 100%; margin: 0 !important; padding: 0 32px; }
-  .stats-bar { grid-template-columns: repeat(2, 1fr); }
-  .stat-cell { border-bottom: 1px solid var(--border-light); }
-  .fleet-grid { grid-template-columns: 1fr 1fr; grid-auto-rows: 35vh; }
-  .fleet-item:nth-child(1),
-  .fleet-item:nth-child(4),
-  .fleet-item:nth-child(5) { grid-column: span 2; }
-  .contact-actions { flex-direction: column; align-items: stretch; }
-  .contact-btn { justify-content: center; }
+  .globe-summary { flex-direction: column; gap: 24px; }
+  .globe-summary-div { width: 40px; height: 1px; }
   .footer { padding: 32px 24px; flex-direction: column; gap: 20px; text-align: center; }
   .footer-offices { justify-content: center; }
   .mobile-close { right: 24px; }
-}
-@media (max-width: 640px) {
-  .fleet-grid { grid-template-columns: 1fr; grid-auto-rows: 40vh; }
-  .fleet-item:nth-child(1),
-  .fleet-item:nth-child(4),
-  .fleet-item:nth-child(5) { grid-column: span 1; }
-  .btn-line, .btn-gold { width: 100%; justify-content: center; text-align: center; }
-  .hero-cta-wrap { padding: 0 20px; }
 }
 
 /* ═══ PLANE SCROLL ═══ */
@@ -1012,56 +1374,6 @@ a { text-decoration: none; color: inherit; }
 .blueprint-toggle:hover {
   border-color: var(--gold);
   background: rgba(184,151,106,0.12);
-}
-
-/* ─── X-RAY SCANNER SECTION ─── */
-.xray-section {
-  background: var(--bg);
-  padding-top: clamp(60px, 8vw, 100px);
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
-.xray-header {
-  text-align: center;
-  margin-bottom: clamp(24px, 3vw, 40px);
-  padding: 0 clamp(24px, 5vw, 64px);
-}
-.xray-header .label { justify-content: center; }
-.xray-header .section-title { color: var(--navy); }
-.xray-viewport {
-  position: relative;
-  flex: 1;
-  overflow: hidden;
-}
-.xray-wrap {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  width: min(900px, 100%);
-}
-.xray-exterior, .xray-interior {
-  width: 100%;
-  display: block;
-}
-.xray-interior {
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  object-fit: cover;
-  object-position: center top;
-  clip-path: inset(0% 0 100% 0);
-}
-.xray-line {
-  position: absolute;
-  left: 5%; right: 5%;
-  height: 1.5px;
-  background: linear-gradient(90deg, transparent, var(--gold), transparent);
-  opacity: 0;
-  pointer-events: none;
-  box-shadow: 0 0 12px rgba(184,151,106,0.4);
-  transition: opacity 0.3s;
-  z-index: 2;
 }
 
 /* ─── BLUEPRINT PANEL ─── */
@@ -1246,67 +1558,6 @@ a { text-decoration: none; color: inherit; }
   padding: 4px 14px; border-radius: 4px; letter-spacing: 0.06em;
 }
 
-/* ═══ STORY SPLIT SECTIONS ═══ */
-.story-section {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  min-height: 70vh;
-}
-.story-section.reverse { direction: rtl; }
-.story-section.reverse > * { direction: ltr; }
-.story-img {
-  position: relative;
-  overflow: hidden;
-  min-height: 500px;
-}
-.story-img img {
-  position: absolute; inset: 0;
-  width: 100%; height: 100%; object-fit: cover;
-  transition: transform 1.2s var(--ease-out);
-}
-.story-img:hover img { transform: scale(1.04); }
-.story-text {
-  display: flex; flex-direction: column; justify-content: center;
-  padding: clamp(48px, 8vw, 100px) clamp(32px, 6vw, 80px);
-  background: var(--bg-alt);
-}
-.story-section:nth-child(even) .story-text { background: var(--white); }
-.story-text .section-title { font-size: clamp(28px, 3.5vw, 48px); color: var(--navy); margin-bottom: 24px; }
-.story-text .body-text { max-width: 400px; }
-.story-detail {
-  margin-top: 32px;
-  display: flex; gap: 32px;
-}
-.story-detail-item {
-  display: flex; flex-direction: column; gap: 4px;
-}
-.story-detail-num {
-  font-family: 'Makro', Georgia, serif;
-  font-size: 28px; font-weight: 500;
-  color: var(--gold); line-height: 1;
-}
-.story-detail-label {
-  font-size: 9px; letter-spacing: 0.25em;
-  text-transform: uppercase; color: var(--text-body-dark);
-}
-@media (max-width: 900px) {
-  .story-section { grid-template-columns: 1fr; }
-  .story-section.reverse { direction: ltr; }
-  .story-img { min-height: 55vw; }
-}
-
-/* ═══ FLEET — SYMMETRIC ═══ */
-.fleet-grid-sym {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(2, 48vh);
-  gap: 4px;
-  padding: 0 4px 4px;
-}
-.fleet-grid-sym .fleet-item { grid-column: span 1; }
-@media (max-width: 768px) {
-  .fleet-grid-sym { grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(3, 38vh); }
-}
 
 /* ═══ MOBILE — COMPREHENSIVE ═══ */
 @media (max-width: 768px) {
@@ -1318,12 +1569,11 @@ a { text-decoration: none; color: inherit; }
   .mobile-close { cursor: pointer; }
 
   /* ── About ── */
-  .about-img { min-height: 55vw; }
-  .about-text { padding: 48px 24px; }
 
   /* ── Globe ── */
-  .globe-section { padding: clamp(60px, 8vw, 100px) 24px; }
+  .globe-journey { padding: clamp(60px, 8vw, 100px) 24px; }
   .globe-wrap { max-width: 300px; }
+  .globe-cards { min-height: 320px; }
 
   /* ── Plane section — stack vertically ── */
   .plane-scroll { height: auto; min-height: 100svh; }
@@ -1355,20 +1605,12 @@ a { text-decoration: none; color: inherit; }
   .blueprint-close { top: 12px; right: 12px; }
 
   /* ── Services ── */
-  .svc-slide { padding: 80px 0; }
-  .svc-text { padding: 0 24px !important; max-width: 100%; }
-  .svc-num { font-size: clamp(48px, 12vw, 72px); }
-  .svc-text h3 { font-size: clamp(24px, 6vw, 40px); }
 
   /* ── Story sections ── */
-  .story-text { padding: 48px 24px; }
 
   /* ── Fleet ── */
-  .fleet-header { padding: clamp(48px, 8vw, 80px) 24px clamp(16px, 3vw, 32px); }
 
   /* ── Quote ── */
-  .quote-section { padding: clamp(72px, 12vw, 120px) 24px; }
-  .quote-big-mark { font-size: 45vw; top: 5%; }
 
   /* ── Contact ── */
   .contact { padding: clamp(64px, 10vw, 120px) 24px; }
@@ -1384,24 +1626,10 @@ a { text-decoration: none; color: inherit; }
   .hero-flight { min-height: 100svh; }
 
   /* ── Services ── */
-  .svc-slide { padding: 64px 0; }
-  .svc-text p { font-size: 14px; }
 
   /* ── Plane ── */
   .plane-canvas-col { min-height: 200px; }
   .plane-info-col { padding: 16px 20px 40px; }
-
-  /* ── Fleet ── */
-  .fleet-grid-sym {
-    grid-template-columns: 1fr;
-    grid-template-rows: repeat(6, 56vw);
-  }
-  .fleet-item.reveal:nth-child(n) { transition-delay: 0s; }
-
-  /* ── Story ── */
-  .story-img { min-height: 60vw; }
-  .story-detail { gap: 20px; }
-  .story-detail-num { font-size: 22px; }
 
   /* ── Contact form ── */
   .contact-btn { padding: 16px 20px; }
@@ -1450,10 +1678,8 @@ a { text-decoration: none; color: inherit; }
     <span class="nav-logo-text">Spark</span>
   </a>
   <ul class="nav-links">
-    <li><a href="#about">About</a></li>
-    <li><a href="#services">Services</a></li>
-    <li><a href="#fleet">Fleet</a></li>
-    <li><a href="#contact" class="nav-cta">Inquire</a></li>
+    <li><a href="#hscroll">About</a></li>
+    <li><a href="#planeScroll">Fleet</a></li>
   </ul>
   <button class="mobile-toggle" id="menuBtn" aria-label="Menu">
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5"><line x1="4" y1="8" x2="20" y2="8"/><line x1="4" y1="16" x2="20" y2="16"/></svg>
@@ -1463,18 +1689,18 @@ a { text-decoration: none; color: inherit; }
   <button class="mobile-close" id="menuClose" aria-label="Close">
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
   </button>
-  <a href="#about" class="mob-link">About</a>
-  <a href="#services" class="mob-link">Services</a>
-  <a href="#fleet" class="mob-link">Fleet</a>
-  <a href="#contact" class="mob-link">Contact</a>
+  <a href="#hscroll" class="mob-link">About</a>
+  <a href="#planeScroll" class="mob-link">Fleet</a>
 </div>
 
-<!-- ═══ HERO — FULL-BLEED VIDEO ═══ -->
+<!-- ═══ HERO — 3D SKY + CLOUDS ═══ -->
 <section class="hero-flight" id="hero">
-  <video class="hero-video" muted loop playsinline preload="auto">
-    <source src="assets/hero-video.mp4" type="video/mp4">
-  </video>
-  <img class="hero-img" src="assets/hero.jpg" alt="Private jet on tarmac" style="display:none;">
+  <canvas id="skyCanvas"></canvas>
+  <div class="hero-vignette"></div>
+  <div class="hero-scroll-indicator" id="heroScroll">
+    <span>Scroll</span>
+    <div class="hero-scroll-line"></div>
+  </div>
 </section>
 
 <!-- ═══ MARQUEE ═══ -->
@@ -1500,41 +1726,169 @@ a { text-decoration: none; color: inherit; }
   </div>
 </div>
 
-<!-- ═══ ABOUT ═══ -->
-<section id="about">
-  <div class="about">
-    <div class="about-img">
-      <img src="assets/branding/PNG/NBAA_Spark-11.jpg" alt="Blue jet fuselage close-up" style="object-position: center center;">
-      <div class="about-img-reveal" id="aboutReveal"></div>
+<!-- ═══ KINETIC + HORIZONTAL SCROLL — ONE FLOW ═══ -->
+<section class="hscroll" id="hscroll">
+  <!-- Kinetic overlay -->
+  <div class="kinetic-overlay" id="kineticOverlay">
+    <div class="kinetic-curtain kinetic-curtain--left" id="curtainLeft"></div>
+    <div class="kinetic-curtain kinetic-curtain--right" id="curtainRight"></div>
+    <div class="kinetic-runway" id="runwayLeft"></div>
+    <div class="kinetic-runway" id="runwayRight"></div>
+    <div class="kinetic-inner" id="kineticInner">
+      <p class="kinetic-word" id="kWord0">Elevating</p>
+      <p class="kinetic-word" id="kWord1">Excellence</p>
+      <p class="kinetic-word" id="kWord2">in Aviation</p>
     </div>
-    <div class="about-text">
-      <div class="label reveal">The Spark Story</div>
-      <h2 class="section-title reveal">Three Decades of<br>Aviation Excellence</h2>
-      <p class="body-text reveal">Spark Aviation was born from a pilot's conviction that the aircraft transaction experience could be better — more personal, more informed, and built on genuine relationships rather than transactional pressure.</p>
-      <p class="body-text reveal">Founded by Marcelo Borin, a Brazilian-American aviation veteran who spent three decades in the cockpit — including flying U.S. Presidents — Spark brings the precision of a pilot and the care of a trusted advisor to every deal.</p>
-      <div class="about-quote reveal">
-        <p>"I knew how to serve, how to fly, and how to connect with people. That's what this company is built on."</p>
-        <cite>Marcelo Borin — Founder</cite>
+  </div>
+  <div class="hscroll-track" id="hscrollTrack">
+
+    <!-- Panel 1: Quote -->
+    <div class="hscroll-panel hscroll-panel--dark hscroll-panel--quote">
+      <div class="quote-glow" id="quoteGlow"></div>
+      <div class="hscroll-panel-inner" style="position:relative;z-index:1;">
+        <div class="hscroll-quote-mark" id="quoteMarkEl" aria-hidden="true">&ldquo;</div>
+        <p class="hscroll-quote" id="quoteText">I came to this country not knowing the language, but I knew how to serve, how to fly, and how to connect with people. That&rsquo;s what this company is built on.</p>
+        <cite class="hscroll-cite" id="quoteCite">Marcelo Borin &mdash; Founder</cite>
       </div>
     </div>
+
+    <!-- Panel 2: Story -->
+    <div class="hscroll-panel hscroll-panel--light hscroll-panel--story">
+      <div class="story-corner story-corner--tl"></div>
+      <div class="story-corner story-corner--br"></div>
+      <div class="story-grid" id="storyInner">
+        <div class="story-divider story-divider--top" id="storyDivTop"></div>
+        <div class="label" id="storyLabel">The Spark Story</div>
+
+        <!-- Visual centerpiece: counter + arc ring -->
+        <div class="story-counter-wrap" id="storyCounterWrap">
+          <svg class="story-arc" viewBox="0 0 200 200">
+            <circle class="story-arc-track" cx="100" cy="100" r="90"
+              fill="none" stroke="rgba(184,151,106,0.08)" stroke-width="1"/>
+            <circle class="story-arc-fill" cx="100" cy="100" r="90" id="storyArcFill"
+              fill="none" stroke="rgba(184,151,106,0.6)" stroke-width="1.5"
+              stroke-dasharray="565.49" stroke-dashoffset="565.49"
+              stroke-linecap="round" transform="rotate(-90 100 100)"/>
+          </svg>
+          <div class="story-counter-inner">
+            <span class="story-counter-num" id="storyCounterNum">0</span>
+            <span class="story-counter-plus" id="storyCounterPlus">+</span>
+          </div>
+          <div class="story-counter-label" id="storyCounterLabel">YEARS OF EXCELLENCE</div>
+        </div>
+
+        <h2 class="hscroll-title" id="storyTitle">Three Decades of<br>Aviation Excellence</h2>
+        <div class="story-divider story-divider--bottom" id="storyDivBottom"></div>
+
+        <div class="story-beats">
+          <p class="hscroll-body story-beat" id="storyBody1">Spark Aviation was born from a pilot&rsquo;s conviction that the aircraft transaction experience could be better &mdash; more personal, more informed, and built on genuine relationships.</p>
+          <p class="hscroll-body story-beat" id="storyBody2">Founded by Marcelo Borin, a Brazilian-American aviation veteran who spent three decades in the cockpit &mdash; including flying <span class="story-accent" id="storyAccent">U.S. Presidents</span>.</p>
+        </div>
+
+        <div class="story-services" id="storyServices">
+          <span class="story-service-word">Aircraft Sales</span>
+          <span class="story-service-sep"></span>
+          <span class="story-service-word">Acquisition</span>
+          <span class="story-service-sep"></span>
+          <span class="story-service-word">Management</span>
+        </div>
+        <div class="story-rule" id="storyRule"></div>
+      </div>
+    </div>
+
+  </div>
+  <!-- Navigation aids -->
+  <div class="hscroll-progress" id="hscrollProgress"></div>
+  <div class="hscroll-dots" id="hscrollDots">
+    <div class="hscroll-dot active"></div>
+    <div class="hscroll-dot"></div>
   </div>
 </section>
 
-<!-- ═══ GLOBE — GLOBAL REACH ═══ -->
-<section class="globe-section">
-  <div class="globe-layout">
-    <div class="globe-text">
-      <div class="label reveal">Global Presence</div>
-      <h2 class="section-title reveal">Worldwide<br>Reach</h2>
-      <p class="globe-subtitle reveal">Three decades of trusted relationships across borders, connecting buyers and sellers on every continent.</p>
-      <div class="globe-cities reveal">
-        <div class="globe-city"><div><div class="globe-city-name">Boca Raton</div><div class="globe-city-label">Florida, USA</div></div></div>
-        <div class="globe-city"><div><div class="globe-city-name">São Paulo</div><div class="globe-city-label">Brazil</div></div></div>
-        <div class="globe-city"><div><div class="globe-city-name">Dallas</div><div class="globe-city-label">Texas, USA</div></div></div>
+<!-- ═══ FULL-BLEED VIDEO MOMENT ═══ -->
+<section class="fullbleed" id="fullbleed">
+  <video class="fullbleed-video" id="fullbleedVideo" autoplay muted loop playsinline>
+    <source src="assets/branding/Videos/hero.mp4" type="video/mp4">
+  </video>
+  <div class="fullbleed-overlay"></div>
+  <div class="fullbleed-content" id="fullbleedContent">
+    <p class="fullbleed-line" id="fbLine1">A pilot&rsquo;s expertise.</p>
+    <p class="fullbleed-line" id="fbLine2">A President&rsquo;s trust.</p>
+    <p class="fullbleed-line fullbleed-line--gold" id="fbLine3">
+      Your <span class="fullbleed-accent">aviation</span> partner.
+    </p>
+    <a href="#planeScroll" class="fullbleed-cta" id="fbCta">
+      Explore Our Fleet
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M3 8h10M9 4l4 4-4 4"/>
+      </svg>
+    </a>
+  </div>
+</section>
+
+<!-- ═══ GLOBE — SCROLL-DRIVEN JOURNEY ═══ -->
+<section class="globe-section" id="globeSection">
+  <div class="globe-journey">
+    <!-- Left column: title + city cards -->
+    <div class="globe-left" id="globeLeft">
+      <div class="globe-header" id="globeHeader">
+        <div class="label" id="globeLabel">Global Presence</div>
+        <h2 class="section-title" id="globeTitle">Worldwide<br>Reach</h2>
+        <p class="globe-subtitle" id="globeSubtitle">Three decades of trusted relationships across borders, connecting buyers and sellers on every continent.</p>
+      </div>
+
+      <!-- City cards — stacked absolutely, only one visible at a time -->
+      <div class="globe-cards" id="globeCards">
+        <div class="globe-card" id="globeCard0">
+          <div class="globe-card-accent"></div>
+          <div class="globe-card-label">Headquarters</div>
+          <div class="globe-card-city">Boca Raton</div>
+          <div class="globe-card-region">Florida, USA</div>
+          <p class="globe-card-desc">Command center for global operations. Where Marcelo Borin built Spark Aviation from the ground up &mdash; managing aircraft transactions across North America and beyond.</p>
+          <div class="globe-card-pill">Est. 2015 &middot; North American Hub</div>
+        </div>
+        <div class="globe-card" id="globeCard1">
+          <div class="globe-card-accent"></div>
+          <div class="globe-card-label">LATAM Operations</div>
+          <div class="globe-card-city">São Paulo</div>
+          <div class="globe-card-region">Brazil</div>
+          <p class="globe-card-desc">Leveraging deep roots and three decades of relationships throughout Latin America. Bridging North and South American markets with native fluency.</p>
+          <div class="globe-card-pill">200+ LATAM Transactions &middot; Portuguese &amp; Spanish</div>
+        </div>
+        <div class="globe-card" id="globeCard2">
+          <div class="globe-card-accent"></div>
+          <div class="globe-card-label">Southwest Hub</div>
+          <div class="globe-card-city">Dallas</div>
+          <div class="globe-card-region">Texas, USA</div>
+          <p class="globe-card-desc">Strategic position in the heart of American aviation. Direct access to major MRO facilities, completion centers, and the thriving Southwest market.</p>
+          <div class="globe-card-pill">Key MRO Partnerships &middot; Central Time Zone</div>
+        </div>
       </div>
     </div>
-    <div class="globe-wrap reveal">
-      <canvas id="globeCanvas" class="globe-canvas" width="1000" height="1000"></canvas>
+
+    <!-- Right column: globe canvas -->
+    <div class="globe-right" id="globeRight">
+      <div class="globe-wrap" id="globeWrap">
+        <canvas id="globeCanvas" class="globe-canvas" width="1000" height="1000"></canvas>
+      </div>
+    </div>
+
+    <!-- Summary stats bar — appears in Phase 4 -->
+    <div class="globe-summary" id="globeSummary">
+      <div class="globe-summary-stat">
+        <span class="globe-summary-num" data-target="44">0</span><span class="globe-summary-plus">+</span>
+        <span class="globe-summary-label">Countries</span>
+      </div>
+      <div class="globe-summary-div"></div>
+      <div class="globe-summary-stat">
+        <span class="globe-summary-num" data-target="6">0</span>
+        <span class="globe-summary-label">Continents</span>
+      </div>
+      <div class="globe-summary-div"></div>
+      <div class="globe-summary-stat">
+        <span class="globe-summary-prefix">$</span><span class="globe-summary-num" data-target="2">0</span><span class="globe-summary-plus">B+</span>
+        <span class="globe-summary-label">In Global Deals</span>
+      </div>
     </div>
   </div>
 </section>
@@ -1616,136 +1970,8 @@ a { text-decoration: none; color: inherit; }
   </div>
 </div>
 
-<!-- ═══ SERVICES ═══ -->
-<section id="services">
-  <div class="svc-slide">
-    <img src="assets/branding/PNG/Spark_Rifle-38.jpg" alt="Stairs open dark fuselage awaiting">
-    <div class="svc-slide-overlay"></div>
-    <div class="svc-text">
-      <div class="svc-num reveal">01</div>
-      <h3 class="reveal">Aircraft<br>Sales</h3>
-      <p class="reveal">We specialize in discreet, high-value jet transactions across the globe. Our curated network and deep market intelligence ensure optimal value and swift closings, whether you're upgrading, transitioning, or exiting ownership.</p>
-      <a href="#contact" class="svc-link reveal">Inquire <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
-    </div>
-  </div>
-  <div class="svc-slide">
-    <img src="assets/branding/PNG/Spark_Rifle-10.jpg" alt="Three-quarter boarding angle">
-    <div class="svc-slide-overlay"></div>
-    <div class="svc-text">
-      <div class="svc-num reveal">02</div>
-      <h3 class="reveal">Aircraft<br>Acquisition</h3>
-      <p class="reveal">From first-time buyers to seasoned owners, we manage every step — from sourcing and negotiation to pre-purchase inspection and entry into service. You define the mission, we deliver the machine.</p>
-      <a href="#contact" class="svc-link reveal">Inquire <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
-    </div>
-  </div>
-  <div class="svc-slide">
-    <img src="assets/branding/PNG/Spark_Rifle-6.jpg" alt="Full cockpit instrument panel">
-    <div class="svc-slide-overlay"></div>
-    <div class="svc-text">
-      <div class="svc-num reveal">03</div>
-      <h3 class="reveal">Aircraft<br>Management</h3>
-      <p class="reveal">Owning a jet should be a privilege — not a burden. Our management services are personalized, transparent, and designed to protect your investment while keeping you flight-ready 24/7.</p>
-      <a href="#contact" class="svc-link reveal">Inquire <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
-    </div>
-  </div>
-</section>
 
-<!-- ═══ STORY SPLIT — JET VIEWS ═══ -->
-<section class="story-section">
-  <div class="story-img reveal">
-    <img src="assets/branding/PNG/Spark_Rifle-34.jpg" alt="Turbine engine close-up" loading="lazy">
-  </div>
-  <div class="story-text">
-    <div class="label reveal">Curated Excellence</div>
-    <h2 class="section-title reveal">Every Aircraft,<br>a Statement</h2>
-    <p class="body-text reveal">We don't just sell jets — we match discerning clients with aircraft that reflect their mission, lifestyle, and ambition. From approach to touchdown, every detail matters.</p>
-    <div class="story-detail reveal">
-      <div class="story-detail-item">
-        <div class="story-detail-num">500<span style="color:var(--gold);font-size:18px;">+</span></div>
-        <div class="story-detail-label">Transactions</div>
-      </div>
-      <div class="story-detail-item">
-        <div class="story-detail-num">44<span style="color:var(--gold);font-size:18px;">+</span></div>
-        <div class="story-detail-label">Countries</div>
-      </div>
-      <div class="story-detail-item">
-        <div class="story-detail-num">$2<span style="color:var(--gold);font-size:18px;">B+</span></div>
-        <div class="story-detail-label">In Deals</div>
-      </div>
-    </div>
-  </div>
-</section>
 
-<section class="story-section reverse">
-  <div class="story-img reveal">
-    <img src="assets/branding/PNG/Spark_Rifle-30.jpg" alt="White leather seat oval window clouds" loading="lazy" style="object-position: center center;">
-  </div>
-  <div class="story-text">
-    <div class="label reveal">Pilot's Perspective</div>
-    <h2 class="section-title reveal">Above the World,<br>Below the Clouds</h2>
-    <p class="body-text reveal">Marcelo Borin flew from this vantage point for three decades — including transporting heads of state. He understands what it means to be at altitude, and what it takes to get there.</p>
-    <p class="body-text reveal" style="margin-top:16px;">That perspective shapes every acquisition, every negotiation, every relationship Spark Aviation builds.</p>
-  </div>
-</section>
-
-<!-- ═══ X-RAY CABIN SCANNER ═══ -->
-<section class="xray-section">
-  <div class="xray-header">
-    <div class="label reveal" style="justify-content:center;">Interior Layout</div>
-    <h2 class="section-title reveal" style="color:var(--navy);text-align:center;">Cabin<br>Revealed</h2>
-  </div>
-  <div class="xray-viewport" id="xrayViewport">
-    <div class="xray-wrap" id="xrayWrap">
-      <img class="xray-exterior" src="assets/plane-top.png" alt="Top view exterior">
-      <img class="xray-interior" id="xrayInterior" src="assets/plane_interior_only.png" alt="Cabin interior cutaway">
-    </div>
-    <div class="xray-line xray-line--top" id="xrayLineTop"></div>
-    <div class="xray-line xray-line--bottom" id="xrayLineBot"></div>
-  </div>
-</section>
-
-<!-- ═══ FLEET ═══ -->
-<section id="fleet" class="fleet">
-  <div class="fleet-header"><div class="container"><div class="label reveal">The Gallery</div></div></div>
-  <div class="fleet-grid-sym">
-    <div class="fleet-item reveal"><img src="assets/branding/PNG/NBAA_Spark-2.jpg" alt="Turbine blades sculptural" loading="lazy"><div class="fleet-item-overlay"></div><span class="fleet-item-label">Engineering</span></div>
-    <div class="fleet-item reveal"><img src="assets/branding/PNG/NBAA_Spark-8.jpg" alt="Tail silhouette moon blue sky" loading="lazy"><div class="fleet-item-overlay"></div><span class="fleet-item-label">Silhouette</span></div>
-    <div class="fleet-item reveal"><img src="assets/branding/PNG/Spark_Rifle-7.jpg" alt="Engine nacelle mountains" loading="lazy"><div class="fleet-item-overlay"></div><span class="fleet-item-label">Precision</span></div>
-    <div class="fleet-item reveal"><img src="assets/branding/PNG/Spark_Rifle-29.jpg" alt="Chrome detail" loading="lazy"><div class="fleet-item-overlay"></div><span class="fleet-item-label">Detail</span></div>
-    <div class="fleet-item reveal"><img src="assets/branding/PNG/Spark_Rifle-21.jpg" alt="Wide cabin interior looking aft" loading="lazy"><div class="fleet-item-overlay"></div><span class="fleet-item-label">Interior</span></div>
-    <div class="fleet-item reveal"><img src="assets/branding/PNG/NBAA_Spark-5.jpg" alt="Hangar dramatic strip lights" loading="lazy"><div class="fleet-item-overlay"></div><span class="fleet-item-label">Craft</span></div>
-  </div>
-</section>
-
-<!-- ═══ QUOTE ═══ -->
-<section class="quote-section">
-  <div class="quote-big-mark" aria-hidden="true">&ldquo;</div>
-  <div class="quote-inner">
-    <p class="quote-text" id="quoteText">I came to this country not knowing the language, but I knew how to serve, how to fly, and how to connect with people. That's what this company is built on: relationships, integrity, and a love for |aviation.|</p>
-    <div class="quote-cite" id="quoteCite">Marcelo Borin — Founder, Spark Aviation</div>
-  </div>
-</section>
-
-<!-- ═══ CONTACT ═══ -->
-<section id="contact" class="contact">
-  <div class="container">
-    <div class="label reveal">Get in Touch</div>
-    <h2 class="section-title reveal">Let's Talk<br>Aviation</h2>
-    <p class="contact-subtitle reveal">Ready to buy, sell, or manage your aircraft? Reach out directly to Marcelo and the team.</p>
-    <div class="contact-actions reveal">
-      <a href="tel:+19549944466" class="contact-btn contact-btn--call"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>Call Now</a>
-      <a href="mailto:marcelo@sparkaviation.com" class="contact-btn contact-btn--email"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>Email</a>
-    </div>
-    <div class="contact-availability reveal">Available 24/7 &middot; Boca Raton &middot; São Paulo &middot; Dallas</div>
-    <div class="contact-divider reveal"><span>or send a message</span></div>
-    <form class="contact-form reveal" onsubmit="event.preventDefault();this.querySelector('.btn-gold').textContent='Message Sent';this.querySelector('.btn-gold').style.background='#2d6b4a';this.querySelector('.btn-gold').style.color='#fff';">
-      <div class="fg"><label>Name</label><input type="text" placeholder="Your name"></div>
-      <div class="fg"><label>Email</label><input type="email" placeholder="your@email.com"></div>
-      <div class="fg"><label>Message</label><textarea placeholder="Tell us about your aviation needs..."></textarea></div>
-      <button type="submit" class="btn-gold">Send Message</button>
-    </form>
-  </div>
-</section>
 
 <!-- ═══ FOOTER ═══ -->
 <footer class="footer">
@@ -1773,7 +1999,7 @@ if (window.innerWidth > 1024) {
     ring.style.transform = `translate(${ringX - rSize}px, ${ringY - rSize}px)`;
     requestAnimationFrame(cursorLoop);
   })();
-  document.querySelectorAll('a, button, .btn-line, .btn-gold, .nav-cta, .svc-link, .fleet-item, .svc-text').forEach(el => {
+  document.querySelectorAll('a, button, .btn-line, .btn-gold, .nav-cta').forEach(el => {
     el.addEventListener('mouseenter', () => { ring.classList.add('hover'); dot.classList.add('hover'); });
     el.addEventListener('mouseleave', () => { ring.classList.remove('hover'); dot.classList.remove('hover'); });
   });
@@ -1817,9 +2043,10 @@ const preTl = gsap.timeline({
         if (window._planeDataReady) { clearInterval(checkPlane); initPlaneViewer(); }
       }, 100);
     }
-    // Reset hero video to sync with page load
-    var heroVideo = document.querySelector('.hero-video');
-    if (heroVideo) { heroVideo.currentTime = 0; heroVideo.play(); }
+    // Init 3D sky + clouds
+    initSkyCanvas();
+    // Jet flyby + text reveal
+    heroRevealSequence();
   }
 });
 preTl
@@ -1853,10 +2080,600 @@ ScrollTrigger.create({
 });
 
 
-// ═══ ABOUT IMAGE REVEAL (wipe) ═══
-gsap.to('#aboutReveal', {
-  scaleX: 0, duration: 1.2, ease: 'expo.inOut',
-  scrollTrigger: { trigger: '#about', start: 'top 60%', toggleActions: 'play none none none' }
+// ═══ KINETIC + HORIZONTAL SCROLL — ONE FLOW ═══
+(function() {
+  var track = document.getElementById('hscrollTrack');
+  var section = document.getElementById('hscroll');
+  if (!track || !section) return;
+
+  var isMobile = window.innerWidth <= 1024;
+
+  // ─── Kinetic overlay refs ───
+  var overlay = document.getElementById('kineticOverlay');
+  var kWord0 = document.getElementById('kWord0');
+  var kWord1 = document.getElementById('kWord1');
+  var kWord2 = document.getElementById('kWord2');
+  var curtainLeft = document.getElementById('curtainLeft');
+  var curtainRight = document.getElementById('curtainRight');
+  var runwayLeft = document.getElementById('runwayLeft');
+  var runwayRight = document.getElementById('runwayRight');
+
+  // Split "Excellence" into chars
+  var kChars = [], lChars = [], otherChars = [];
+  if (kWord1) {
+    var kText = kWord1.textContent;
+    kWord1.innerHTML = '';
+    for (var ci = 0; ci < kText.length; ci++) {
+      var sp = document.createElement('span');
+      sp.className = 'kinetic-char';
+      sp.textContent = kText[ci];
+      if (kText[ci] === 'l') { sp.classList.add('kinetic-char--l'); lChars.push(sp); }
+      kWord1.appendChild(sp);
+      kChars.push(sp);
+    }
+    otherChars = kChars.filter(function(c) { return lChars.indexOf(c) === -1; });
+  }
+
+  // Align runway divs to l-char center positions
+  function alignRunways() {
+    if (!lChars.length || !runwayLeft) return;
+    var prevOp = kWord1.style.opacity;
+    kWord1.style.opacity = '1';
+    kWord1.style.visibility = 'hidden';
+    var secRect = section.getBoundingClientRect();
+    var r0 = lChars[0].getBoundingClientRect();
+    var r1 = lChars[1].getBoundingClientRect();
+    kWord1.style.opacity = prevOp;
+    kWord1.style.visibility = '';
+    runwayLeft.style.left = (r0.left - secRect.left + r0.width / 2 - 2) + 'px';
+    runwayLeft.style.width = '4px';
+    runwayRight.style.left = (r1.left - secRect.left + r1.width / 2 - 2) + 'px';
+    runwayRight.style.width = '4px';
+  }
+  alignRunways();
+  window.addEventListener('resize', alignRunways);
+
+  // ─── Paused kinetic timeline (driven by progress in onUpdate) ───
+  var kineticTl = gsap.timeline({ paused: true });
+  // Phase 1: type in
+  kineticTl.to(kWord0, { opacity: 1, duration: 0.04, ease: 'power2.out' }, 0);
+  kineticTl.to(kWord1, { opacity: 1, duration: 0.04, ease: 'power2.out' }, 0.04);
+  kineticTl.to(kWord2, { opacity: 1, duration: 0.04, ease: 'power2.out' }, 0.08);
+  // Phase 3: dissolve
+  kineticTl.to(kWord0, { opacity: 0, duration: 0.08, ease: 'power2.in' }, 0.22);
+  kineticTl.to(kWord2, { opacity: 0, duration: 0.08, ease: 'power2.in' }, 0.22);
+  kineticTl.to(otherChars, { opacity: 0, duration: 0.08, stagger: 0.004, ease: 'power2.in' }, 0.24);
+  // Phase 4: gold + handoff
+  kineticTl.to(lChars, { color: 'rgba(184,151,106,1)', duration: 0.06, ease: 'none' }, 0.36);
+  kineticTl.to(lChars, { opacity: 0, duration: 0.06, ease: 'power2.in' }, 0.44);
+  kineticTl.to([runwayLeft, runwayRight], { opacity: 1, duration: 0.06, ease: 'power2.out' }, 0.42);
+  // Phase 5: split + curtains
+  kineticTl.to(runwayLeft, { left: '15%', duration: 0.4, ease: 'power3.inOut' }, 0.55);
+  kineticTl.to(runwayRight, { left: '85%', duration: 0.4, ease: 'power3.inOut' }, 0.55);
+  kineticTl.to(curtainLeft, { x: '-100%', duration: 0.4, ease: 'power3.inOut' }, 0.58);
+  kineticTl.to(curtainRight, { x: '100%', duration: 0.4, ease: 'power3.inOut' }, 0.58);
+  kineticTl.to([runwayLeft, runwayRight], { opacity: 0, duration: 0.08, ease: 'power2.in' }, 0.92);
+  // End: hide overlay
+  kineticTl.set(overlay, { autoAlpha: 0, pointerEvents: 'none' }, 0.99);
+
+  // ─── Quote panel: scroll-driven word-by-word reveal ───
+  var quoteEl = document.getElementById('quoteText');
+  var quoteWords = [];
+  var quoteGlow = document.getElementById('quoteGlow');
+  // Phrase groups for staggered reveal
+  var phraseGroups = [
+    { text: 'I came to this country not knowing the language,', keywords: [] },
+    { text: 'but I knew how to serve,', keywords: ['serve,'] },
+    { text: 'how to fly,', keywords: ['fly,'] },
+    { text: 'and how to connect with people.', keywords: ['connect'] },
+    { text: 'That\u2019s what this company is built on.', keywords: [] }
+  ];
+  var phraseWordRanges = []; // { startIdx, endIdx, keywordIndices }
+  if (quoteEl) {
+    var rawText = quoteEl.textContent;
+    var allWords = rawText.split(/\s+/).filter(function(w) { return w.length > 0; });
+    quoteEl.innerHTML = '';
+    allWords.forEach(function(w) {
+      var span = document.createElement('span');
+      span.className = 'q-word';
+      span.textContent = w + ' ';
+      quoteEl.appendChild(span);
+      quoteWords.push(span);
+    });
+    // Map phrases to word indices
+    var wordIdx = 0;
+    phraseGroups.forEach(function(pg) {
+      var phraseWords = pg.text.split(/\s+/).filter(function(w) { return w.length > 0; });
+      var startIdx = wordIdx;
+      var endIdx = wordIdx + phraseWords.length - 1;
+      var keywordIndices = [];
+      phraseWords.forEach(function(pw, pi) {
+        pg.keywords.forEach(function(kw) {
+          if (pw.toLowerCase().indexOf(kw.toLowerCase().replace(/[,.]$/, '')) === 0) {
+            keywordIndices.push(startIdx + pi);
+          }
+        });
+      });
+      phraseWordRanges.push({ startIdx: startIdx, endIdx: endIdx, keywordIndices: keywordIndices });
+      wordIdx += phraseWords.length;
+    });
+  }
+  var quoteCite = document.getElementById('quoteCite');
+  var quoteMark = document.getElementById('quoteMarkEl');
+
+  // ─── Story panel refs ───
+  var storyLabel = document.getElementById('storyLabel');
+  var storyTitle = document.getElementById('storyTitle');
+  var storyDivTop = document.getElementById('storyDivTop');
+  var storyDivBottom = document.getElementById('storyDivBottom');
+  var storyCorners = document.querySelectorAll('.story-corner');
+  var storyBody1 = document.getElementById('storyBody1');
+  var storyBody2 = document.getElementById('storyBody2');
+  var storyAccent = document.getElementById('storyAccent');
+  var storyServices = document.getElementById('storyServices');
+  var storyServiceWords = storyServices ? storyServices.querySelectorAll('.story-service-word') : [];
+  var storyServiceSeps = storyServices ? storyServices.querySelectorAll('.story-service-sep') : [];
+  var storyRule = document.getElementById('storyRule');
+  // Counter + arc refs
+  var storyCounterWrap = document.getElementById('storyCounterWrap');
+  var storyCounterNum = document.getElementById('storyCounterNum');
+  var storyCounterPlus = document.getElementById('storyCounterPlus');
+  var storyCounterLabel = document.getElementById('storyCounterLabel');
+  var storyArcFill = document.getElementById('storyArcFill');
+  var storyPanel = document.querySelector('.hscroll-panel--story');
+  var ARC_CIRC = 565.49; // 2π × 90
+
+  // ─── Progress bar + dots ───
+  var progressBar = document.getElementById('hscrollProgress');
+  var dots = document.querySelectorAll('.hscroll-dot');
+
+  // ─── Panel animation functions ───
+
+  function animateQuote(v) {
+    // Phase A (0–0.15): Emergence — quote mark + glow
+    var emergeP = gsap.utils.clamp(0, 1, v / 0.15);
+    if (quoteMark) {
+      quoteMark.style.opacity = emergeP;
+      var s = 0.7 + emergeP * 0.3;
+      quoteMark.style.transform = 'scale(' + s + ')' + (quoteMark._parallax || '');
+    }
+    if (quoteGlow) {
+      quoteGlow.style.opacity = emergeP * 0.8;
+      var glowScale = 0.6 + emergeP * 0.4;
+      quoteGlow.style.transform = 'translate(-50%, -50%) scale(' + glowScale + ')';
+    }
+
+    // Phase B (0.15–0.70): Word-by-word reveal
+    var wordStart = 0.15;
+    var wordEnd = 0.70;
+    var phraseRanges = [
+      [0.15, 0.26],  // phrase 1
+      [0.26, 0.37],  // phrase 2
+      [0.37, 0.48],  // phrase 3
+      [0.48, 0.59],  // phrase 4
+      [0.59, 0.70]   // phrase 5
+    ];
+
+    for (var pi = 0; pi < phraseWordRanges.length; pi++) {
+      var pr = phraseWordRanges[pi];
+      var range = phraseRanges[pi];
+      var wordCount = pr.endIdx - pr.startIdx + 1;
+
+      for (var wi = pr.startIdx; wi <= pr.endIdx; wi++) {
+        var localIdx = wi - pr.startIdx;
+        // Each word has its own sub-range within the phrase range
+        var wStart = range[0] + (range[1] - range[0]) * (localIdx / wordCount);
+        var wEnd = range[0] + (range[1] - range[0]) * ((localIdx + 1) / wordCount);
+        var wP = gsap.utils.clamp(0, 1, (v - wStart) / (wEnd - wStart));
+
+        var span = quoteWords[wi];
+        if (!span) continue;
+
+        span.style.opacity = wP;
+        span.style.filter = 'blur(' + (4 * (1 - wP)) + 'px)';
+        span.style.transform = 'translateY(' + (8 * (1 - wP)) + 'px)';
+
+        // Gold flash for keywords
+        var isKeyword = pr.keywordIndices.indexOf(wi) !== -1;
+        if (isKeyword && wP > 0.3 && wP < 0.95) {
+          // Sine pulse — gold color flash
+          var flashP = (wP - 0.3) / 0.65;
+          var flash = Math.sin(flashP * Math.PI);
+          span.style.color = 'rgba(184,151,106,' + (0.9 * flash + 0.1 * (1 - flash)) + ')';
+          if (flash < 0.05) span.style.color = '';
+        } else if (isKeyword && wP >= 0.95) {
+          span.style.color = '';
+        }
+      }
+    }
+
+    // Phase C (0.70–0.85): Citation + underline
+    var citeP = gsap.utils.clamp(0, 1, (v - 0.70) / 0.15);
+    if (quoteCite) {
+      quoteCite.style.opacity = citeP;
+      quoteCite.style.transform = 'translateY(' + (12 * (1 - citeP)) + 'px)';
+      quoteCite.style.setProperty('--line-scale', citeP);
+      // Force the ::after pseudo-element
+      var lineScale = gsap.utils.clamp(0, 1, (v - 0.74) / 0.11);
+      quoteCite.style.setProperty('--line-scale', lineScale);
+    }
+    // Quote mark golden glow in phase C
+    if (quoteMark && citeP > 0) {
+      quoteMark.style.textShadow = '0 0 ' + (30 * citeP) + 'px rgba(184,151,106,' + (0.3 * citeP) + ')';
+    } else if (quoteMark) {
+      quoteMark.style.textShadow = '';
+    }
+
+    // Phase D (0.85–1.0): Subtle dissolve
+    var dissolveP = gsap.utils.clamp(0, 1, (v - 0.85) / 0.15);
+    if (quoteEl) {
+      var fadeOut = 1.0 - dissolveP * 0.15;
+      var scaleOut = 1.0 - dissolveP * 0.02;
+      quoteEl.parentElement.style.opacity = fadeOut;
+      quoteEl.parentElement.style.transform = 'scale(' + scaleOut + ')';
+    }
+  }
+
+  function animateStory(v) {
+    // ── Background reveal (continuous) ──
+    if (storyPanel) {
+      var bgOp = 0.02 + v * 0.07;
+      storyPanel.style.setProperty('--story-bg-opacity', bgOp);
+    }
+
+    // ── Phase A (0–0.10): Entrance — corners, label, divider, counter appear ──
+    var entranceP = gsap.utils.clamp(0, 1, v / 0.10);
+
+    storyCorners.forEach(function(c) { c.style.opacity = entranceP; });
+
+    if (storyLabel) {
+      storyLabel.style.opacity = entranceP;
+      storyLabel.style.transform = 'translateY(' + (25 * (1 - entranceP)) + 'px)';
+    }
+    if (storyDivTop) {
+      storyDivTop.style.width = (120 * entranceP) + 'px';
+    }
+    if (storyCounterWrap) {
+      storyCounterWrap.style.opacity = entranceP;
+      var cScale = 0.85 + entranceP * 0.15;
+      storyCounterWrap.style.transform = 'scale(' + cScale + ')';
+    }
+
+    // ── Phase B (0.10–0.45): Counter counts 0→30, arc draws, title + beat 1 ──
+    var counterP = gsap.utils.clamp(0, 1, (v - 0.10) / 0.35);
+
+    // Counter number: 0→30
+    if (storyCounterNum) {
+      storyCounterNum.textContent = Math.round(counterP * 30);
+    }
+    // SVG arc draws
+    if (storyArcFill) {
+      storyArcFill.style.strokeDashoffset = ARC_CIRC * (1 - counterP);
+    }
+    // "+" sign fades in as counter nears 30
+    if (storyCounterPlus) {
+      storyCounterPlus.style.opacity = gsap.utils.clamp(0, 1, (counterP - 0.80) / 0.20);
+    }
+    // "YEARS OF EXCELLENCE" label
+    if (storyCounterLabel) {
+      storyCounterLabel.style.opacity = gsap.utils.clamp(0, 1, (v - 0.15) / 0.08);
+    }
+
+    // Title
+    if (storyTitle) {
+      var titleP = gsap.utils.clamp(0, 1, (v - 0.12) / 0.10);
+      storyTitle.style.opacity = titleP;
+      storyTitle.style.transform = 'translateY(' + (25 * (1 - titleP)) + 'px)';
+    }
+    // Bottom divider
+    if (storyDivBottom) {
+      var divBotP = gsap.utils.clamp(0, 1, (v - 0.14) / 0.08);
+      storyDivBottom.style.width = (120 * divBotP) + 'px';
+    }
+
+    // Beat 1: fade in, then out
+    var beat1In = gsap.utils.clamp(0, 1, (v - 0.22) / 0.12);
+    var beat1Out = gsap.utils.clamp(0, 1, (v - 0.40) / 0.05);
+    if (storyBody1) {
+      var b1Op = beat1In * (1 - beat1Out);
+      storyBody1.style.opacity = b1Op;
+      storyBody1.style.transform = 'translateY(' + (20 * (1 - beat1In) + (-12 * beat1Out)) + 'px)';
+    }
+
+    // ── Phase C (0.45–0.70): Beat 2 ──
+    var beat2In = gsap.utils.clamp(0, 1, (v - 0.45) / 0.10);
+    var beat2Out = gsap.utils.clamp(0, 1, (v - 0.66) / 0.04);
+    if (storyBody2) {
+      var b2Op = beat2In * (1 - beat2Out);
+      storyBody2.style.opacity = b2Op;
+      storyBody2.style.transform = 'translateY(' + (20 * (1 - beat2In) + (-12 * beat2Out)) + 'px)';
+    }
+    // Gold underline on "U.S. Presidents"
+    if (storyAccent) {
+      var accentP = gsap.utils.clamp(0, 1, (v - 0.52) / 0.10);
+      storyAccent.style.setProperty('--accent-scale', accentP);
+    }
+
+    // ── Phase D (0.70–0.92): Services + gold glow on counter ──
+    var svcBaseP = gsap.utils.clamp(0, 1, (v - 0.70) / 0.15);
+    storyServiceWords.forEach(function(el, i) {
+      var delay = i * 0.12;
+      var wp = gsap.utils.clamp(0, 1, (svcBaseP - delay) / (1 - delay * 2));
+      el.style.opacity = wp;
+      el.style.transform = 'translateY(' + (12 * (1 - wp)) + 'px)';
+    });
+    storyServiceSeps.forEach(function(el, i) {
+      var delay = (i + 0.5) * 0.12;
+      var sp = gsap.utils.clamp(0, 1, (svcBaseP - delay) / (1 - delay * 2));
+      el.style.opacity = sp;
+    });
+    // Gold rule
+    if (storyRule) {
+      var ruleP = gsap.utils.clamp(0, 1, (v - 0.78) / 0.10);
+      storyRule.style.width = (100 * ruleP) + 'px';
+    }
+    // Counter glow pulse in Phase D
+    if (storyCounterNum && v > 0.70) {
+      var glowP = gsap.utils.clamp(0, 1, (v - 0.70) / 0.15);
+      storyCounterNum.style.textShadow = '0 0 ' + (20 * glowP) + 'px rgba(184,151,106,' + (0.2 * glowP) + ')';
+    } else if (storyCounterNum) {
+      storyCounterNum.style.textShadow = '';
+    }
+
+    // ── Phase E (0.92–1.0): Exit buffer ──
+    if (v > 0.92) {
+      var exitP = gsap.utils.clamp(0, 1, (v - 0.92) / 0.08);
+      if (storyCounterWrap) {
+        storyCounterWrap.style.opacity = 1 - exitP * 0.1;
+      }
+    }
+  }
+
+
+  // ─── Single ScrollTrigger: kinetic + horizontal scroll ───
+  ScrollTrigger.create({
+    trigger: section,
+    pin: true,
+    scrub: 1,
+    end: function() { return '+=' + (window.innerHeight * 3.5 + window.innerWidth * 4); },
+    invalidateOnRefresh: true,
+    onUpdate: function(self) {
+      var p = self.progress;
+      var kPx = window.innerHeight * 3.5;
+      var total = kPx + track.scrollWidth;
+      var k = kPx / total; // fraction of scroll for kinetic
+
+      if (p <= k) {
+        // ── Kinetic phase ──
+        kineticTl.progress(p / k);
+        gsap.set(track, { x: 0 });
+        // Ensure overlay is visible when scrolling back
+        if (overlay && overlay.style.visibility === 'hidden') {
+          gsap.set(overlay, { autoAlpha: 1, pointerEvents: 'auto' });
+        }
+      } else {
+        // ── Horizontal scroll phase ──
+        kineticTl.progress(1);
+        var hp = (p - k) / (1 - k);
+        var maxX = -(track.scrollWidth - window.innerWidth);
+
+        // Stepped track position: hold → slide → hold
+        var trackX;
+        if (hp <= 0.40) {
+          trackX = 0;                              // Panel 1 settled
+        } else if (hp <= 0.60) {
+          var slideP = (hp - 0.40) / 0.20;
+          trackX = slideP * maxX;                  // Slide transition
+        } else {
+          trackX = maxX;                           // Panel 2 settled
+        }
+        gsap.set(track, { x: trackX });
+
+        // Content animation — only during hold phases
+        var v1 = (hp <= 0.40) ? hp / 0.40 : 1;
+        var v2 = (hp >= 0.60) ? (hp - 0.60) / 0.40 : 0;
+
+        animateQuote(v1);
+        animateStory(v2);
+
+        // Progress bar
+        if (progressBar) progressBar.style.width = (hp * 100) + '%';
+
+        // Dots (2 panels)
+        var active = hp < 0.50 ? 0 : 1;
+        dots.forEach(function(d, i) { d.classList.toggle('active', i === active); });
+      }
+    }
+  });
+
+  // ─── Mouse parallax for quote mark (desktop) ───
+  if (!isMobile && quoteMark) {
+    document.addEventListener('mousemove', function(e) {
+      var mx = (e.clientX / window.innerWidth - 0.5) * 2;
+      var my = (e.clientY / window.innerHeight - 0.5) * 2;
+      quoteMark._parallax = ' translate(' + (mx * 18) + 'px, ' + (my * 12) + 'px)';
+    });
+  }
+
+})();
+
+// ═══ FULL-BLEED VIDEO — STATEMENT CASCADE ═══
+(function() {
+  var fb = document.getElementById('fullbleed');
+  var vid = document.getElementById('fullbleedVideo');
+  if (!fb || !vid) return;
+
+  var fbLine1 = document.getElementById('fbLine1');
+  var fbLine2 = document.getElementById('fbLine2');
+  var fbLine3 = document.getElementById('fbLine3');
+  var fbCta = document.getElementById('fbCta');
+  var fbAccent = document.querySelector('.fullbleed-accent');
+
+  // Parallax: video moves slower
+  gsap.to(vid, {
+    y: -80,
+    ease: 'none',
+    scrollTrigger: {
+      trigger: fb,
+      start: 'top bottom',
+      end: 'bottom top',
+      scrub: true,
+    }
+  });
+
+  // Staggered statement reveals
+  if (fbLine1) gsap.fromTo(fbLine1, { opacity: 0, y: 30 }, {
+    opacity: 1, y: 0,
+    scrollTrigger: { trigger: fb, start: 'top 70%', end: 'top 40%', scrub: true }
+  });
+  if (fbLine2) gsap.fromTo(fbLine2, { opacity: 0, y: 30 }, {
+    opacity: 1, y: 0,
+    scrollTrigger: { trigger: fb, start: 'top 55%', end: 'top 30%', scrub: true }
+  });
+  if (fbLine3) gsap.fromTo(fbLine3, { opacity: 0, y: 30 }, {
+    opacity: 1, y: 0,
+    scrollTrigger: { trigger: fb, start: 'top 40%', end: 'top 20%', scrub: true }
+  });
+
+  // Gold underline on "aviation"
+  if (fbAccent) {
+    var accentProxy = { v: 0 };
+    gsap.to(accentProxy, {
+      v: 1,
+      onUpdate: function() { fbAccent.style.setProperty('--accent-scale', accentProxy.v); },
+      scrollTrigger: { trigger: fb, start: 'top 30%', end: 'top 10%', scrub: true }
+    });
+  }
+
+  // CTA button
+  if (fbCta) gsap.fromTo(fbCta, { opacity: 0, y: 20 }, {
+    opacity: 1, y: 0,
+    scrollTrigger: { trigger: fb, start: 'top 25%', end: 'top 5%', scrub: true }
+  });
+})();
+
+// ═══ GLOBE SCROLL-DRIVEN JOURNEY ═══
+(function() {
+  var section = document.getElementById('globeSection');
+  if (!section) return;
+
+  var header = document.getElementById('globeHeader');
+  var wrap = document.getElementById('globeWrap');
+  var cards = [
+    document.getElementById('globeCard0'),
+    document.getElementById('globeCard1'),
+    document.getElementById('globeCard2')
+  ];
+  var summary = document.getElementById('globeSummary');
+  var summaryNums = summary ? summary.querySelectorAll('.globe-summary-num') : [];
+
+  // Initialize window globals for globe renderer
+  window._globeTargetRotation = 70;
+  window._globeArcProgress = [0, 0, 0];
+  window._globeScrollProgress = 0;
+  window._globeActiveCity = -1;
+
+  // Set initial summary position (centered via xPercent)
+  if (summary) gsap.set(summary, { xPercent: -50, y: 20, opacity: 0 });
+
+  // Clip-path reveal on first approach
+  var revealed = false;
+  ScrollTrigger.create({
+    trigger: section,
+    start: 'top 85%',
+    once: true,
+    onEnter: function() {
+      section.classList.add('revealed');
+      revealed = true;
+    }
+  });
+
+  // Track active card
+  var activeCard = -1;
+  function activateCard(idx) {
+    if (idx === activeCard) return;
+    cards.forEach(function(c, i) {
+      if (c) c.classList.toggle('active', i === idx);
+    });
+    activeCard = idx;
+    window._globeActiveCity = idx;
+  }
+
+  // Main pinned scroll journey
+  ScrollTrigger.create({
+    trigger: section,
+    pin: true,
+    scrub: 0.8,
+    start: 'top top',
+    end: '+=500%',
+    invalidateOnRefresh: true,
+    onUpdate: function(self) {
+      var p = self.progress;
+      window._globeScrollProgress = p;
+
+      // Phase 0: Entrance (0–0.10)
+      if (p < 0.10) {
+        var ep = p / 0.10; // 0→1 within phase
+        gsap.set(header, { opacity: ep, y: 30 * (1 - ep) });
+        gsap.set(wrap, { opacity: ep, scale: 0.85 + 0.15 * ep });
+        activateCard(-1);
+        window._globeTargetRotation = 70;
+        window._globeArcProgress = [0, 0, 0];
+        gsap.set(summary, { xPercent: -50, opacity: 0, y: 20 });
+      }
+      // Phase 1: Boca Raton (0.10–0.35)
+      else if (p < 0.35) {
+        gsap.set(header, { opacity: 1, y: 0 });
+        gsap.set(wrap, { opacity: 1, scale: 1 });
+        activateCard(0);
+        window._globeTargetRotation = 80;
+        var a1 = gsap.utils.clamp(0, 1, (p - 0.12) / 0.18);
+        window._globeArcProgress = [a1, 0, 0];
+        gsap.set(summary, { xPercent: -50, opacity: 0, y: 20 });
+      }
+      // Phase 2: São Paulo (0.35–0.60)
+      else if (p < 0.60) {
+        activateCard(1);
+        window._globeTargetRotation = 46;
+        var a2 = gsap.utils.clamp(0, 1, (p - 0.37) / 0.18);
+        window._globeArcProgress = [1, a2, 0];
+        gsap.set(summary, { xPercent: -50, opacity: 0, y: 20 });
+      }
+      // Phase 3: Dallas (0.60–0.85)
+      else if (p < 0.85) {
+        activateCard(2);
+        window._globeTargetRotation = 97;
+        var a3 = gsap.utils.clamp(0, 1, (p - 0.62) / 0.18);
+        window._globeArcProgress = [1, 1, a3];
+        gsap.set(summary, { xPercent: -50, opacity: 0, y: 20 });
+      }
+      // Phase 4: Full Network (0.85–1.0)
+      else {
+        activateCard(-1);
+        window._globeTargetRotation = 70;
+        window._globeArcProgress = [1, 1, 1];
+        var sp = gsap.utils.clamp(0, 1, (p - 0.86) / 0.10);
+        gsap.set(summary, { xPercent: -50, opacity: sp, y: 20 * (1 - sp) });
+        // Drive counter animation
+        summaryNums.forEach(function(el) {
+          var target = parseInt(el.getAttribute('data-target'));
+          el.textContent = Math.round(target * sp);
+        });
+        // Slight scale-back on globe
+        gsap.set(wrap, { scale: 1 - 0.05 * sp });
+      }
+    }
+  });
+})();
+
+// ═══ PLANE SCROLL CLIP-PATH REVEAL ═══
+ScrollTrigger.create({
+  trigger: '#planeScroll',
+  start: 'top 85%',
+  once: true,
+  onEnter: function() {
+    document.getElementById('planeScroll').classList.add('revealed');
+  }
 });
 
 // ═══ SHARED MODEL DATA ═══
@@ -1935,6 +2752,479 @@ var PLANE_INFO = [
     }
   },
 ];
+
+// ═══ DISTANT JET FLYBY ═══
+function heroRevealSequence() {
+  // Fade in scroll indicator
+  var scrollInd = document.getElementById('heroScroll');
+  if (scrollInd) {
+    gsap.set(scrollInd, { opacity: 0 });
+    gsap.to(scrollInd, { opacity: 1, duration: 0.8, ease: 'power2.out', delay: 1.5 });
+  }
+
+  // Fade in 3D brand text after jet starts flying
+  setTimeout(function() {
+    if (!window._heroText) return;
+    var ht = window._heroText;
+    gsap.to(ht.brand.mat, { opacity: 1, duration: 1.2, ease: 'power2.out' });
+    // Activate shine sweep after brand text is visible
+    setTimeout(function() {
+      if (window._heroText) window._heroText.brand.shineActive = true;
+    }, 1500);
+  }, 1500);
+
+  // Load 3D plane and fly it across in the background
+  if (window._skyScene && window._skyCam && typeof THREE !== 'undefined') {
+    var loader = new THREE.GLTFLoader();
+    loader.load('assets/branding/plane.glb', function(gltf) {
+      var wrapper = new THREE.Group();
+      wrapper.position.set(-25, -3, -15);
+
+      var model = gltf.scene;
+      model.scale.setScalar(0.4);
+      model.quaternion.setFromEuler(new THREE.Euler(0, Math.PI, 0));
+      wrapper.add(model);
+
+      // Lock EVERY node's quaternion in the entire hierarchy
+      var lockedQuats = [];
+      model.traverse(function(child) {
+        lockedQuats.push({ obj: child, q: child.quaternion.clone() });
+        if (child.isMesh) {
+          child.material = new THREE.MeshStandardMaterial({
+            color: 0xffffff,
+            metalness: 0.5,
+            roughness: 0.3,
+          });
+        }
+      });
+
+      var planeLight = new THREE.DirectionalLight(0xffffff, 2.0);
+      planeLight.position.set(5, 10, 5);
+      var ambLight = new THREE.AmbientLight(0xffffff, 0.8);
+      window._skyScene.add(planeLight);
+      window._skyScene.add(ambLight);
+      wrapper.renderOrder = -1; // render before foreground clouds
+      window._skyScene.add(wrapper);
+
+      // Contrail / vapor trail system
+      var trailParticles = [];
+      var frameCount = 0;
+
+      // Pure requestAnimationFrame — no GSAP for this animation
+      var startX = -25, endX = 25;
+      var startY = -3, endY = -2.5;
+      var dur = 6000; // ms
+      var t0 = performance.now();
+
+      function flyPlane() {
+        var p = Math.min((performance.now() - t0) / dur, 1);
+        wrapper.position.x = startX + (endX - startX) * p;
+        wrapper.position.y = startY + (endY - startY) * p;
+
+        // Force-lock every single node's rotation every frame
+        for (var i = 0; i < lockedQuats.length; i++) {
+          lockedQuats[i].obj.quaternion.copy(lockedQuats[i].q);
+        }
+
+        frameCount++;
+
+        // Spawn contrail particle every 3 frames
+        if (frameCount % 3 === 0 && p < 0.95 && window._cloudTex && window._spriteGeo) {
+          var tMat = new THREE.MeshBasicMaterial({
+            map: window._cloudTex,
+            transparent: true,
+            depthWrite: false,
+            opacity: 0.35,
+            color: new THREE.Color(0.95, 0.96, 0.98),
+            side: THREE.DoubleSide,
+          });
+          var tMesh = new THREE.Mesh(window._spriteGeo, tMat);
+          tMesh.position.set(
+            wrapper.position.x - 1.5,
+            wrapper.position.y,
+            wrapper.position.z
+          );
+          tMesh.scale.setScalar(0.3);
+          if (window._skyCam) tMesh.quaternion.copy(window._skyCam.quaternion);
+          window._skyScene.add(tMesh);
+          trailParticles.push({ mesh: tMesh, mat: tMat });
+        }
+
+        // Update trail particles — grow + fade
+        for (var ti = trailParticles.length - 1; ti >= 0; ti--) {
+          var tp = trailParticles[ti];
+          tp.mat.opacity -= 0.008;
+          tp.mesh.scale.multiplyScalar(1.03);
+          if (window._skyCam) tp.mesh.quaternion.copy(window._skyCam.quaternion);
+          if (tp.mat.opacity <= 0) {
+            window._skyScene.remove(tp.mesh);
+            tp.mat.dispose();
+            trailParticles.splice(ti, 1);
+          }
+        }
+
+        if (p < 1) {
+          requestAnimationFrame(flyPlane);
+        } else {
+          window._skyScene.remove(wrapper);
+          window._skyScene.remove(planeLight);
+          window._skyScene.remove(ambLight);
+          // Clean up remaining trail particles
+          for (var ri = 0; ri < trailParticles.length; ri++) {
+            window._skyScene.remove(trailParticles[ri].mesh);
+            trailParticles[ri].mat.dispose();
+          }
+          trailParticles = [];
+        }
+      }
+      flyPlane();
+    });
+  }
+}
+
+// ═══ 3D SKY + FLYING CLOUDS HERO ═══
+function initSkyCanvas() {
+  var canvas = document.getElementById('skyCanvas');
+  if (!canvas || typeof THREE === 'undefined') return;
+
+  var hero = document.getElementById('hero');
+  var w = hero.clientWidth;
+  var h = hero.clientHeight;
+
+  var renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: false });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.setSize(w, h);
+  if (renderer.outputEncoding !== undefined) renderer.outputEncoding = THREE.sRGBEncoding;
+
+  var scene = new THREE.Scene();
+  // Expose for jet flyby
+  window._skyScene = scene;
+
+  // Sky gradient background
+  var skyC = document.createElement('canvas');
+  skyC.width = 2; skyC.height = 512;
+  var skyCtx = skyC.getContext('2d');
+  var g = skyCtx.createLinearGradient(0, 0, 0, 512);
+  g.addColorStop(0,    'rgb(28, 42, 68)');
+  g.addColorStop(0.15, 'rgb(48, 68, 105)');
+  g.addColorStop(0.35, 'rgb(82, 110, 148)');
+  g.addColorStop(0.55, 'rgb(120, 148, 178)');
+  g.addColorStop(0.7,  'rgb(158, 178, 198)');
+  g.addColorStop(0.85, 'rgb(190, 205, 218)');
+  g.addColorStop(1,    'rgb(215, 225, 235)');
+  skyCtx.fillStyle = g;
+  skyCtx.fillRect(0, 0, 2, 512);
+  var skyTex = new THREE.CanvasTexture(skyC);
+  if (skyTex.encoding !== undefined) skyTex.encoding = THREE.sRGBEncoding;
+  scene.background = skyTex;
+
+  // Camera — looking forward, flying through clouds
+  var cam = new THREE.PerspectiveCamera(65, w / h, 0.1, 300);
+  cam.position.set(0, 0, 0);
+  cam.lookAt(0, 0, -100);
+  window._skyCam = cam;
+
+  // Procedural cloud texture (no external file needed)
+  var tSize = 256;
+  var tCanvas = document.createElement('canvas');
+  tCanvas.width = tSize; tCanvas.height = tSize;
+  var tCtx = tCanvas.getContext('2d');
+
+  // Soft radial cloud puff
+  var radGrad = tCtx.createRadialGradient(tSize/2, tSize/2, 0, tSize/2, tSize/2, tSize/2);
+  radGrad.addColorStop(0, 'rgba(255,255,255,1)');
+  radGrad.addColorStop(0.2, 'rgba(255,255,255,0.85)');
+  radGrad.addColorStop(0.45, 'rgba(255,255,255,0.35)');
+  radGrad.addColorStop(0.7, 'rgba(255,255,255,0.08)');
+  radGrad.addColorStop(1, 'rgba(255,255,255,0)');
+  tCtx.fillStyle = radGrad;
+  tCtx.fillRect(0, 0, tSize, tSize);
+
+  // Overlapping puffs for organic shape
+  for (var ni = 0; ni < 10; ni++) {
+    var nx = tSize/2 + (Math.random() - 0.5) * tSize * 0.45;
+    var ny = tSize/2 + (Math.random() - 0.5) * tSize * 0.45;
+    var nr = tSize * (0.12 + Math.random() * 0.22);
+    var nGrad = tCtx.createRadialGradient(nx, ny, 0, nx, ny, nr);
+    nGrad.addColorStop(0, 'rgba(255,255,255,0.45)');
+    nGrad.addColorStop(0.5, 'rgba(255,255,255,0.12)');
+    nGrad.addColorStop(1, 'rgba(255,255,255,0)');
+    tCtx.fillStyle = nGrad;
+    tCtx.fillRect(0, 0, tSize, tSize);
+  }
+
+  var cloudTex = new THREE.CanvasTexture(tCanvas);
+  window._cloudTex = cloudTex;
+
+  // Cloud system — distant clouds drifting sideways
+  var spriteGeo = new THREE.PlaneGeometry(1, 1);
+  window._spriteGeo = spriteGeo;
+  var CLOUD_COUNT = 80;
+  var SPREAD_X = 120;      // very wide horizontal field
+  var SPREAD_Y = 14;
+  var SPREAD_Z = 80;       // deep depth layers
+  var MIN_Z = 30;          // minimum distance from camera (keeps clouds far)
+  var DRIFT_SPEED = 2;     // gentle sideways drift
+
+  var cloudMeshes = [];
+  var cloudGroup = new THREE.Group();
+
+  for (var i = 0; i < CLOUD_COUNT; i++) {
+    var opacity = 0.04 + Math.random() * 0.12;
+    var mat = new THREE.MeshBasicMaterial({
+      map: cloudTex,
+      color: new THREE.Color(0.90, 0.93, 0.96),
+      transparent: true,
+      depthWrite: false,
+      side: THREE.DoubleSide,
+      blending: THREE.NormalBlending,
+      opacity: opacity,
+    });
+
+    var mesh = new THREE.Mesh(spriteGeo, mat);
+    var scale = 12 + Math.random() * 30;
+    mesh.scale.set(scale, scale * (0.3 + Math.random() * 0.3), 1);
+
+    mesh.position.x = (Math.random() - 0.5) * SPREAD_X;
+    mesh.position.y = (Math.random() - 0.5) * SPREAD_Y - 3;
+    mesh.position.z = -(Math.random() * SPREAD_Z + MIN_Z);
+
+    var rotQ = new THREE.Quaternion().setFromAxisAngle(
+      new THREE.Vector3(0, 0, 1), Math.random() * Math.PI * 2
+    );
+
+    cloudMeshes.push({ mesh: mesh, rotQ: rotQ, baseOpacity: opacity, wisp: false });
+    cloudGroup.add(mesh);
+  }
+
+  scene.add(cloudGroup);
+
+  // ── 3D Text Sprites — floating among clouds ──
+
+  // Redraws a canvas with shiny sweep effect
+  function drawShinyFrame(canvas, ctx, text, opts, shineP) {
+    var w = canvas.width, h = canvas.height;
+    ctx.clearRect(0, 0, w, h);
+
+    // Pass 1: Draw text in base color
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.font = opts.fontSize + 'px ' + opts.fontFamily;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.shadowColor = 'rgba(0,0,0,0.4)';
+    ctx.shadowBlur = opts.fontSize * 0.3;
+    ctx.fillStyle = opts.baseColor;
+
+    if (opts.letterSpacing > 0) {
+      var xPos = (w - opts.textWidth) / 2;
+      for (var i = 0; i < text.length; i++) {
+        var charW = ctx.measureText(text[i]).width;
+        ctx.fillText(text[i], xPos + charW / 2, h / 2);
+        xPos += charW + opts.letterSpacing;
+      }
+    } else {
+      ctx.fillText(text, w / 2, h / 2);
+    }
+
+    // Pass 2: Shine sweep (only draws on existing text pixels)
+    if (shineP > 0 && shineP < 1) {
+      ctx.globalCompositeOperation = 'source-atop';
+      ctx.shadowColor = 'transparent';
+      ctx.shadowBlur = 0;
+
+      var sweepX = (shineP * 1.4 - 0.2) * w;
+      var spread = w * 0.12;
+      var grad = ctx.createLinearGradient(sweepX - spread, 0, sweepX + spread, 0);
+      grad.addColorStop(0, 'transparent');
+      grad.addColorStop(0.4, opts.baseColor);
+      grad.addColorStop(0.5, opts.shineColor);
+      grad.addColorStop(0.6, opts.baseColor);
+      grad.addColorStop(1, 'transparent');
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, w, h);
+
+      ctx.globalCompositeOperation = 'source-over';
+    }
+  }
+
+  // Creates a shiny text mesh with animated sweep
+  function createShinyTextMesh(text, opts) {
+    var fontSize = opts.fontSize || 48;
+    var fontFamily = opts.fontFamily || "'Italiana', serif";
+    var baseColor = opts.color || '#b5b5b5';
+    var shineColor = opts.shineColor || '#ffffff';
+    var letterSpacing = opts.letterSpacing || 0;
+
+    var c = document.createElement('canvas');
+    var ctx = c.getContext('2d');
+    ctx.font = fontSize + 'px ' + fontFamily;
+
+    var baseWidth = ctx.measureText(text).width;
+    var totalSpacing = letterSpacing * (text.length - 1);
+    var textWidth = baseWidth + totalSpacing;
+
+    c.width = Math.ceil(textWidth + fontSize * 2);
+    c.height = Math.ceil(fontSize * 3);
+
+    var drawOpts = {
+      fontSize: fontSize, fontFamily: fontFamily,
+      baseColor: baseColor, shineColor: shineColor,
+      letterSpacing: letterSpacing, textWidth: textWidth
+    };
+
+    drawShinyFrame(c, ctx, text, drawOpts, 0);
+
+    var tex = new THREE.CanvasTexture(c);
+    tex.minFilter = THREE.LinearFilter;
+
+    var aspect = c.width / c.height;
+    var meshH = opts.meshHeight || 2;
+    var geo = new THREE.PlaneGeometry(meshH * aspect, meshH);
+    var mat = new THREE.MeshBasicMaterial({
+      map: tex, transparent: true, depthWrite: false,
+      opacity: 0, side: THREE.DoubleSide,
+    });
+
+    var mesh = new THREE.Mesh(geo, mat);
+    mesh.position.set(opts.x || 0, opts.y || 0, opts.z || -22);
+    mesh.renderOrder = 5;
+
+    return {
+      mesh: mesh, mat: mat, tex: tex, geo: geo,
+      canvas: c, ctx: ctx, text: text, drawOpts: drawOpts,
+      shineActive: false
+    };
+  }
+
+  // Wait for fonts then create text in the scene
+  document.fonts.ready.then(function() {
+    var brandText = createShinyTextMesh('SPARK JETS', {
+      fontSize: 36, fontFamily: "'Inter', sans-serif", color: '#b5b5b5',
+      shineColor: '#ffffff', letterSpacing: 14, meshHeight: 1.2, x: 0, y: 0.5, z: -22
+    });
+
+    scene.add(brandText.mesh);
+
+    window._heroText = {
+      brand: brandText,
+      allMeshes: [brandText]
+    };
+  });
+
+  // Foreground clouds — static, in front of the jet (Z=-12 vs plane at Z=-15)
+  // These DON'T drift so they stay in the flight path
+  var fgClouds = [
+    { x: -8,  y: -2.8, z: -12, scale: 22, opacity: 0.55 },
+    { x: 5,   y: -3.0, z: -11, scale: 24, opacity: 0.60 },
+    { x: 16,  y: -2.5, z: -12, scale: 20, opacity: 0.50 },
+  ];
+  var fgMeshes = [];
+  for (var fi = 0; fi < fgClouds.length; fi++) {
+    var fg = fgClouds[fi];
+    var fgMat = new THREE.MeshBasicMaterial({
+      map: cloudTex,
+      color: new THREE.Color(0.92, 0.94, 0.97),
+      transparent: true,
+      depthWrite: false,
+      side: THREE.DoubleSide,
+      blending: THREE.NormalBlending,
+      opacity: fg.opacity,
+    });
+    var fgMesh = new THREE.Mesh(spriteGeo, fgMat);
+    fgMesh.scale.set(fg.scale, fg.scale * 0.45, 1);
+    fgMesh.position.set(fg.x, fg.y, fg.z);
+    fgMesh.renderOrder = 10; // render after the plane
+    var fgRotQ = new THREE.Quaternion().setFromAxisAngle(
+      new THREE.Vector3(0, 0, 1), Math.random() * Math.PI * 2
+    );
+    fgMeshes.push({ mesh: fgMesh, rotQ: fgRotQ });
+    scene.add(fgMesh); // added to scene directly, NOT cloudGroup
+  }
+
+  // Resize
+  function resize() {
+    w = hero.clientWidth; h = hero.clientHeight;
+    cam.aspect = w / h;
+    cam.updateProjectionMatrix();
+    renderer.setSize(w, h);
+  }
+  window.addEventListener('resize', resize);
+
+  // Render loop — clouds drift sideways (right to left)
+  var clock = new THREE.Clock();
+  var halfX = SPREAD_X / 2;
+  function tick() {
+    requestAnimationFrame(tick);
+    var dt = Math.min(clock.getDelta(), 0.05);
+    var t = clock.getElapsedTime();
+
+    // Very gentle camera bob
+    cam.position.y = Math.sin(t * 0.08) * 0.4;
+
+    for (var ci = 0; ci < cloudMeshes.length; ci++) {
+      var c = cloudMeshes[ci];
+      c.mesh.position.x -= DRIFT_SPEED * dt;
+
+      // Recycle clouds that exit the left side
+      if (c.mesh.position.x < -halfX - 10) {
+        c.mesh.position.x = halfX + Math.random() * 20;
+        c.mesh.position.y = (Math.random() - 0.5) * SPREAD_Y - 3;
+        c.mesh.position.z = -(Math.random() * SPREAD_Z + MIN_Z);
+      }
+
+      // Billboard toward camera
+      c.mesh.quaternion.copy(cam.quaternion);
+      c.mesh.quaternion.multiply(c.rotQ);
+    }
+
+    // Billboard foreground clouds too
+    for (var fci = 0; fci < fgMeshes.length; fci++) {
+      fgMeshes[fci].mesh.quaternion.copy(cam.quaternion);
+      fgMeshes[fci].mesh.quaternion.multiply(fgMeshes[fci].rotQ);
+    }
+
+    // 3D text — billboard + shiny sweep
+    if (window._heroText) {
+      var ht = window._heroText;
+
+      // Billboard all text meshes toward camera
+      for (var ti = 0; ti < ht.allMeshes.length; ti++) {
+        ht.allMeshes[ti].mesh.quaternion.copy(cam.quaternion);
+      }
+
+      // Shiny text sweep
+      if (ht.brand.shineActive && ht.brand.canvas) {
+        var bt = ht.brand;
+        var shineDur = 2.2;
+        var shineDelay = 0.5;
+        var totalCycle = shineDur + shineDelay;
+        var cycleTime = t % totalCycle;
+        var shineP = cycleTime < shineDur ? cycleTime / shineDur : -1;
+
+        if (shineP >= 0) {
+          drawShinyFrame(bt.canvas, bt.ctx, bt.text, bt.drawOpts, shineP);
+          bt.tex.needsUpdate = true;
+        }
+      }
+    }
+
+    renderer.render(scene, cam);
+  }
+  tick();
+
+  // Hero dissolve on scroll
+  gsap.to(hero, {
+    opacity: 0, y: -60, ease: 'none',
+    scrollTrigger: { trigger: hero, start: 'top top', end: 'bottom top', scrub: true }
+  });
+  var scrollInd = document.getElementById('heroScroll');
+  if (scrollInd) {
+    gsap.to(scrollInd, {
+      opacity: 0,
+      scrollTrigger: { trigger: hero, start: 'top top', end: '15% top', scrub: true }
+    });
+  }
+}
 
 // ═══ 3D CRYSTAL LOGO — spinning in nav ═══
 function initCrystalLogo() {
@@ -2310,123 +3600,6 @@ function initPlaneViewer() {
   animate();
 }
 
-// ═══ X-RAY CABIN SCANNER ═══
-(function() {
-  var viewport = document.getElementById('xrayViewport');
-  var wrap     = document.getElementById('xrayWrap');
-  var exterior = document.querySelector('.xray-exterior');
-  var interior = document.getElementById('xrayInterior');
-  var lineTop  = document.getElementById('xrayLineTop');
-  var lineBot  = document.getElementById('xrayLineBot');
-  if (!interior || !wrap || !viewport || !exterior) return;
-
-  var stripPct = 12;
-  var parallax = 0.35; // exterior moves at 65% speed of interior
-  var Hv, Hi, stripPx, scannerTopPx;
-
-  function measure() {
-    Hv = viewport.offsetHeight;
-    Hi = wrap.offsetHeight;
-    stripPx = stripPct / 100 * Hi;
-    scannerTopPx = Hv / 2 - stripPx / 2;
-    lineTop.style.top = scannerTopPx + 'px';
-    lineBot.style.top = (scannerTopPx + stripPx) + 'px';
-  }
-
-  // Wait for both images to load before measuring & initializing
-  var imgs = [exterior, interior];
-  var loaded = 0;
-  function onImgReady() {
-    loaded++;
-    if (loaded < imgs.length) return;
-    init();
-  }
-  imgs.forEach(function(img) {
-    if (img.complete) { onImgReady(); }
-    else { img.addEventListener('load', onImgReady); img.addEventListener('error', onImgReady); }
-  });
-
-  function init() {
-  measure();
-  window.addEventListener('resize', function() {
-    measure();
-    ScrollTrigger.refresh();
-  });
-
-  ScrollTrigger.create({
-    trigger: '.xray-section',
-    start: 'top top',
-    end: '+=200%',
-    pin: true,
-    scrub: 1,
-    onUpdate: function(self) {
-      var p = self.progress;
-      var tyInterior = scannerTopPx - p * (Hi - stripPx);
-      var tyExterior = tyInterior * (1 - parallax);
-
-      wrap.style.transform = 'translateX(-50%)';
-      exterior.style.transform = 'translateY(' + tyExterior + 'px)';
-      interior.style.transform = 'translateY(' + tyInterior + 'px)';
-
-      var topPct = ((scannerTopPx - tyInterior) / Hi) * 100;
-      var botPct = 100 - topPct - stripPct;
-      interior.style.clipPath = 'inset(' + topPct + '% 0 ' + botPct + '% 0)';
-
-      // Fade in first 8%, fade out last 8%
-      var fade = 0.08;
-      var alpha = 1;
-      if (p < fade) alpha = p / fade;
-      else if (p > 1 - fade) alpha = (1 - p) / fade;
-      if (p <= 0.001 || p >= 0.999) alpha = 0;
-      lineTop.style.opacity = alpha;
-      lineBot.style.opacity = alpha;
-      interior.style.opacity = alpha;
-    }
-  });
-  } // end init
-})();
-
-// ═══ SERVICE SLIDES — CLIP-PATH REVEALS ═══
-document.querySelectorAll('.svc-slide').forEach((slide, i) => {
-  const dir = i % 2 === 0 ? 'inset(0 100% 0 0)' : 'inset(0 0 0 100%)';
-  gsap.fromTo(slide.querySelector('img'), {
-    clipPath: dir
-  }, {
-    clipPath: 'inset(0 0% 0 0%)',
-    duration: 1.4,
-    ease: 'expo.inOut',
-    scrollTrigger: { trigger: slide, start: 'top 70%', toggleActions: 'play none none none' }
-  });
-});
-
-// ═══ QUOTE — AUTO TYPE ON ENTER ═══
-const quoteEl = document.getElementById('quoteText');
-const rawText = quoteEl.textContent.trim();
-quoteEl.innerHTML = rawText.split(' ').map(w => {
-  if (w.startsWith('|') && w.endsWith('|')) {
-    return `<span class="word em">${w.replace(/\|/g, '')}</span>`;
-  }
-  if (w.startsWith('|')) return `<span class="word em">${w.replace(/\|/g, '')}`;
-  if (w.endsWith('|')) return `${w.replace(/\|/g, '')}</span>`;
-  return `<span class="word">${w}</span>`;
-}).join(' ');
-
-const words = quoteEl.querySelectorAll('.word');
-const quoteCite = document.getElementById('quoteCite');
-let quoteStarted = false;
-const quoteObs = new IntersectionObserver(entries => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting && !quoteStarted) {
-      quoteStarted = true;
-      words.forEach((w, i) => {
-        setTimeout(() => w.classList.add('lit'), i * 80);
-      });
-      setTimeout(() => quoteCite.classList.add('vis'), words.length * 80 + 300);
-      quoteObs.disconnect();
-    }
-  });
-}, { threshold: 0.3 });
-quoteObs.observe(document.querySelector('.quote-section'));
 
 // ═══ SCROLL REVEALS ═══
 const revEls = document.querySelectorAll('.reveal');
@@ -2450,14 +3623,8 @@ document.getElementById('menuBtn').addEventListener('click', () => document.getE
 document.getElementById('menuClose').addEventListener('click', () => document.getElementById('mobileMenu').classList.remove('open'));
 document.querySelectorAll('.mob-link').forEach(a => a.addEventListener('click', () => document.getElementById('mobileMenu').classList.remove('open')));
 
-// Fleet videos — play once and freeze on last frame
-document.querySelectorAll('.fleet-item video').forEach(v => {
-  v.muted = true; v.playsInline = true;
-  v.loop = false;
-  v.play().catch(() => {});
-});
 
-// ═══ ROTATING DOTTED GLOBE ═══
+// ═══ SCROLL-DRIVEN DOTTED GLOBE ═══
 (function() {
   const canvas = document.getElementById('globeCanvas');
   if (!canvas) return;
@@ -2485,7 +3652,7 @@ document.querySelectorAll('.fleet-item video').forEach(v => {
   const graticule = d3.geoGraticule().step([20, 20])();
   let landDots = [];
   let oceanDots = [];
-  let rotation = 70; // start facing Americas (Boca Raton, São Paulo, Dallas)
+  let rotation = 70;
   let frame = 0;
   let globeVisible = true;
   let animId = null;
@@ -2503,7 +3670,10 @@ document.querySelectorAll('.fleet-item video').forEach(v => {
     { name: 'São Paulo', coords: [-46.63, -23.55] },
     { name: 'Dallas', coords: [-96.80, 32.78] }
   ];
-  // City connection pairs
+  // City connection arcs (ordered for scroll phases)
+  // Arc 0: Boca Raton → São Paulo (Phase 1)
+  // Arc 1: Boca Raton → Dallas (Phase 2 — drawn as São Paulo is shown, connecting the network)
+  // Arc 2: São Paulo → Dallas (Phase 3)
   const arcs = [
     [cities[0].coords, cities[1].coords],
     [cities[0].coords, cities[2].coords],
@@ -2521,7 +3691,6 @@ document.querySelectorAll('.fleet-item video').forEach(v => {
           }
         }
       }
-      // Ocean dots at lower density to reduce lag
       for (let lat = -80; lat <= 80; lat += 6) {
         for (let lon = -180; lon < 180; lon += 6) {
           if (!d3.geoContains(land, [lon, lat])) {
@@ -2535,15 +3704,25 @@ document.querySelectorAll('.fleet-item video').forEach(v => {
 
   function animateGlobe() {
     ctx.clearRect(0, 0, w, h);
-    rotation += 0.12;
     frame++;
+
+    // ── Scroll-driven rotation (smooth lerp toward target) ──
+    const target = window._globeTargetRotation || 70;
+    rotation += (target - rotation) * 0.06;
+
     projection.rotate([rotation, -15, 0]);
     const center = projection.invert([cx, cy]);
 
-    // 1. Atmospheric glow behind globe
+    // Read scroll-driven arc progress
+    const arcProgress = window._globeArcProgress || [0, 0, 0];
+    const activeCity = window._globeActiveCity != null ? window._globeActiveCity : -1;
+    const scrollP = window._globeScrollProgress || 0;
+
+    // 1. Atmospheric glow — intensifies during Phase 4
+    const glowIntensity = scrollP > 0.85 ? 0.06 + (scrollP - 0.85) / 0.15 * 0.06 : 0.06;
     const glow = ctx.createRadialGradient(cx, cy, R * 0.6, cx, cy, R * 1.3);
-    glow.addColorStop(0, 'rgba(184,151,106,0.06)');
-    glow.addColorStop(0.5, 'rgba(184,151,106,0.03)');
+    glow.addColorStop(0, `rgba(184,151,106,${glowIntensity})`);
+    glow.addColorStop(0.5, `rgba(184,151,106,${glowIntensity * 0.5})`);
     glow.addColorStop(1, 'rgba(184,151,106,0)');
     ctx.fillStyle = glow;
     ctx.beginPath();
@@ -2574,7 +3753,7 @@ document.querySelectorAll('.fleet-item video').forEach(v => {
     ctx.lineWidth = 0.5;
     ctx.stroke();
 
-    // 5. Ocean dots (very faint)
+    // 5. Ocean dots
     oceanDots.forEach(d => {
       const p = projection(d);
       if (p) {
@@ -2605,14 +3784,23 @@ document.querySelectorAll('.fleet-item video').forEach(v => {
       }
     });
 
-    // 7. Connection arcs between cities
-    arcs.forEach(([a, b]) => {
+    // 7. Scroll-driven connection arcs
+    const dashOffset = (frame * 0.02) % 1;
+    arcs.forEach(([a, b], arcIdx) => {
+      const drawProg = arcProgress[arcIdx];
+      if (drawProg <= 0) return;
+
       const interp = d3.geoInterpolate(a, b);
       const steps = 60;
-      const dashOffset = (frame * 0.02) % 1;
-      ctx.strokeStyle = 'rgba(184,151,106,0.85)';
-      ctx.lineWidth = 2.5;
-      for (let i = 0; i < steps; i++) {
+      const maxStep = Math.ceil(drawProg * steps);
+
+      // Glow effect for fully drawn arcs in Phase 4
+      const isFullNetwork = scrollP > 0.85;
+      const glowPulse = isFullNetwork ? (Math.sin(frame * 0.06 + arcIdx) * 0.3 + 0.7) : 1;
+
+      ctx.lineWidth = isFullNetwork ? 3 : 2.5;
+
+      for (let i = 0; i < maxStep; i++) {
         const t1 = i / steps;
         const t2 = (i + 1) / steps;
         const p1 = projection(interp(t1));
@@ -2621,11 +3809,16 @@ document.querySelectorAll('.fleet-item video').forEach(v => {
           const d1 = d3.geoDistance(interp(t1), center);
           const d2 = d3.geoDistance(interp(t2), center);
           if (d1 < Math.PI / 2 && d2 < Math.PI / 2) {
-            // Animated dash pattern
             const segPhase = (t1 + dashOffset) % 0.12;
             if (segPhase < 0.07) {
               const fade1 = 1 - d1 / (Math.PI / 2);
-              ctx.globalAlpha = 0.5 + fade1 * 0.5;
+              // Leading edge glow — brighter near the draw front
+              let edgeBoost = 1;
+              if (drawProg < 1 && i > maxStep - 6) {
+                edgeBoost = 1.5;
+              }
+              ctx.strokeStyle = `rgba(184,151,106,${(0.5 + fade1 * 0.5) * glowPulse})`;
+              ctx.globalAlpha = Math.min(1, (0.5 + fade1 * 0.5) * edgeBoost);
               ctx.beginPath();
               ctx.moveTo(p1[0], p1[1]);
               ctx.lineTo(p2[0], p2[1]);
@@ -2635,40 +3828,92 @@ document.querySelectorAll('.fleet-item video').forEach(v => {
         }
       }
       ctx.globalAlpha = 1;
+
+      // Draw a bright leading dot at the arc front while drawing
+      if (drawProg > 0 && drawProg < 1) {
+        const frontT = drawProg;
+        const frontCoord = interp(frontT);
+        const frontP = projection(frontCoord);
+        if (frontP) {
+          const fd = d3.geoDistance(frontCoord, center);
+          if (fd < Math.PI / 2) {
+            const ff = 1 - fd / (Math.PI / 2);
+            // Bright gold dot at leading edge
+            ctx.beginPath();
+            ctx.arc(frontP[0], frontP[1], 5, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(184,151,106,${0.9 * ff})`;
+            ctx.fill();
+            // White core
+            ctx.beginPath();
+            ctx.arc(frontP[0], frontP[1], 2.5, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(255,240,220,${0.95 * ff})`;
+            ctx.fill();
+          }
+        }
+      }
     });
 
-    // 8. Pulsing city markers
-    const pulse = Math.sin(frame * 0.04) * 0.5 + 0.5; // 0→1 oscillation
-    cities.forEach(city => {
+    // 8. City markers — active city is brighter and larger
+    const pulse = Math.sin(frame * 0.04) * 0.5 + 0.5;
+    cities.forEach((city, i) => {
       const p = projection(city.coords);
       if (p) {
         const dist = d3.geoDistance(city.coords, center);
         if (dist < Math.PI / 2) {
           const fade = 1 - (dist / (Math.PI / 2));
+          const isActive = (i === activeCity);
+          const isNetwork = scrollP > 0.85;
+          const dotScale = (isActive || isNetwork) ? 1.5 : 1;
+          const alphaBoost = (isActive || isNetwork) ? 1.3 : 1;
+
           // Expanding ring
-          const ringR = 6 + pulse * 12;
+          const ringR = (isActive ? 8 : 6) + pulse * (isActive ? 18 : 12);
           ctx.beginPath();
           ctx.arc(p[0], p[1], ringR, 0, Math.PI * 2);
-          ctx.strokeStyle = `rgba(184,151,106,${(1 - pulse) * 0.35 * fade})`;
-          ctx.lineWidth = 1.5;
+          ctx.strokeStyle = `rgba(184,151,106,${(1 - pulse) * 0.35 * fade * alphaBoost})`;
+          ctx.lineWidth = isActive ? 2 : 1.5;
           ctx.stroke();
-          // Second ring (offset phase)
+
+          // Second ring
           const pulse2 = Math.sin(frame * 0.04 + Math.PI) * 0.5 + 0.5;
-          const ringR2 = 6 + pulse2 * 12;
+          const ringR2 = (isActive ? 8 : 6) + pulse2 * (isActive ? 18 : 12);
           ctx.beginPath();
           ctx.arc(p[0], p[1], ringR2, 0, Math.PI * 2);
-          ctx.strokeStyle = `rgba(184,151,106,${(1 - pulse2) * 0.2 * fade})`;
+          ctx.strokeStyle = `rgba(184,151,106,${(1 - pulse2) * 0.2 * fade * alphaBoost})`;
           ctx.stroke();
+
           // Solid center dot
+          const dotR = 4 * dotScale;
           ctx.beginPath();
-          ctx.arc(p[0], p[1], 4, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(184,151,106,${0.7 + fade * 0.3})`;
+          ctx.arc(p[0], p[1], dotR, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(184,151,106,${Math.min(1, (0.7 + fade * 0.3) * alphaBoost)})`;
           ctx.fill();
+
           // Bright core
           ctx.beginPath();
-          ctx.arc(p[0], p[1], 2, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(255,240,220,${0.8 * fade})`;
+          ctx.arc(p[0], p[1], 2 * dotScale, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(255,240,220,${Math.min(1, 0.8 * fade * alphaBoost)})`;
           ctx.fill();
+
+          // Active city: extra outer glow
+          if (isActive) {
+            const glowR = 24 + pulse * 8;
+            const cityGlow = ctx.createRadialGradient(p[0], p[1], 0, p[0], p[1], glowR);
+            cityGlow.addColorStop(0, `rgba(184,151,106,${0.15 * fade})`);
+            cityGlow.addColorStop(1, 'rgba(184,151,106,0)');
+            ctx.fillStyle = cityGlow;
+            ctx.beginPath();
+            ctx.arc(p[0], p[1], glowR, 0, Math.PI * 2);
+            ctx.fill();
+          }
+
+          // Active city: draw city name label on globe
+          if (isActive && fade > 0.3) {
+            ctx.font = '600 22px Inter, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillStyle = `rgba(184,151,106,${fade * 0.9})`;
+            ctx.fillText(city.name, p[0], p[1] - dotR - 14);
+          }
         }
       }
     });

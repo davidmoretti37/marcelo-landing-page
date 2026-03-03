@@ -26,62 +26,73 @@ export default function WorldClock() {
   }, []);
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+    <div
+      style={{
+        display: "grid",
+        gridTemplateColumns: "1fr 1fr",
+        gap: 12,
+      }}
+      className="world-clock-grid"
+    >
       {WORLD_CLOCKS.map((clock, i) => (
         <div
           key={clock.city}
-          className="clock-card"
           style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            padding: "16px 20px",
+            padding: "14px 16px",
             borderLeft: clock.highlight
               ? "2px solid #B8976A"
-              : "2px solid rgba(12,18,32,0.08)",
+              : "2px solid rgba(255,255,255,0.08)",
             background: clock.highlight
-              ? "rgba(184,151,106,0.04)"
+              ? "rgba(184,151,106,0.06)"
               : "transparent",
           }}
         >
-          <div>
-            <div
-              style={{
-                fontSize: 15,
-                fontWeight: 400,
-                letterSpacing: "0.06em",
-                textTransform: "uppercase",
-                color: "#0C1220",
-              }}
-            >
-              {clock.city}
-            </div>
-            <div
-              style={{
-                fontSize: 9,
-                fontWeight: 500,
-                letterSpacing: "0.2em",
-                color: "rgba(12,18,32,0.3)",
-                textTransform: "uppercase",
-                marginTop: 2,
-              }}
-            >
-              {clock.label}
-            </div>
+          <div
+            style={{
+              fontSize: 12,
+              fontWeight: 400,
+              letterSpacing: "0.06em",
+              textTransform: "uppercase",
+              color: "#f5f0e8",
+            }}
+          >
+            {clock.city}
           </div>
           <div
             style={{
-              fontSize: 20,
+              fontSize: 8,
+              fontWeight: 500,
+              letterSpacing: "0.2em",
+              color: "rgba(255,255,255,0.3)",
+              textTransform: "uppercase",
+              marginTop: 2,
+            }}
+          >
+            {clock.label}
+          </div>
+          <div
+            style={{
+              fontSize: 18,
               fontWeight: 200,
               letterSpacing: "0.05em",
-              color: clock.highlight ? "#B8976A" : "rgba(12,18,32,0.6)",
+              color: clock.highlight ? "#B8976A" : "rgba(255,255,255,0.5)",
               fontVariantNumeric: "tabular-nums",
+              fontFamily: "var(--font-b612), 'B612 Mono', monospace",
+              marginTop: 6,
             }}
           >
             {times[i] || "--:--:--"}
           </div>
         </div>
       ))}
+
+      <style>{`
+        @media (max-width: 768px) {
+          .world-clock-grid {
+            grid-template-columns: 1fr !important;
+          }
+        }
+      `}</style>
     </div>
   );
 }

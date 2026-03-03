@@ -26,11 +26,15 @@ html {
 }
 
 body {
-  background: #0b1a35;
-  color: #0C1220;
+  background: #0a0906;
+  color: #f5f0e8;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.font-editorial {
+  font-family: var(--font-cormorant), "Georgia", serif;
 }
 
 /* Scrollbar */
@@ -38,7 +42,7 @@ body {
   width: 4px;
 }
 ::-webkit-scrollbar-track {
-  background: #F8F7F4;
+  background: #0a0906;
 }
 ::-webkit-scrollbar-thumb {
   background: rgba(184, 151, 106, 0.4);

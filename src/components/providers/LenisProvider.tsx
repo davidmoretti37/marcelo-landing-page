@@ -11,11 +11,11 @@ export default function LenisProvider({
     <ReactLenis
       root
       options={{
-        lerp: 0.08,
-        duration: 1.4,
+        lerp: 0.04,
+        duration: 2.0,
         smoothWheel: true,
-        wheelMultiplier: 0.8,
-        touchMultiplier: 1.5,
+        wheelMultiplier: 0.35,
+        touchMultiplier: 0.8,
       }}
     >
       {children}

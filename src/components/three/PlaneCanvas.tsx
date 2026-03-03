@@ -18,24 +18,25 @@ import { feature } from "topojson-client";
 */
 const PROXY_DEFAULTS = {
   camX: 0,
-  camY: 0,
+  camY: 50,        // cruise altitude (globe at Y=48)
   camZ: 5,
   lookX: 0,
-  lookY: 0,
+  lookY: 48,       // looking slightly down toward globe
   lookZ: 0,
   rotY: Math.PI / 2,
   posZ: 0,
   exposure: 1.0,
   autoRotate: false,
   showPlane: 0,
-  globeVisible: 0,
-  globePosX: 5,
-  globePosY: 0,
-  globeRotY: Math.PI * 1.4,
+  globeVisible: 1, // globe visible from page load
+  globePosX: 0,    // centered
+  globePosY: 48,
+  globeRotY: Math.PI * 0.8,
   arcProgress: 0,
-  skyDarkness: 0,
+  skyDarkness: 1,  // full space black from start
   terrainOpacity: 0,
   terrainScroll: 0,
+  cloudOpacity: 0, // no clouds — we're in space
 };
 
 export const planeProxy = { ...PROXY_DEFAULTS };
@@ -98,109 +99,6 @@ const starFragmentShader = /* glsl */ `
   }
 `;
 
-/* ── Terrain Shaders ── */
-
-const terrainVertexShader = /* glsl */ `
-  uniform float uTime;
-  varying vec3 vPosition;
-  varying float vElevation;
-
-  vec3 mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
-  vec4 mod289(vec4 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
-  vec4 permute(vec4 x) { return mod289(((x*34.0)+1.0)*x); }
-  vec4 taylorInvSqrt(vec4 r) { return 1.79284291400159 - 0.85373472095314 * r; }
-  vec3 fade(vec3 t) { return t*t*t*(t*(t*6.0-15.0)+10.0); }
-
-  float cnoise(vec3 P) {
-    vec3 Pi0 = floor(P);
-    vec3 Pi1 = Pi0 + vec3(1.0);
-    Pi0 = mod289(Pi0);
-    Pi1 = mod289(Pi1);
-    vec3 Pf0 = fract(P);
-    vec3 Pf1 = Pf0 - vec3(1.0);
-    vec4 ix = vec4(Pi0.x, Pi1.x, Pi0.x, Pi1.x);
-    vec4 iy = vec4(Pi0.yy, Pi1.yy);
-    vec4 iz0 = Pi0.zzzz;
-    vec4 iz1 = Pi1.zzzz;
-    vec4 ixy = permute(permute(ix) + iy);
-    vec4 ixy0 = permute(ixy + iz0);
-    vec4 ixy1 = permute(ixy + iz1);
-    vec4 gx0 = ixy0 * (1.0 / 7.0);
-    vec4 gy0 = fract(floor(gx0) * (1.0 / 7.0)) - 0.5;
-    gx0 = fract(gx0);
-    vec4 gz0 = vec4(0.5) - abs(gx0) - abs(gy0);
-    vec4 sz0 = step(gz0, vec4(0.0));
-    gx0 -= sz0 * (step(0.0, gx0) - 0.5);
-    gy0 -= sz0 * (step(0.0, gy0) - 0.5);
-    vec4 gx1 = ixy1 * (1.0 / 7.0);
-    vec4 gy1 = fract(floor(gx1) * (1.0 / 7.0)) - 0.5;
-    gx1 = fract(gx1);
-    vec4 gz1 = vec4(0.5) - abs(gx1) - abs(gy1);
-    vec4 sz1 = step(gz1, vec4(0.0));
-    gx1 -= sz1 * (step(0.0, gx1) - 0.5);
-    gy1 -= sz1 * (step(0.0, gy1) - 0.5);
-    vec3 g000 = vec3(gx0.x,gy0.x,gz0.x);
-    vec3 g100 = vec3(gx0.y,gy0.y,gz0.y);
-    vec3 g010 = vec3(gx0.z,gy0.z,gz0.z);
-    vec3 g110 = vec3(gx0.w,gy0.w,gz0.w);
-    vec3 g001 = vec3(gx1.x,gy1.x,gz1.x);
-    vec3 g101 = vec3(gx1.y,gy1.y,gz1.y);
-    vec3 g011 = vec3(gx1.z,gy1.z,gz1.z);
-    vec3 g111 = vec3(gx1.w,gy1.w,gz1.w);
-    vec4 norm0 = taylorInvSqrt(vec4(dot(g000,g000), dot(g010,g010), dot(g100,g100), dot(g110,g110)));
-    g000 *= norm0.x; g010 *= norm0.y; g100 *= norm0.z; g110 *= norm0.w;
-    vec4 norm1 = taylorInvSqrt(vec4(dot(g001,g001), dot(g011,g011), dot(g101,g101), dot(g111,g111)));
-    g001 *= norm1.x; g011 *= norm1.y; g101 *= norm1.z; g111 *= norm1.w;
-    float n000 = dot(g000, Pf0);
-    float n100 = dot(g100, vec3(Pf1.x, Pf0.yz));
-    float n010 = dot(g010, vec3(Pf0.x, Pf1.y, Pf0.z));
-    float n110 = dot(g110, vec3(Pf1.xy, Pf0.z));
-    float n001 = dot(g001, vec3(Pf0.xy, Pf1.z));
-    float n101 = dot(g101, vec3(Pf1.x, Pf0.y, Pf1.z));
-    float n011 = dot(g011, vec3(Pf0.x, Pf1.yz));
-    float n111 = dot(g111, Pf1);
-    vec3 fade_xyz = fade(Pf0);
-    vec4 n_z = mix(vec4(n000, n100, n010, n110), vec4(n001, n101, n011, n111), fade_xyz.z);
-    vec2 n_yz = mix(n_z.xy, n_z.zw, fade_xyz.y);
-    float n_xyz = mix(n_yz.x, n_yz.y, fade_xyz.x);
-    return 2.2 * n_xyz;
-  }
-
-  void main() {
-    vec3 pos = position;
-    vec3 noisePos = pos + vec3(0.0, 0.0, uTime * -30.0);
-    float noise1 = cnoise(noisePos * 0.08);
-    float noise2 = cnoise(noisePos * 0.06);
-    float noise3 = cnoise(noisePos * 0.4);
-    float edge = sin(radians(clamp(pos.x / 30.0, -1.0, 1.0) * 90.0));
-    float elevation = noise1 * edge * 2.0
-                    + noise2 * edge * 2.0
-                    + noise3 * (abs(edge) * 0.5 + 0.1);
-    pos.z += elevation;
-    vElevation = clamp(elevation / 3.0, 0.0, 1.0);
-    vPosition = pos;
-    gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
-  }
-`;
-
-const terrainFragmentShader = /* glsl */ `
-  precision highp float;
-  uniform float uOpacity;
-  varying vec3 vPosition;
-  varying float vElevation;
-
-  void main() {
-    float distFade = clamp((50.0 - length(vPosition.xy)) / 50.0, 0.0, 1.0);
-    vec3 navy = vec3(0.047, 0.071, 0.125);
-    vec3 gold = vec3(0.722, 0.592, 0.416);
-    float heightMix = smoothstep(0.0, 1.0, vElevation);
-    vec3 color = mix(navy, gold, heightMix * 0.6);
-    color += gold * 0.1 * pow(distFade, 3.0);
-    float alpha = distFade * 0.5 * uOpacity;
-    if (alpha < 0.01) discard;
-    gl_FragColor = vec4(color, alpha);
-  }
-`;
 
 /* ── Starfield factory ── */
 
@@ -263,8 +161,8 @@ function createStarfield(scene: THREE.Scene) {
 
   const points = new THREE.Points(geo, mat);
   points.frustumCulled = false;
-  // Position star sphere high above clouds — camera enters it during space section
-  points.position.y = 110;
+  // Position star sphere at cruise altitude — camera enters it during space section
+  points.position.y = 55;
   scene.add(points);
 
   return {
@@ -476,27 +374,6 @@ export default function PlaneCanvas() {
     // ── Starfield (THREE.Points inside this scene) ──
     const starfield = createStarfield(sc);
 
-    // ── GLSL Terrain Hills ──
-    const terrainGeo = new THREE.PlaneGeometry(60, 120, 128, 128);
-    const terrainMat = new THREE.ShaderMaterial({
-      vertexShader: terrainVertexShader,
-      fragmentShader: terrainFragmentShader,
-      uniforms: {
-        uTime: { value: 0 },
-        uOpacity: { value: 0 },
-      },
-      transparent: true,
-      depthWrite: false,
-      depthTest: true,
-      side: THREE.FrontSide,
-    });
-    const terrainMesh = new THREE.Mesh(terrainGeo, terrainMat);
-    terrainMesh.rotation.x = -Math.PI / 2;
-    terrainMesh.position.set(0, -2, -30);
-    terrainMesh.renderOrder = -1;
-    terrainMesh.frustumCulled = false;
-    terrainMesh.visible = false;
-    sc.add(terrainMesh);
 
     // ── Premium Globe ──
     const GLOBE_R = 1.5;
@@ -577,6 +454,7 @@ export default function PlaneCanvas() {
             transparent: true,
             opacity: 0.12,
           });
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           (outlineMat as any)._baseOpacity = 0.12;
           const line = new THREE.LineSegments(geo, outlineMat);
           globeGroup.add(line);
@@ -637,6 +515,7 @@ export default function PlaneCanvas() {
       const pos = latLngToVec3(city.lat, city.lng, GLOBE_R + 0.02);
       const dotGeo = new THREE.SphereGeometry(0.03, 8, 8);
       const dotMat = new THREE.MeshBasicMaterial({ color: 0xb8976a, transparent: true, opacity: 1.0 });
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (dotMat as any)._baseOpacity = 1.0;
       const dot = new THREE.Mesh(dotGeo, dotMat);
       dot.position.copy(pos);
@@ -730,11 +609,11 @@ export default function PlaneCanvas() {
         modelRef.current.position.z = p.posZ;
       }
 
-      // ── Update clouds — always fully opaque, camera scrolls past them ──
+      // ── Update clouds — billboard + opacity fade ──
       for (const sp of cloudSprites) {
-        // Billboard toward camera + local z-rotation for variety
         sp.mesh.quaternion.copy(cam.quaternion);
         sp.mesh.quaternion.multiply(sp.rotQ);
+        (sp.mesh.material as THREE.MeshBasicMaterial).opacity = sp.baseOpacity * p.cloudOpacity;
       }
 
       // ── Update globe — continuous opacity fade ──
@@ -752,25 +631,17 @@ export default function PlaneCanvas() {
           am.dashOffset -= 0.003;
         }
         // Fade outlines + dots via stored base opacity
-        globeGroup.traverse((child) => {
-          const m = (child as THREE.Mesh).material;
-          if (m && (m as any)._baseOpacity !== undefined) {
-            (m as any).opacity = (m as any)._baseOpacity * gv;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        globeGroup.traverse((child: any) => {
+          const m = child.material;
+          if (m && m._baseOpacity !== undefined) {
+            m.opacity = m._baseOpacity * gv;
           }
         });
       }
 
       // ── Update starfield — just twinkle, always full brightness ──
       starfield.update(elapsed);
-
-      // ── Update terrain ──
-      terrainMesh.visible = p.terrainOpacity > 0.01;
-      if (terrainMesh.visible) {
-        const baseTime = elapsed * 0.2;
-        const scrollTime = p.terrainScroll * 40;
-        terrainMat.uniforms.uTime.value = baseTime + scrollTime;
-        terrainMat.uniforms.uOpacity.value = p.terrainOpacity;
-      }
 
       // ── Sky darkness ──
       sky.update(p.skyDarkness);
@@ -788,10 +659,6 @@ export default function PlaneCanvas() {
       sc.remove(cloudGroup);
       // Starfield cleanup
       starfield.dispose();
-      // Terrain cleanup
-      sc.remove(terrainMesh);
-      terrainGeo.dispose();
-      terrainMat.dispose();
       // Globe cleanup
       sc.remove(globeGroup);
       sky.tex.dispose();
