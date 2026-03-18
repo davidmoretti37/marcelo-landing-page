@@ -1,8 +1,11 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import dynamic from "next/dynamic";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
+
+const CrystalLogo = dynamic(() => import("@/components/three/CrystalLogo"), { ssr: false });
 
 const NAV_LINKS = [
   { label: "Showroom", href: "#showroom" },
@@ -49,9 +52,10 @@ export default function NavBar() {
         {/* Logo */}
         <a
           href="#"
-          className="font-sans font-semibold text-[13px] tracking-[0.25em] uppercase transition-colors duration-400"
+          className="flex items-center gap-3 font-sans font-semibold text-[13px] tracking-[0.25em] uppercase transition-colors duration-400"
           style={{ color: scrolled ? "#0F0F0D" : "#F5F2EC" }}
         >
+          <CrystalLogo size={24} />
           SPARK AVIATION
         </a>
 
