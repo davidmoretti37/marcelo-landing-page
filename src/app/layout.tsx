@@ -1,32 +1,47 @@
 import type { Metadata } from "next";
-import { Inter, Cormorant_Garamond, B612_Mono } from "next/font/google";
+import { Inter, Cormorant_Garamond, Playfair_Display, DM_Sans, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
-import LenisProvider from "@/components/providers/LenisProvider";
-import GSAPProvider from "@/components/providers/GSAPProvider";
 
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
-  weight: ["200", "300", "400"],
+  weight: ["400", "500", "600"],
+  display: "swap",
 });
 
 const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
   variable: "--font-cormorant",
-  weight: ["300", "400", "500"],
+  weight: ["300", "400"],
   style: ["normal", "italic"],
+  display: "swap",
 });
 
-const b612 = B612_Mono({
+const playfair = Playfair_Display({
   subsets: ["latin"],
-  variable: "--font-b612",
-  weight: "400",
+  variable: "--font-playfair",
+  weight: ["400", "500", "700"],
+  display: "swap",
+});
+
+const dmSans = DM_Sans({
+  subsets: ["latin"],
+  variable: "--font-dm-sans",
+  weight: ["400", "500", "600", "700"],
+  display: "swap",
+});
+
+const jetbrains = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-jetbrains",
+  weight: ["400", "500"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "Spark Jets | Elevating Excellence in Aviation",
+  title: "Spark Aviation | Private Aircraft Brokerage",
   description:
-    "Aircraft Sales, Acquisition & Management. Founded by international aviation veteran Marcelo Borin.",
+    "Spark Aviation brokers the world's finest private aircraft for those who require absolute certainty. Founded by Marcelo Borin.",
 };
 
 export default function RootLayout({
@@ -35,13 +50,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} ${cormorant.variable} ${b612.variable}`} suppressHydrationWarning>
+    <html lang="en" className={`${inter.variable} ${cormorant.variable} ${playfair.variable} ${dmSans.variable} ${jetbrains.variable}`} suppressHydrationWarning>
       <body className="font-sans antialiased" suppressHydrationWarning>
-        <LenisProvider>
-          <GSAPProvider>
-            <main>{children}</main>
-          </GSAPProvider>
-        </LenisProvider>
+        {children}
       </body>
     </html>
   );

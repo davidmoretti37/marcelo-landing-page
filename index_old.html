@@ -1,0 +1,2811 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Spark Aviation | Elevating Excellence in Aviation</title>
+<meta name="description" content="Aircraft Sales, Acquisition & Management. Founded by international aviation veteran Marcelo Borin.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500&family=Italiana&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script async src="https://d3js.org/d3.v7.min.js"></script>
+<script async src="https://unpkg.com/topojson-client@3"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<!-- plane-data scripts loaded lazily after preloader -->
+<style>
+@font-face {
+  font-family: 'Makro';
+  src: url('assets/branding/Fonts/Makro Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-display: swap;
+}
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  /* Legacy colors (keep for backward compatibility) */
+  --navy: #0C1220;
+  --navy-mid: #131B2B;
+  --bg: #F8F7F4;
+  --bg-alt: #EFEEE9;
+  --white: #FFFFFF;
+  --gold: #B8976A;
+  --text-dark: #0C1220;
+  --text-body-dark: #3A4258;
+  --text-body: rgba(255,255,255,0.80);
+  --text-light: rgba(255,255,255,0.58);
+  --text-dim: rgba(255,255,255,0.32);
+  --border: rgba(255,255,255,0.08);
+  --border-light: rgba(12,18,32,0.08);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Premium Brand Colors */
+  --navy-deep: #0F1419;
+  --blue-accent: #4A90E2;
+  --silver: #C0C0C0;
+  --bg-cream: #F8F7F4;
+  --bg-dark: #0F1419;
+  --charcoal: #2A2A2A;
+  --gradient-dark: linear-gradient(135deg, #0F1419 0%, #1A2332 100%);
+  --gradient-overlay: linear-gradient(180deg, rgba(15,20,25,0.85) 0%, rgba(15,20,25,0.65) 100%);
+}
+html { overflow-x: hidden; scroll-behavior: smooth; }
+body {
+  font-family: 'Inter', -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--text-dark);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  cursor: none;
+}
+@media (max-width: 1024px) { body { cursor: auto; } }
+::selection { background: var(--gold); color: var(--navy); }
+img { display: block; max-width: 100%; }
+a { text-decoration: none; color: inherit; }
+
+/* ═══ PREMIUM VISUAL EFFECTS ═══ */
+.glass-card {
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,0.1);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+}
+
+.btn-premium {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--blue-accent);
+  color: white;
+  padding: 18px 48px;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  border: none;
+  cursor: pointer;
+  transition: all 0.4s var(--ease-out);
+}
+.btn-premium:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 48px rgba(74,144,226,0.3);
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 18px 48px;
+  border: 1.5px solid rgba(255,255,255,0.3);
+  background: transparent;
+  color: white;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.4s var(--ease-out);
+}
+.btn-secondary:hover {
+  border-color: white;
+  background: rgba(255,255,255,0.1);
+}
+
+.hover-lift {
+  transition: all 0.4s var(--ease-out);
+}
+.hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.2);
+}
+
+/* ═══ FLOATING GRADIENT MESH ═══ */
+.gradient-mesh {
+  position: fixed; inset: 0; z-index: 0;
+  pointer-events: none; overflow: hidden;
+}
+.mesh-orb {
+  position: absolute; border-radius: 50%;
+  filter: blur(120px);
+  will-change: transform;
+}
+.mesh-orb-1 {
+  width: 600px; height: 600px;
+  background: rgba(184, 151, 106, 0.07);
+  top: -10%; left: -5%;
+  animation: meshFloat1 20s ease-in-out infinite alternate;
+}
+.mesh-orb-2 {
+  width: 500px; height: 500px;
+  background: rgba(180, 200, 230, 0.08);
+  bottom: -10%; right: -5%;
+  animation: meshFloat2 24s ease-in-out infinite alternate;
+}
+.mesh-orb-3 {
+  width: 400px; height: 400px;
+  background: rgba(184, 151, 106, 0.05);
+  top: 40%; left: 50%;
+  animation: meshFloat3 18s ease-in-out infinite alternate;
+}
+@keyframes meshFloat1 { 0% { transform: translate(0, 0); } 100% { transform: translate(80px, 60px); } }
+@keyframes meshFloat2 { 0% { transform: translate(0, 0); } 100% { transform: translate(-60px, -80px); } }
+@keyframes meshFloat3 { 0% { transform: translate(0, 0); } 100% { transform: translate(-40px, 50px); } }
+
+/* ═══ CUSTOM CURSOR ═══ */
+.cursor-dot {
+  position: fixed; top: 0; left: 0; z-index: 99999;
+  width: 20px; height: 20px;
+  pointer-events: none;
+  mix-blend-mode: difference;
+  will-change: transform;
+}
+.cursor-dot::before, .cursor-dot::after {
+  content: ''; position: absolute;
+  background: var(--white);
+  transition: transform 0.3s var(--ease-out), opacity 0.3s;
+}
+.cursor-dot::before { width: 1px; height: 20px; left: 50%; top: 0; transform: translateX(-50%); }
+.cursor-dot::after { width: 20px; height: 1px; top: 50%; left: 0; transform: translateY(-50%); }
+.cursor-dot.hover::before { transform: translateX(-50%) scaleY(0.5); }
+.cursor-dot.hover::after { transform: translateY(-50%) scaleX(0.5); }
+.cursor-ring {
+  position: fixed; top: 0; left: 0; z-index: 99998;
+  width: 40px; height: 40px; border-radius: 50%;
+  pointer-events: none;
+  will-change: transform;
+  background: radial-gradient(circle, rgba(184,151,106,0.08) 0%, transparent 70%);
+  transition: width 0.4s var(--ease-out), height 0.4s var(--ease-out), opacity 0.4s;
+  opacity: 0;
+}
+.cursor-ring.hover {
+  width: 80px; height: 80px;
+  opacity: 1;
+  background: radial-gradient(circle, rgba(184,151,106,0.12) 0%, transparent 70%);
+}
+@media (max-width: 1024px) {
+  .cursor-dot, .cursor-ring { display: none !important; }
+}
+
+/* ═══ FILM GRAIN ═══ */
+.film-grain {
+  position: fixed; inset: 0; z-index: 9999;
+  pointer-events: none; opacity: 0.018;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 256px 256px;
+  animation: grainShift 0.5s steps(4) infinite;
+}
+@keyframes grainShift {
+  0% { transform: translate(0, 0); }
+  25% { transform: translate(-2px, 2px); }
+  50% { transform: translate(2px, -2px); }
+  75% { transform: translate(-1px, -1px); }
+  100% { transform: translate(1px, 1px); }
+}
+
+/* ═══ PRELOADER ═══ */
+.preloader {
+  position: fixed; inset: 0; z-index: 100000;
+  background: #0a0c14;
+  display: flex; align-items: center; justify-content: center;
+  flex-direction: column;
+  gap: 40px;
+}
+.pre-logo {
+  width: 100px; height: auto;
+  opacity: 0;
+  filter: url(#preGlow);
+}
+.pre-logo-path {
+  fill: none;
+  stroke: var(--gold);
+  stroke-width: 5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.pre-logo-path.glow-trail {
+  stroke: var(--gold);
+  stroke-width: 12;
+  opacity: 0.3;
+  filter: blur(6px);
+}
+.pre-counter {
+  font-family: 'Makro', Georgia, serif;
+  font-size: 12px;
+  letter-spacing: 0.4em;
+  color: rgba(184,151,106,0);
+  text-transform: uppercase;
+}
+
+/* ═══ NAV ═══ */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 9000;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 52px 80px;
+  background: transparent;
+  transition: background 0.5s, padding 0.5s var(--ease-out), backdrop-filter 0.5s;
+  opacity: 0;
+  color: var(--white);
+  text-shadow: 0 1px 12px rgba(0,0,0,0.25);
+}
+.nav.show { opacity: 1; transition: opacity 0.8s 0.3s, background 0.5s, padding 0.5s var(--ease-out); }
+.nav.scrolled {
+  padding: 14px 48px;
+  background: rgba(10,14,20,0.85);
+  backdrop-filter: blur(40px);
+  -webkit-backdrop-filter: blur(40px);
+}
+.nav.scrolled .nav-logo-text { font-size: 11px; letter-spacing: 0.3em; }
+.nav.scrolled .nav-links li a { font-size: 11px; }
+.nav.scrolled .nav-cta { padding: 10px 28px; font-size: 11px; }
+.nav.scrolled #logoCanvas { width: 22px; height: 22px; }
+.nav-logo { display: flex; align-items: center; gap: 18px; }
+.nav-logo svg { height: 24px; width: auto; display: none; }
+.nav-logo-text {
+  font-size: 18px; font-weight: 500;
+  letter-spacing: 0.4em; text-transform: uppercase;
+  transition: font-size 0.5s var(--ease-out), letter-spacing 0.5s var(--ease-out);
+}
+.nav-links { display: flex; align-items: center; gap: 56px; list-style: none; }
+.nav-links li a {
+  font-size: 15px; font-weight: 400;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  color: rgba(255,255,255,0.6);
+  transition: color 0.3s, font-size 0.5s var(--ease-out);
+  position: relative;
+}
+.nav-links li a::after {
+  content: ''; position: absolute; bottom: -4px; left: 0;
+  width: 0; height: 1px; background: var(--white);
+  transition: width 0.4s var(--ease-out);
+}
+.nav-links li a:hover { color: var(--white); }
+.nav-links li a:hover::after { width: 100%; }
+.nav-cta {
+  padding: 14px 38px;
+  border: 1px solid rgba(255,255,255,0.15);
+  transition: all 0.5s var(--ease-out);
+}
+.nav-cta::after { display: none; }
+.nav-cta:hover { background: var(--white); color: var(--navy); border-color: var(--white); }
+.mobile-toggle { display: none; background: none; border: none; cursor: pointer; }
+.mobile-menu {
+  position: fixed; inset: 0; z-index: 8999;
+  background: var(--navy);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 48px;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.4s;
+}
+.mobile-menu.open { opacity: 1; pointer-events: all; }
+.mobile-menu a {
+  font-family: 'Makro', Georgia, serif;
+  font-size: 28px; font-weight: 500;
+  letter-spacing: 0.06em; text-transform: uppercase;
+  transition: color 0.3s;
+}
+.mobile-menu a:hover { color: var(--gold); }
+.mobile-close {
+  position: absolute; top: 32px; right: 48px;
+  background: none; border: none; cursor: pointer;
+}
+
+/* ═══ HERO — FULL-BLEED IMAGE ═══ */
+.hero-flight {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  min-height: 700px;
+  overflow: hidden;
+  z-index: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#skyCanvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+.hero-vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 85% 85% at 50% 50%, transparent 40%, rgba(0,0,0,0.2) 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+.hero-overlay {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 0 24px;
+}
+.hero-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: rgba(184,151,106,0.9);
+  margin-bottom: 20px;
+  text-shadow: 0 1px 12px rgba(0,0,0,0.3);
+}
+.hero-title {
+  font-family: 'Italiana', Georgia, serif;
+  font-size: clamp(52px, 8vw, 96px);
+  font-weight: 400;
+  color: #ffffff;
+  line-height: 1.0;
+  margin: 0;
+  letter-spacing: 0.02em;
+  text-shadow: 0 2px 30px rgba(0,0,0,0.2);
+}
+.hero-divider {
+  width: 56px;
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(184,151,106,0.8), transparent);
+  margin: 32px 0;
+}
+.hero-tagline {
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  font-weight: 300;
+  color: rgba(255,255,255,0.9);
+  line-height: 1.5;
+  margin: 0;
+  text-shadow: 0 1px 12px rgba(0,0,0,0.2);
+}
+.hero-sub {
+  font-family: 'Inter', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  color: rgba(255,255,255,0.5);
+  margin-top: 20px;
+  text-shadow: 0 1px 8px rgba(0,0,0,0.2);
+}
+.hero-scroll-indicator {
+  position: absolute;
+  bottom: 36px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  z-index: 2;
+}
+.hero-scroll-indicator span {
+  font-family: 'Inter', sans-serif;
+  font-size: 8px;
+  letter-spacing: 0.3em;
+  color: rgba(255,255,255,0.45);
+  text-transform: uppercase;
+  text-shadow: 0 1px 6px rgba(0,0,0,0.2);
+}
+.hero-scroll-line {
+  width: 1px;
+  height: 28px;
+  background: linear-gradient(to bottom, rgba(255,255,255,0.45), transparent);
+  animation: scrollPulse 2s ease-in-out infinite;
+}
+@keyframes scrollPulse {
+  0%, 100% { opacity: 0.3; transform: scaleY(1); }
+  50% { opacity: 0.8; transform: scaleY(1.15); }
+}
+
+/* 3D Crystal Logo Canvas */
+#logoCanvas {
+  width: 42px;
+  height: 42px;
+  display: block;
+  opacity: 0;
+  transition: opacity 0.5s ease, width 0.5s var(--ease-out), height 0.5s var(--ease-out);
+}
+
+/* ═══ MARQUEE ═══ */
+.marquee-section {
+  border-top: 1px solid var(--border-light);
+  border-bottom: 1px solid var(--border-light);
+  background: #E2E0DA;
+  overflow: hidden;
+  padding: 20px 0;
+}
+.marquee-track {
+  display: flex; width: max-content;
+  animation: marqueeScroll 35s linear infinite;
+}
+.marquee-section:hover .marquee-track { animation-play-state: paused; }
+.marquee-item {
+  font-family: 'Italiana', Georgia, serif;
+  font-size: 15px; letter-spacing: 0.06em;
+  color: rgba(12,18,32,0.55);
+  white-space: nowrap;
+  padding: 0 24px;
+  display: flex; align-items: center; gap: 24px;
+  transition: color 0.3s;
+}
+.marquee-section:hover .marquee-item { color: rgba(12,18,32,0.70); }
+.marquee-dot {
+  width: 3px; height: 3px; border-radius: 50%;
+  background: rgba(12,18,32,0.35);
+  flex-shrink: 0;
+}
+@keyframes marqueeScroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* ═══ STATS BAR (removed) ═══
+.stats-bar { display: none; }
+.stat-num {
+}
+.stat-num .gold { color: var(--gold); }
+.stat-desc { display: none; }
+*/
+
+/* ═══ ABOUT ═══ */
+.about {
+  display: grid; grid-template-columns: 1fr 1fr;
+  min-height: 90vh;
+}
+.about-img {
+  position: relative; overflow: hidden; min-height: 600px;
+}
+.about-img img {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%; object-fit: cover;
+}
+.about-img-reveal {
+  position: absolute; inset: 0;
+  background: var(--bg);
+  transform-origin: right;
+  z-index: 2;
+}
+.about-text {
+  display: flex; flex-direction: column; justify-content: center;
+  padding: clamp(48px, 8vw, 100px) clamp(32px, 6vw, 80px);
+  background: var(--white);
+}
+
+/* ═══ GLOBE SECTION ═══ */
+.globe-section {
+  background: var(--bg);
+  padding: clamp(80px, 10vw, 140px) clamp(24px, 5vw, 64px);
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid var(--border-light);
+}
+.globe-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(40px, 5vw, 80px);
+  align-items: center;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+.globe-text {
+  display: flex; flex-direction: column; justify-content: center;
+}
+.globe-section .section-title {
+  color: var(--text-dark);
+  margin-bottom: 20px;
+}
+.globe-subtitle {
+  font-size: 16px; font-weight: 300; line-height: 1.8;
+  color: var(--text-body-dark);
+  max-width: 440px;
+  margin-bottom: 48px;
+}
+.globe-cities {
+  display: flex; flex-direction: column; gap: 20px;
+}
+.globe-city {
+  display: flex; align-items: center; gap: 16px;
+  padding-left: 16px;
+  border-left: 2px solid var(--gold);
+}
+.globe-city-name {
+  font-family: 'Makro', Georgia, serif;
+  font-size: 16px; font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-dark);
+}
+.globe-city-dot {
+  width: 4px; height: 4px; border-radius: 50%;
+  background: var(--gold);
+  flex-shrink: 0;
+  opacity: 0.5;
+}
+.globe-city-label {
+  font-size: 10px; letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-body-dark);
+  opacity: 0.5;
+}
+.globe-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+  max-width: 580px;
+  justify-self: center;
+}
+.globe-canvas {
+  width: 100%;
+  height: 100%;
+}
+.label {
+  font-size: 10px; font-weight: 500;
+  letter-spacing: 0.3em; text-transform: uppercase;
+  color: var(--gold);
+  display: flex; align-items: center; gap: 16px;
+  margin-bottom: 28px;
+}
+.label::before { content: ''; width: 32px; height: 1px; background: var(--gold); }
+.section-title {
+  font-family: 'Makro', Georgia, serif;
+  font-weight: 500; text-transform: uppercase;
+  letter-spacing: 0.02em; line-height: 1.05;
+  font-size: clamp(32px, 4.5vw, 60px);
+}
+.about-text .section-title { color: var(--navy); margin-bottom: 32px; }
+.body-text {
+  font-size: 17px; font-weight: 300; line-height: 1.8;
+  color: #4A5568; max-width: 480px;
+}
+.body-text + .body-text { margin-top: 20px; }
+.about-quote {
+  margin-top: 48px; padding-top: 40px;
+  border-top: 1px solid rgba(0,0,0,0.08);
+}
+.about-quote p {
+  font-family: 'Makro', Georgia, serif;
+  font-size: 20px; font-weight: 500;
+  line-height: 1.6; color: var(--navy);
+  font-style: italic;
+}
+.about-quote cite {
+  display: block; margin-top: 16px;
+  font-style: normal; font-size: 10px;
+  letter-spacing: 0.25em; text-transform: uppercase;
+  color: var(--gold);
+}
+
+/* ═══ BOLT DIVIDER ═══ */
+.bolt-divider {
+  padding: 80px 0;
+  display: flex; justify-content: center;
+  background: var(--bg);
+}
+.bolt-divider svg { width: 60px; height: auto; }
+.bolt-divider path {
+  fill: none;
+  stroke: rgba(184,151,106,0.6);
+  stroke-width: 6;
+}
+
+/* ═══ VIDEO TEXT — SCROLL ZOOM REVEAL ═══ */
+.vtext {
+  position: relative;
+  background: var(--bg);
+  display: flex; align-items: center; justify-content: center;
+  padding: clamp(60px, 8vw, 100px) clamp(16px, 4vw, 48px);
+  overflow: hidden;
+}
+.vtext-frame {
+  position: relative;
+  width: 52%;
+  aspect-ratio: 16 / 9;
+  border-radius: 6px;
+  overflow: hidden;
+  will-change: width, border-radius;
+}
+.vtext-frame video {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%; object-fit: cover;
+}
+.vtext-overlay {
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 70% 60% at 50% 50%, rgba(12,18,32,0.10), rgba(12,18,32,0.50));
+  z-index: 1;
+}
+.vtext-mask {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  z-index: 2;
+  opacity: 0;
+  transition: opacity 0.6s;
+}
+.vtext-mask.vis { opacity: 1; }
+.vtext-mask h2 {
+  font-family: 'Inter', -apple-system, sans-serif;
+  font-size: clamp(28px, 5vw, 72px);
+  font-weight: 200; text-transform: uppercase;
+  color: #fff;
+  line-height: 1.05;
+  text-align: center;
+  letter-spacing: 0.08em;
+}
+.vtext-sub {
+  position: absolute; bottom: 10%; left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  font-size: 11px; font-weight: 500;
+  letter-spacing: 0.3em; text-transform: uppercase;
+  color: rgba(12,18,32,0.35);
+  white-space: nowrap;
+}
+@media (max-width: 768px) {
+  .vtext-frame { width: 90%; }
+}
+
+/* ═══ SERVICES ═══ */
+.svc-slide {
+  position: relative; height: 100vh; min-height: 700px;
+  overflow: hidden;
+  display: flex; align-items: center;
+}
+.svc-slide img {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%; object-fit: cover;
+}
+.svc-slide-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(90deg, rgba(12,18,32,0.60) 0%, rgba(12,18,32,0.25) 55%, transparent 100%);
+}
+.svc-slide:nth-child(even) .svc-slide-overlay {
+  background: linear-gradient(270deg, rgba(12,18,32,0.60) 0%, rgba(12,18,32,0.25) 55%, transparent 100%);
+}
+.svc-text {
+  position: relative; z-index: 2;
+  padding: 48px clamp(32px, 6vw, 100px);
+  max-width: 560px;
+  color: var(--white);
+  border-top: 2px solid transparent;
+  transition: border-color 0.6s var(--ease-out), transform 0.5s var(--ease-out), background 0.5s;
+}
+.svc-text::before {
+  content: ''; position: absolute; top: 0; left: 0;
+  width: 0; height: 2px;
+  background: linear-gradient(90deg, rgba(30,60,140,0.8), var(--gold));
+  transition: width 0.6s var(--ease-out);
+}
+.svc-text::after {
+  content: ''; position: absolute; top: 0; left: 0; right: 0;
+  height: 0; background: linear-gradient(180deg, rgba(184,151,106,0.06), transparent);
+  transition: height 0.5s var(--ease-out);
+  pointer-events: none;
+}
+@media (hover: hover) {
+  .svc-text:hover { transform: translateY(-4px); }
+  .svc-text:hover::before { width: 100%; }
+  .svc-text:hover::after { height: 200px; }
+  .svc-text:hover h3 { color: rgba(140,170,255,0.9); }
+}
+.svc-slide:nth-child(even) .svc-text {
+  margin-left: auto;
+}
+.svc-num {
+  font-family: 'Makro', Georgia, serif;
+  font-size: clamp(60px, 8vw, 100px);
+  font-weight: 500;
+  color: rgba(255,255,255,0.25);
+  line-height: 1; margin-bottom: -8px;
+}
+.svc-text h3 {
+  font-family: 'Makro', Georgia, serif;
+  font-size: clamp(28px, 4vw, 52px);
+  font-weight: 500; text-transform: uppercase;
+  letter-spacing: 0.02em; line-height: 1.1;
+  margin-bottom: 24px;
+  transition: color 0.4s;
+}
+.svc-text p {
+  font-size: 15px; font-weight: 300; line-height: 1.85;
+  color: var(--text-body); max-width: 440px;
+}
+.svc-link {
+  display: inline-flex; align-items: center; gap: 12px;
+  margin-top: 36px; font-size: 11px; font-weight: 500;
+  letter-spacing: 0.25em; text-transform: uppercase;
+  color: var(--gold);
+  transition: gap 0.4s var(--ease-out);
+}
+.svc-link:hover { gap: 20px; }
+.svc-link svg { width: 16px; height: 16px; stroke: var(--gold); fill: none; stroke-width: 1.5; }
+
+/* ═══ FLEET GALLERY ═══ */
+.fleet { background: var(--bg-alt); }
+.fleet-header {
+  padding: clamp(60px, 8vw, 100px) clamp(24px, 5vw, 64px) clamp(24px, 3vw, 40px);
+}
+.fleet-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-auto-rows: 45vh;
+  gap: 4px;
+  padding: 0 4px 4px;
+}
+.fleet-item {
+  position: relative; overflow: hidden;
+}
+.fleet-item:nth-child(1) { grid-column: span 2; }
+.fleet-item:nth-child(4) { grid-column: span 2; }
+.fleet-item:nth-child(5) { grid-column: span 2; }
+.fleet-item img, .fleet-item video {
+  width: 100%; height: 100%; object-fit: cover;
+  transition: transform 1.2s var(--ease-out);
+}
+.fleet-item video { background: var(--bg-alt); }
+@media (hover: hover) {
+  .fleet-item:hover img, .fleet-item:hover video { transform: scale(1.03); }
+}
+.fleet-item-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg, transparent 50%, rgba(12,18,32,0.4));
+  opacity: 0; transition: opacity 0.4s; pointer-events: none;
+}
+.fleet-item:hover .fleet-item-overlay { opacity: 1; }
+.fleet-item-label {
+  position: absolute; bottom: 20px; left: 20px;
+  font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--white);
+  opacity: 0; transform: translateY(6px);
+  transition: all 0.4s var(--ease-out); pointer-events: none;
+}
+.fleet-item:hover .fleet-item-label { opacity: 1; transform: translateY(0); }
+
+/* ═══ QUOTE ═══ */
+.quote-section {
+  position: relative; overflow: hidden;
+  background: var(--bg);
+  padding: clamp(100px, 15vw, 200px) clamp(24px, 8vw, 120px);
+  display: flex; align-items: center; justify-content: center;
+}
+.quote-big-mark {
+  position: absolute; top: 10%; left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Makro', Georgia, serif;
+  font-size: clamp(200px, 30vw, 500px);
+  color: rgba(12,18,32,0.04);
+  line-height: 1; pointer-events: none;
+  user-select: none;
+}
+.quote-inner { max-width: 900px; text-align: center; position: relative; z-index: 1; }
+.quote-text {
+  font-family: 'Makro', Georgia, serif;
+  font-size: clamp(24px, 3.5vw, 44px);
+  font-weight: 500; line-height: 1.5;
+  color: var(--text-dark);
+}
+.quote-text .word {
+  opacity: 0.08;
+  transition: opacity 0.5s;
+}
+.quote-text .word.lit { opacity: 1; }
+.quote-text .word.em { color: var(--gold); font-style: italic; }
+.quote-cite {
+  text-align: center; margin-top: 40px;
+  font-size: 10px; letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--gold);
+  opacity: 0;
+  transition: opacity 0.6s;
+}
+.quote-cite.vis { opacity: 1; }
+
+
+/* ═══ FOOTER ═══ */
+.footer {
+  background: var(--bg-alt);
+  border-top: 1px solid var(--border-light);
+  padding: 40px 64px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.footer-logo { display: flex; align-items: center; gap: 12px; }
+.footer-logo svg { height: 18px; }
+.footer-logo svg path { fill: rgba(12,18,32,0.25); }
+.footer-logo span { font-size: 10px; font-weight: 500; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(12,18,32,0.20); }
+.footer-offices { display: flex; gap: 32px; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(12,18,32,0.15); }
+.footer-copy { font-size: 10px; color: rgba(12,18,32,0.12); }
+
+/* ═══ REVEAL UTILITY ═══ */
+.reveal {
+  opacity: 0; transform: translateY(30px);
+  transition: opacity 0.9s var(--ease-out), transform 0.9s var(--ease-out);
+}
+.reveal.vis { opacity: 1; transform: translateY(0); }
+/* Stagger delays for grouped elements */
+.fleet-item.reveal:nth-child(2) { transition-delay: 0.08s; }
+.fleet-item.reveal:nth-child(3) { transition-delay: 0.16s; }
+.fleet-item.reveal:nth-child(4) { transition-delay: 0.24s; }
+.fleet-item.reveal:nth-child(5) { transition-delay: 0.32s; }
+.fleet-item.reveal:nth-child(6) { transition-delay: 0.40s; }
+
+/* ═══ RESPONSIVE ═══ */
+@media (max-width: 1024px) {
+  .nav { padding: 20px 24px; }
+  .nav.scrolled { padding: 14px 24px; }
+  .nav-links { display: none; }
+  .mobile-toggle { display: block; }
+  .about { grid-template-columns: 1fr; }
+  .about-img { min-height: 50vh; }
+  .about-text { padding: 64px 32px; }
+  .globe-layout { grid-template-columns: 1fr; text-align: center; }
+  .globe-text .label { justify-content: center; }
+  .globe-wrap { max-width: 340px; }
+  .globe-cities { align-items: center; }
+  .globe-subtitle { margin-left: auto; margin-right: auto; }
+  .svc-slide { min-height: auto; height: auto; padding: 80px 0; }
+  .svc-slide-overlay { background: rgba(12,18,32,0.50) !important; }
+  .svc-text { max-width: 100%; margin: 0 !important; padding: 0 32px; }
+  .stats-bar { grid-template-columns: repeat(2, 1fr); }
+  .stat-cell { border-bottom: 1px solid var(--border-light); }
+  .fleet-grid { grid-template-columns: 1fr 1fr; grid-auto-rows: 35vh; }
+  .fleet-item:nth-child(1),
+  .fleet-item:nth-child(4),
+  .fleet-item:nth-child(5) { grid-column: span 2; }
+  .footer { padding: 32px 24px; flex-direction: column; gap: 20px; text-align: center; }
+  .footer-offices { justify-content: center; }
+  .mobile-close { right: 24px; }
+}
+@media (max-width: 640px) {
+  .fleet-grid { grid-template-columns: 1fr; grid-auto-rows: 40vh; }
+  .fleet-item:nth-child(1),
+  .fleet-item:nth-child(4),
+  .fleet-item:nth-child(5) { grid-column: span 1; }
+  .btn-line, .btn-gold { width: 100%; justify-content: center; text-align: center; }
+  .hero-cta-wrap { padding: 0 20px; }
+}
+
+/* ═══ PLANE SCROLL ═══ */
+.plane-scroll {
+  position: relative;
+  height: 100vh;
+  background: #08090e;
+}
+/* Top & bottom gradient fades */
+.plane-scroll::before,
+.plane-scroll::after {
+  content: '';
+  position: absolute;
+  left: 0; right: 0;
+  height: 160px;
+  pointer-events: none;
+  z-index: 2;
+}
+.plane-scroll::before {
+  top: 0;
+  background: linear-gradient(to bottom, #08090e 0%, transparent 100%);
+}
+.plane-scroll::after {
+  bottom: 0;
+  background: linear-gradient(to top, #08090e 0%, transparent 100%);
+}
+.plane-scroll-sticky {
+  width: 100%; height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  overflow: hidden;
+}
+
+/* ─── LEFT INFO PANEL ─── */
+.plane-info-col {
+  display: flex; flex-direction: column;
+  justify-content: center;
+  padding: 0 clamp(32px, 6vw, 100px);
+  position: relative;
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+.plane-info-col.is-switching {
+  opacity: 0;
+  transform: translateY(14px);
+}
+.plane-info-label {
+  font-size: 10px; letter-spacing: 0.28em; color: var(--gold);
+  text-transform: uppercase; margin-bottom: 18px;
+  display: flex; align-items: center; gap: 10px;
+}
+.plane-info-label::before {
+  content: ''; width: 28px; height: 1px; background: var(--gold); opacity: 0.6;
+}
+.plane-info-name {
+  font-family: var(--font-display, 'Italiana', serif);
+  font-size: clamp(36px, 4.5vw, 64px);
+  color: #fff; line-height: 1.1; margin: 0 0 12px;
+  transition: opacity 0.4s;
+}
+.plane-info-desc {
+  font-size: 14px; font-weight: 300; color: rgba(255,255,255,0.45);
+  line-height: 1.75; margin-bottom: 36px; max-width: 340px;
+  transition: opacity 0.4s;
+}
+.plane-stats {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 16px 28px; margin-bottom: 28px;
+}
+.plane-stat { border-top: 1px solid rgba(255,255,255,0.08); padding-top: 12px; }
+.plane-stat-val {
+  font-size: 22px; font-weight: 300; color: #fff;
+  letter-spacing: 0.02em; line-height: 1;
+}
+.plane-stat-key {
+  font-size: 10px; letter-spacing: 0.18em; color: rgba(255,255,255,0.35);
+  text-transform: uppercase; margin-top: 5px;
+}
+
+/* ─── NAV ROW ─── */
+.plane-nav-row {
+  display: flex; align-items: center; gap: 12px;
+}
+.plane-nav {
+  width: 44px; height: 44px; border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.15);
+  background: rgba(255,255,255,0.06);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: all 0.2s; color: rgba(255,255,255,0.7);
+}
+.plane-nav:hover {
+  background: rgba(184,151,106,0.18); border-color: rgba(184,151,106,0.6);
+  color: #B8976A;
+}
+.plane-nav svg { width: 18px; height: 18px; }
+.plane-counter {
+  display: flex; gap: 7px; align-items: center; margin-left: 4px;
+}
+.plane-counter-dot {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: rgba(255,255,255,0.2); transition: all 0.3s;
+}
+.plane-counter-dot.active { background: var(--gold, #B8976A); transform: scale(1.5); }
+
+/* ─── BLUEPRINT TOGGLE ─── */
+.blueprint-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 24px;
+  padding: 10px 24px;
+  border: 1px solid rgba(184,151,106,0.35);
+  background: rgba(184,151,106,0.06);
+  color: var(--gold);
+  font-family: 'Inter', monospace;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s var(--ease-out);
+}
+.blueprint-toggle:hover {
+  border-color: var(--gold);
+  background: rgba(184,151,106,0.12);
+}
+
+/* ─── X-RAY SCANNER SECTION ─── */
+.xray-section {
+  background: var(--bg);
+  padding-top: clamp(60px, 8vw, 100px);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+.xray-header {
+  text-align: center;
+  margin-bottom: clamp(24px, 3vw, 40px);
+  padding: 0 clamp(24px, 5vw, 64px);
+}
+.xray-header .label { justify-content: center; }
+.xray-header .section-title { color: var(--navy); }
+.xray-viewport {
+  position: relative;
+  flex: 1;
+  overflow: hidden;
+}
+.xray-wrap {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(900px, 100%);
+}
+.xray-exterior, .xray-interior {
+  width: 100%;
+  display: block;
+}
+.xray-interior {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  clip-path: inset(0% 0 100% 0);
+}
+.xray-line {
+  position: absolute;
+  left: 5%; right: 5%;
+  height: 1.5px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  opacity: 0;
+  pointer-events: none;
+  box-shadow: 0 0 12px rgba(184,151,106,0.4);
+  transition: opacity 0.3s;
+  z-index: 2;
+}
+
+/* ─── BLUEPRINT PANEL ─── */
+.blueprint-panel {
+  background: #08090e;
+  max-height: 0;
+  overflow: hidden;
+  background-image:
+    linear-gradient(rgba(184,151,106,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(184,151,106,0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+.blueprint-panel.active {
+  max-height: none;
+  overflow: visible;
+}
+.blueprint-inner {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: clamp(40px, 6vw, 80px) clamp(24px, 5vw, 64px);
+  position: relative;
+}
+.blueprint-close {
+  position: absolute;
+  top: clamp(16px, 3vw, 40px);
+  right: clamp(16px, 3vw, 40px);
+  width: 40px;
+  height: 40px;
+  border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.03);
+  color: rgba(255,255,255,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s;
+  z-index: 2;
+}
+.blueprint-close:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+.blueprint-title-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+.blueprint-title-line {
+  flex: 1;
+  height: 1px;
+  background: rgba(184,151,106,0.2);
+}
+.blueprint-title-text {
+  font-size: 9px;
+  letter-spacing: 0.4em;
+  color: rgba(184,151,106,0.5);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.blueprint-aircraft-name {
+  font-family: 'Italiana', serif;
+  font-size: clamp(28px, 3.5vw, 44px);
+  color: #fff;
+  text-align: center;
+  margin: 0 0 4px;
+}
+.blueprint-category {
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  color: var(--gold);
+  text-transform: uppercase;
+  text-align: center;
+  margin-bottom: 40px;
+}
+.blueprint-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  flex: 1;
+}
+.blueprint-group {
+  border: 1px solid rgba(184,151,106,0.08);
+  padding: 20px;
+}
+.blueprint-group-title {
+  font-size: 9px;
+  letter-spacing: 0.35em;
+  color: var(--gold);
+  text-transform: uppercase;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.blueprint-group-title::before {
+  content: '';
+  width: 16px;
+  height: 1px;
+  background: var(--gold);
+  opacity: 0.5;
+}
+.blueprint-spec {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 7px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+.blueprint-spec:last-child { border-bottom: none; }
+.blueprint-spec-key {
+  font-size: 11px;
+  color: rgba(255,255,255,0.4);
+  letter-spacing: 0.05em;
+}
+.blueprint-spec-val {
+  font-family: 'Inter', monospace;
+  font-size: 13px;
+  font-weight: 400;
+  color: #fff;
+  letter-spacing: 0.03em;
+  font-variant-numeric: tabular-nums;
+}
+.blueprint-spec-unit {
+  font-size: 10px;
+  color: rgba(255,255,255,0.2);
+  margin-left: 6px;
+}
+.blueprint-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 40px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(184,151,106,0.12);
+  font-size: 8px;
+  letter-spacing: 0.3em;
+  color: rgba(184,151,106,0.35);
+  text-transform: uppercase;
+}
+.blueprint-footer-sep {
+  width: 20px;
+  height: 1px;
+  background: rgba(184,151,106,0.15);
+}
+/* ─── RIGHT CANVAS COL ─── */
+.plane-canvas-col {
+  display: flex; align-items: center; justify-content: center;
+  position: relative;
+}
+.plane-canvas-wrap {
+  position: relative;
+  width: min(90%, 640px);
+  height: min(90%, 640px);
+}
+/* ─── AMBIENT GLOW BEHIND PLANE ─── */
+.plane-canvas-col::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 60% 50% at 50% 55%, rgba(184,151,106,0.10) 0%, transparent 70%);
+  pointer-events: none;
+}
+#planeCanvas {
+  width: 100%; height: 100%;
+  display: block;
+  cursor: grab;
+}
+.plane-fallback {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 12px; pointer-events: none;
+}
+.plane-fallback p {
+  font-size: 12px; font-weight: 300; letter-spacing: 0.22em;
+  text-transform: uppercase; color: rgba(80,80,80,0.5);
+}
+.plane-fallback code {
+  font-size: 11px; color: var(--gold);
+  background: rgba(184,151,106,0.08);
+  padding: 4px 14px; border-radius: 4px; letter-spacing: 0.06em;
+}
+
+/* ═══ STORY SPLIT SECTIONS ═══ */
+.story-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 70vh;
+}
+.story-section.reverse { direction: rtl; }
+.story-section.reverse > * { direction: ltr; }
+.story-img {
+  position: relative;
+  overflow: hidden;
+  min-height: 500px;
+}
+.story-img img {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%; object-fit: cover;
+  transition: transform 1.2s var(--ease-out);
+}
+.story-img:hover img { transform: scale(1.04); }
+.story-text {
+  display: flex; flex-direction: column; justify-content: center;
+  padding: clamp(48px, 8vw, 100px) clamp(32px, 6vw, 80px);
+  background: var(--bg-alt);
+}
+.story-section:nth-child(even) .story-text { background: var(--white); }
+.story-text .section-title { font-size: clamp(28px, 3.5vw, 48px); color: var(--navy); margin-bottom: 24px; }
+.story-text .body-text { max-width: 400px; }
+.story-detail {
+  margin-top: 32px;
+  display: flex; gap: 32px;
+}
+.story-detail-item {
+  display: flex; flex-direction: column; gap: 4px;
+}
+.story-detail-num {
+  font-family: 'Makro', Georgia, serif;
+  font-size: 28px; font-weight: 500;
+  color: var(--gold); line-height: 1;
+}
+.story-detail-label {
+  font-size: 9px; letter-spacing: 0.25em;
+  text-transform: uppercase; color: var(--text-body-dark);
+}
+@media (max-width: 900px) {
+  .story-section { grid-template-columns: 1fr; }
+  .story-section.reverse { direction: ltr; }
+  .story-img { min-height: 55vw; }
+}
+
+/* ═══ FLEET — SYMMETRIC ═══ */
+.fleet-grid-sym {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, 48vh);
+  gap: 4px;
+  padding: 0 4px 4px;
+}
+.fleet-grid-sym .fleet-item { grid-column: span 1; }
+@media (max-width: 768px) {
+  .fleet-grid-sym { grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(3, 38vh); }
+}
+
+/* ═══ MOBILE — COMPREHENSIVE ═══ */
+@media (max-width: 768px) {
+
+  /* ── Hero ── */
+
+  /* ── Nav ── */
+  .mobile-toggle { cursor: pointer; }
+  .mobile-close { cursor: pointer; }
+
+  /* ── About ── */
+  .about-img { min-height: 55vw; }
+  .about-text { padding: 48px 24px; }
+
+  /* ── Globe ── */
+  .globe-section { padding: clamp(60px, 8vw, 100px) 24px; }
+  .globe-wrap { max-width: 300px; }
+
+  /* ── Plane section — stack vertically ── */
+  .plane-scroll { height: auto; min-height: 100svh; }
+  .plane-scroll::before, .plane-scroll::after { height: 80px; }
+  .plane-scroll-sticky {
+    grid-template-columns: 1fr;
+    height: auto;
+    min-height: 100svh;
+  }
+  .plane-canvas-col {
+    height: 52vw;
+    min-height: 220px;
+    max-height: 340px;
+  }
+  .plane-canvas-wrap { width: 92%; height: 92%; }
+  .plane-info-col {
+    padding: 20px 28px 48px;
+    justify-content: flex-start;
+  }
+  .plane-info-name { font-size: clamp(28px, 8vw, 48px); }
+  .plane-info-desc { font-size: 13px; margin-bottom: 24px; }
+  .plane-stats { gap: 12px 20px; margin-bottom: 28px; }
+  .plane-stat-val { font-size: 18px; }
+
+  /* ── Blueprint ── */
+  .blueprint-inner { padding: 32px 20px; }
+  .blueprint-grid { grid-template-columns: 1fr; }
+  .blueprint-aircraft-name { font-size: 28px; }
+  .blueprint-close { top: 12px; right: 12px; }
+
+  /* ── Services ── */
+  .svc-slide { padding: 80px 0; }
+  .svc-text { padding: 0 24px !important; max-width: 100%; }
+  .svc-num { font-size: clamp(48px, 12vw, 72px); }
+  .svc-text h3 { font-size: clamp(24px, 6vw, 40px); }
+
+  /* ── Story sections ── */
+  .story-text { padding: 48px 24px; }
+
+  /* ── Fleet ── */
+  .fleet-header { padding: clamp(48px, 8vw, 80px) 24px clamp(16px, 3vw, 32px); }
+
+  /* ── Quote ── */
+  .quote-section { padding: clamp(72px, 12vw, 120px) 24px; }
+  .quote-big-mark { font-size: 45vw; top: 5%; }
+
+  /* ── Contact ── */
+  .contact { padding: clamp(64px, 10vw, 120px) 24px; }
+  .contact-btn { padding: 14px 24px; font-size: 12px; }
+
+  /* ── Footer ── */
+  .footer { padding: 32px 24px; }
+  .footer-offices { display: none; }
+}
+
+@media (max-width: 480px) {
+  /* ── Hero ── */
+  .hero-flight { min-height: 100svh; }
+
+  /* ── Services ── */
+  .svc-slide { padding: 64px 0; }
+  .svc-text p { font-size: 14px; }
+
+  /* ── Plane ── */
+  .plane-canvas-col { min-height: 200px; }
+  .plane-info-col { padding: 16px 20px 40px; }
+
+  /* ── Fleet ── */
+  .fleet-grid-sym {
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(6, 56vw);
+  }
+  .fleet-item.reveal:nth-child(n) { transition-delay: 0s; }
+
+  /* ── Story ── */
+  .story-img { min-height: 60vw; }
+  .story-detail { gap: 20px; }
+  .story-detail-num { font-size: 22px; }
+
+  /* ── Contact form ── */
+  .contact-btn { padding: 16px 20px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ FLOATING GRADIENT MESH ═══ -->
+<div class="gradient-mesh" aria-hidden="true">
+  <div class="mesh-orb mesh-orb-1"></div>
+  <div class="mesh-orb mesh-orb-2"></div>
+  <div class="mesh-orb mesh-orb-3"></div>
+</div>
+
+<!-- ═══ FILM GRAIN ═══ -->
+<div class="film-grain" aria-hidden="true"></div>
+
+<!-- ═══ CUSTOM CURSOR ═══ -->
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- ═══ PRELOADER ═══ -->
+<div class="preloader" id="preloader">
+  <svg class="pre-logo" id="preLogo" viewBox="0 0 362 448" fill="none">
+    <defs>
+      <filter id="preGlow" x="-50%" y="-50%" width="200%" height="200%">
+        <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="blur"/>
+        <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+      </filter>
+    </defs>
+    <!-- Glow trail layer -->
+    <path class="pre-logo-path glow-trail" d="M200.264 1.188L0.618 225.27C0.263 225.669 0.066 226.185 0.066 226.719V330.356C0.066 331.558 1.041 332.533 2.244 332.533H153.334C154.536 332.533 155.511 331.558 155.511 330.356V258.665C155.511 257.463 154.536 256.488 153.334 256.488H79.937C78.042 256.488 77.051 254.236 78.332 252.839L203.494 116.334C203.862 115.933 204.067 115.408 204.067 114.863V2.637C204.067 0.636 201.595-0.306 200.264 1.188Z"/>
+    <path class="pre-logo-path glow-trail" d="M161.803 446.69L361.449 222.608C361.804 222.21 362 221.694 362 221.16V117.523C362 116.32 361.025 115.346 359.823 115.346H208.733C207.531 115.346 206.556 116.32 206.556 117.523V189.214C206.556 190.416 207.531 191.391 208.733 191.391H282.13C284.025 191.391 285.015 193.643 283.735 195.04L158.572 331.545C158.204 331.946 158 332.471 158 333.016V445.242C158 447.243 160.472 448.184 161.803 446.69Z"/>
+    <!-- Main crisp stroke layer -->
+    <path class="pre-logo-path" id="prePath1" d="M200.264 1.188L0.618 225.27C0.263 225.669 0.066 226.185 0.066 226.719V330.356C0.066 331.558 1.041 332.533 2.244 332.533H153.334C154.536 332.533 155.511 331.558 155.511 330.356V258.665C155.511 257.463 154.536 256.488 153.334 256.488H79.937C78.042 256.488 77.051 254.236 78.332 252.839L203.494 116.334C203.862 115.933 204.067 115.408 204.067 114.863V2.637C204.067 0.636 201.595-0.306 200.264 1.188Z"/>
+    <path class="pre-logo-path" id="prePath2" d="M161.803 446.69L361.449 222.608C361.804 222.21 362 221.694 362 221.16V117.523C362 116.32 361.025 115.346 359.823 115.346H208.733C207.531 115.346 206.556 116.32 206.556 117.523V189.214C206.556 190.416 207.531 191.391 208.733 191.391H282.13C284.025 191.391 285.015 193.643 283.735 195.04L158.572 331.545C158.204 331.946 158 332.471 158 333.016V445.242C158 447.243 160.472 448.184 161.803 446.69Z"/>
+  </svg>
+  <div class="pre-counter" id="preCounter">Loading</div>
+</div>
+
+<!-- ═══ NAV ═══ -->
+<nav class="nav" id="nav">
+  <a href="#" class="nav-logo" id="navLogoLink">
+    <canvas id="logoCanvas" width="64" height="64"></canvas>
+    <span class="nav-logo-text">Spark</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#fleet">Fleet</a></li>
+  </ul>
+  <button class="mobile-toggle" id="menuBtn" aria-label="Menu">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5"><line x1="4" y1="8" x2="20" y2="8"/><line x1="4" y1="16" x2="20" y2="16"/></svg>
+  </button>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <button class="mobile-close" id="menuClose" aria-label="Close">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
+  </button>
+  <a href="#about" class="mob-link">About</a>
+  <a href="#services" class="mob-link">Services</a>
+  <a href="#fleet" class="mob-link">Fleet</a>
+</div>
+
+<!-- ═══ HERO — 3D SKY + CLOUDS ═══ -->
+<section class="hero-flight" id="hero">
+  <canvas id="skyCanvas"></canvas>
+  <div class="hero-vignette"></div>
+  <div class="hero-overlay">
+    <p class="hero-label">SPARK AVIATION</p>
+    <h1 class="hero-title">Spark Jets</h1>
+    <div class="hero-divider"></div>
+    <p class="hero-tagline">Elevating Excellence in Aviation</p>
+    <p class="hero-sub">Aircraft Sales &middot; Acquisition &middot; Management</p>
+  </div>
+  <div class="hero-scroll-indicator" id="heroScroll">
+    <span>Scroll</span>
+    <div class="hero-scroll-line"></div>
+  </div>
+</section>
+
+<!-- ═══ MARQUEE ═══ -->
+<div class="marquee-section">
+  <div class="marquee-track" id="marqueeTrack">
+    <div class="marquee-item">Gulfstream G700<span class="marquee-dot"></span></div>
+    <div class="marquee-item">Bombardier Global 7500<span class="marquee-dot"></span></div>
+    <div class="marquee-item">Dassault Falcon 8X<span class="marquee-dot"></span></div>
+    <div class="marquee-item">Embraer Praetor 600<span class="marquee-dot"></span></div>
+    <div class="marquee-item">Cessna Citation Longitude<span class="marquee-dot"></span></div>
+    <div class="marquee-item">Pilatus PC-24<span class="marquee-dot"></span></div>
+    <div class="marquee-item">Boeing BBJ<span class="marquee-dot"></span></div>
+    <div class="marquee-item">Hawker 4000<span class="marquee-dot"></span></div>
+    <!-- duplicate for seamless loop -->
+    <div class="marquee-item">Gulfstream G700<span class="marquee-dot"></span></div>
+    <div class="marquee-item">Bombardier Global 7500<span class="marquee-dot"></span></div>
+    <div class="marquee-item">Dassault Falcon 8X<span class="marquee-dot"></span></div>
+    <div class="marquee-item">Embraer Praetor 600<span class="marquee-dot"></span></div>
+    <div class="marquee-item">Cessna Citation Longitude<span class="marquee-dot"></span></div>
+    <div class="marquee-item">Pilatus PC-24<span class="marquee-dot"></span></div>
+    <div class="marquee-item">Boeing BBJ<span class="marquee-dot"></span></div>
+    <div class="marquee-item">Hawker 4000<span class="marquee-dot"></span></div>
+  </div>
+</div>
+
+<!-- ═══ ABOUT ═══ -->
+<section id="about">
+  <div class="about">
+    <div class="about-img">
+      <img src="assets/branding/PNG/NBAA_Spark-11.jpg" alt="Blue jet fuselage close-up" style="object-position: center center;">
+      <div class="about-img-reveal" id="aboutReveal"></div>
+    </div>
+    <div class="about-text">
+      <div class="label reveal">The Spark Story</div>
+      <h2 class="section-title reveal">Three Decades of<br>Aviation Excellence</h2>
+      <p class="body-text reveal">Spark Aviation was born from a pilot's conviction that the aircraft transaction experience could be better — more personal, more informed, and built on genuine relationships rather than transactional pressure.</p>
+      <p class="body-text reveal">Founded by Marcelo Borin, a Brazilian-American aviation veteran who spent three decades in the cockpit — including flying U.S. Presidents — Spark brings the precision of a pilot and the care of a trusted advisor to every deal.</p>
+      <div class="about-quote reveal">
+        <p>"I knew how to serve, how to fly, and how to connect with people. That's what this company is built on."</p>
+        <cite>Marcelo Borin — Founder</cite>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ GLOBE — GLOBAL REACH ═══ -->
+<section class="globe-section">
+  <div class="globe-layout">
+    <div class="globe-text">
+      <div class="label reveal">Global Presence</div>
+      <h2 class="section-title reveal">Worldwide<br>Reach</h2>
+      <p class="globe-subtitle reveal">Three decades of trusted relationships across borders, connecting buyers and sellers on every continent.</p>
+      <div class="globe-cities reveal">
+        <div class="globe-city"><div><div class="globe-city-name">Boca Raton</div><div class="globe-city-label">Florida, USA</div></div></div>
+        <div class="globe-city"><div><div class="globe-city-name">São Paulo</div><div class="globe-city-label">Brazil</div></div></div>
+        <div class="globe-city"><div><div class="globe-city-name">Dallas</div><div class="globe-city-label">Texas, USA</div></div></div>
+      </div>
+    </div>
+    <div class="globe-wrap reveal">
+      <canvas id="globeCanvas" class="globe-canvas" width="1000" height="1000"></canvas>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ BOLT DIVIDER ═══ -->
+<!-- ═══ PLANE SCROLL — 3D MODEL ═══ -->
+<section class="plane-scroll" id="planeScroll">
+  <div class="plane-scroll-sticky" id="planeScrollSticky">
+
+    <!-- Left: info + nav -->
+    <div class="plane-info-col">
+      <div class="plane-info-label">The Fleet</div>
+      <h2 class="plane-info-name" id="planeName">Gulfstream G700</h2>
+      <p class="plane-info-desc" id="planeDesc">The pinnacle of ultra-long-range aviation. Engineered for those who demand the extraordinary on every journey.</p>
+      <div class="plane-stats" id="planeStats">
+        <div class="plane-stat"><div class="plane-stat-val">7,750</div><div class="plane-stat-key">Range (nm)</div></div>
+        <div class="plane-stat"><div class="plane-stat-val">Mach .935</div><div class="plane-stat-key">Top Speed</div></div>
+        <div class="plane-stat"><div class="plane-stat-val">19</div><div class="plane-stat-key">Passengers</div></div>
+        <div class="plane-stat"><div class="plane-stat-val">51,000</div><div class="plane-stat-key">Max Altitude (ft)</div></div>
+      </div>
+      <button class="blueprint-toggle" id="blueprintToggle">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" width="16" height="16">
+          <rect x="3" y="3" width="18" height="18" rx="1"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="3" x2="9" y2="21"/>
+        </svg>
+        View Blueprint
+      </button>
+      <div class="plane-nav-row">
+        <button class="plane-nav" id="planePrev" aria-label="Previous">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+        <button class="plane-nav" id="planeNext" aria-label="Next">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 18l6-6-6-6"/></svg>
+        </button>
+        <div class="plane-counter" id="planeCounter">
+          <div class="plane-counter-dot active" data-idx="0"></div>
+          <div class="plane-counter-dot" data-idx="1"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: 3D viewer -->
+    <div class="plane-canvas-col">
+      <div class="plane-canvas-wrap">
+        <canvas id="planeCanvas"></canvas>
+        <div class="plane-fallback" id="planeFallback">
+          <p style="color:rgba(255,255,255,0.3)">Loading</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══ BLUEPRINT PANEL ═══ -->
+<div class="blueprint-panel" id="blueprintOverlay">
+  <div class="blueprint-inner">
+    <button class="blueprint-close" id="blueprintClose" aria-label="Close blueprint">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="20" height="20">
+        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+    <div class="blueprint-header">
+      <div class="blueprint-title-row">
+        <span class="blueprint-title-line"></span>
+        <span class="blueprint-title-text">Technical Specification</span>
+        <span class="blueprint-title-line"></span>
+      </div>
+      <h3 class="blueprint-aircraft-name" id="blueprintName"></h3>
+      <div class="blueprint-category" id="blueprintCategory"></div>
+    </div>
+    <div class="blueprint-grid" id="blueprintGrid"></div>
+    <div class="blueprint-footer">
+      <span>Spark Aviation</span>
+      <span class="blueprint-footer-sep"></span>
+      <span id="blueprintDwg">DWG NO: SA-G700-001</span>
+      <span class="blueprint-footer-sep"></span>
+      <span>Scale: NTS</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ SERVICES ═══ -->
+<section id="services">
+  <div class="svc-slide">
+    <img src="assets/branding/PNG/Spark_Rifle-38.jpg" alt="Stairs open dark fuselage awaiting">
+    <div class="svc-slide-overlay"></div>
+    <div class="svc-text">
+      <div class="svc-num reveal">01</div>
+      <h3 class="reveal">Aircraft<br>Sales</h3>
+      <p class="reveal">We specialize in discreet, high-value jet transactions across the globe. Our curated network and deep market intelligence ensure optimal value and swift closings, whether you're upgrading, transitioning, or exiting ownership.</p>
+    </div>
+  </div>
+  <div class="svc-slide">
+    <img src="assets/branding/PNG/Spark_Rifle-10.jpg" alt="Three-quarter boarding angle">
+    <div class="svc-slide-overlay"></div>
+    <div class="svc-text">
+      <div class="svc-num reveal">02</div>
+      <h3 class="reveal">Aircraft<br>Acquisition</h3>
+      <p class="reveal">From first-time buyers to seasoned owners, we manage every step — from sourcing and negotiation to pre-purchase inspection and entry into service. You define the mission, we deliver the machine.</p>
+    </div>
+  </div>
+  <div class="svc-slide">
+    <img src="assets/branding/PNG/Spark_Rifle-6.jpg" alt="Full cockpit instrument panel">
+    <div class="svc-slide-overlay"></div>
+    <div class="svc-text">
+      <div class="svc-num reveal">03</div>
+      <h3 class="reveal">Aircraft<br>Management</h3>
+      <p class="reveal">Owning a jet should be a privilege — not a burden. Our management services are personalized, transparent, and designed to protect your investment while keeping you flight-ready 24/7.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ STORY SPLIT — JET VIEWS ═══ -->
+<section class="story-section">
+  <div class="story-img reveal">
+    <img src="assets/branding/PNG/Spark_Rifle-34.jpg" alt="Turbine engine close-up" loading="lazy">
+  </div>
+  <div class="story-text">
+    <div class="label reveal">Curated Excellence</div>
+    <h2 class="section-title reveal">Every Aircraft,<br>a Statement</h2>
+    <p class="body-text reveal">We don't just sell jets — we match discerning clients with aircraft that reflect their mission, lifestyle, and ambition. From approach to touchdown, every detail matters.</p>
+    <div class="story-detail reveal">
+      <div class="story-detail-item">
+        <div class="story-detail-num">500<span style="color:var(--gold);font-size:18px;">+</span></div>
+        <div class="story-detail-label">Transactions</div>
+      </div>
+      <div class="story-detail-item">
+        <div class="story-detail-num">44<span style="color:var(--gold);font-size:18px;">+</span></div>
+        <div class="story-detail-label">Countries</div>
+      </div>
+      <div class="story-detail-item">
+        <div class="story-detail-num">$2<span style="color:var(--gold);font-size:18px;">B+</span></div>
+        <div class="story-detail-label">In Deals</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="story-section reverse">
+  <div class="story-img reveal">
+    <img src="assets/branding/PNG/Spark_Rifle-30.jpg" alt="White leather seat oval window clouds" loading="lazy" style="object-position: center center;">
+  </div>
+  <div class="story-text">
+    <div class="label reveal">Pilot's Perspective</div>
+    <h2 class="section-title reveal">Above the World,<br>Below the Clouds</h2>
+    <p class="body-text reveal">Marcelo Borin flew from this vantage point for three decades — including transporting heads of state. He understands what it means to be at altitude, and what it takes to get there.</p>
+    <p class="body-text reveal" style="margin-top:16px;">That perspective shapes every acquisition, every negotiation, every relationship Spark Aviation builds.</p>
+  </div>
+</section>
+
+<!-- ═══ X-RAY CABIN SCANNER ═══ -->
+<section class="xray-section">
+  <div class="xray-header">
+    <div class="label reveal" style="justify-content:center;">Interior Layout</div>
+    <h2 class="section-title reveal" style="color:var(--navy);text-align:center;">Cabin<br>Revealed</h2>
+  </div>
+  <div class="xray-viewport" id="xrayViewport">
+    <div class="xray-wrap" id="xrayWrap">
+      <img class="xray-exterior" src="assets/plane-top.png" alt="Top view exterior">
+      <img class="xray-interior" id="xrayInterior" src="assets/plane_interior_only.png" alt="Cabin interior cutaway">
+    </div>
+    <div class="xray-line xray-line--top" id="xrayLineTop"></div>
+    <div class="xray-line xray-line--bottom" id="xrayLineBot"></div>
+  </div>
+</section>
+
+<!-- ═══ FLEET ═══ -->
+<section id="fleet" class="fleet">
+  <div class="fleet-header"><div class="container"><div class="label reveal">The Gallery</div></div></div>
+  <div class="fleet-grid-sym">
+    <div class="fleet-item reveal"><img src="assets/branding/PNG/NBAA_Spark-2.jpg" alt="Turbine blades sculptural" loading="lazy"><div class="fleet-item-overlay"></div><span class="fleet-item-label">Engineering</span></div>
+    <div class="fleet-item reveal"><img src="assets/branding/PNG/NBAA_Spark-8.jpg" alt="Tail silhouette moon blue sky" loading="lazy"><div class="fleet-item-overlay"></div><span class="fleet-item-label">Silhouette</span></div>
+    <div class="fleet-item reveal"><img src="assets/branding/PNG/Spark_Rifle-7.jpg" alt="Engine nacelle mountains" loading="lazy"><div class="fleet-item-overlay"></div><span class="fleet-item-label">Precision</span></div>
+    <div class="fleet-item reveal"><img src="assets/branding/PNG/Spark_Rifle-29.jpg" alt="Chrome detail" loading="lazy"><div class="fleet-item-overlay"></div><span class="fleet-item-label">Detail</span></div>
+    <div class="fleet-item reveal"><img src="assets/branding/PNG/Spark_Rifle-21.jpg" alt="Wide cabin interior looking aft" loading="lazy"><div class="fleet-item-overlay"></div><span class="fleet-item-label">Interior</span></div>
+    <div class="fleet-item reveal"><img src="assets/branding/PNG/NBAA_Spark-5.jpg" alt="Hangar dramatic strip lights" loading="lazy"><div class="fleet-item-overlay"></div><span class="fleet-item-label">Craft</span></div>
+  </div>
+</section>
+
+<!-- ═══ QUOTE ═══ -->
+<section class="quote-section">
+  <div class="quote-big-mark" aria-hidden="true">&ldquo;</div>
+  <div class="quote-inner">
+    <p class="quote-text" id="quoteText">I came to this country not knowing the language, but I knew how to serve, how to fly, and how to connect with people. That's what this company is built on: relationships, integrity, and a love for |aviation.|</p>
+    <div class="quote-cite" id="quoteCite">Marcelo Borin — Founder, Spark Aviation</div>
+  </div>
+</section>
+
+
+<!-- ═══ FOOTER ═══ -->
+<footer class="footer">
+  <div class="footer-logo">
+    <svg viewBox="0 0 362 448" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M200.264 1.18837L0.61804 225.27C0.262735 225.669 0.0664062 226.185 0.0664062 226.719V227.658V330.356C0.0664062 331.558 1.04122 332.533 2.24371 332.533H153.334C154.536 332.533 155.511 331.558 155.511 330.356V258.665C155.511 257.463 154.536 256.488 153.334 256.488H79.9366C78.042 256.488 77.0514 254.236 78.3318 252.839L203.494 116.334C203.862 115.933 204.067 115.408 204.067 114.863V2.63675C204.067 0.635919 201.595 -0.305547 200.264 1.18837ZM161.803 446.69L361.449 222.608C361.804 222.21 362 221.694 362 221.16V220.221V117.523C362 116.32 361.025 115.346 359.823 115.346H208.733C207.531 115.346 206.556 116.32 206.556 117.523V189.214C206.556 190.416 207.531 191.391 208.733 191.391H282.13C284.025 191.391 285.015 193.643 283.735 195.04L158.572 331.545C158.204 331.946 158 332.471 158 333.016V445.242C158 447.243 160.472 448.184 161.803 446.69Z" fill="rgba(12,18,32,0.25)"/></svg>
+    <span>Spark Aviation</span>
+  </div>
+  <div class="footer-offices"><span>Boca Raton</span><span>São Paulo</span><span>Dallas</span></div>
+  <div class="footer-copy">&copy; 2026 Spark Aviation. All rights reserved.</div>
+</footer>
+
+<script>
+gsap.registerPlugin(ScrollTrigger);
+
+// ═══ CUSTOM CURSOR ═══
+const dot = document.getElementById('cursorDot');
+const ring = document.getElementById('cursorRing');
+let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
+if (window.innerWidth > 1024) {
+  document.addEventListener('mousemove', e => { mouseX = e.clientX; mouseY = e.clientY; dot.style.transform = `translate(${mouseX - 10}px, ${mouseY - 10}px)`; });
+  (function cursorLoop() {
+    ringX += (mouseX - ringX) * 0.08;
+    ringY += (mouseY - ringY) * 0.08;
+    const rSize = ring.classList.contains('hover') ? 40 : 20;
+    ring.style.transform = `translate(${ringX - rSize}px, ${ringY - rSize}px)`;
+    requestAnimationFrame(cursorLoop);
+  })();
+  document.querySelectorAll('a, button, .btn-line, .btn-gold, .nav-cta, .svc-link, .fleet-item, .svc-text').forEach(el => {
+    el.addEventListener('mouseenter', () => { ring.classList.add('hover'); dot.classList.add('hover'); });
+    el.addEventListener('mouseleave', () => { ring.classList.remove('hover'); dot.classList.remove('hover'); });
+  });
+}
+
+// ═══ START LOADING PLANE DATA IMMEDIATELY ═══
+(function() {
+  function ld(src, cb) {
+    var s = document.createElement('script'); s.src = src;
+    s.onload = cb;
+    s.onerror = function() { console.warn('Failed to load:', src); };
+    document.body.appendChild(s);
+  }
+  ld('assets/branding/plane-data.js', function() {
+    PLANE_SOURCES[0] = (typeof PLANE_DATA !== 'undefined') ? PLANE_DATA : PLANE_SOURCES[0];
+    window._planeDataReady = true;
+  });
+})();
+
+// ═══ PRELOADER — CINEMATIC LOGO DRAW ═══
+const preloader = document.getElementById('preloader');
+const preLogo = document.getElementById('preLogo');
+const prePaths = document.querySelectorAll('.pre-logo-path');
+const preCounter = document.getElementById('preCounter');
+
+// Set stroke-dash values from actual path lengths
+prePaths.forEach(function(p) {
+  var len = p.getTotalLength();
+  p.style.strokeDasharray = len;
+  p.style.strokeDashoffset = len;
+});
+
+const preTl = gsap.timeline({
+  onComplete: () => {
+    document.getElementById('nav').classList.add('show');
+    initCrystalLogo();
+    if (window._planeDataReady) {
+      initPlaneViewer();
+    } else {
+      var checkPlane = setInterval(function() {
+        if (window._planeDataReady) { clearInterval(checkPlane); initPlaneViewer(); }
+      }, 100);
+    }
+    // Init 3D sky + clouds
+    initSkyCanvas();
+  }
+});
+preTl
+  // Counter fades in
+  .to(preCounter, { color: 'rgba(184,151,106,0.5)', duration: 0.4 }, 0)
+  // Percentage count-up
+  .to({ v: 0 }, { v: 100, duration: 2.2, ease: 'power1.inOut',
+    onUpdate: function() {
+      preCounter.textContent = Math.round(this.targets()[0].v) + '%';
+    }
+  }, 0.2)
+  // Logo fades in while slowly scaling from small
+  .fromTo(preLogo, { opacity: 0, scale: 0.8 }, { opacity: 1, scale: 1, duration: 0.6, ease: 'power2.out' }, 0.3)
+  // Draw all paths (both glow trails and crisp strokes together)
+  .to(prePaths, { strokeDashoffset: 0, duration: 2, ease: 'power2.inOut', stagger: 0.08 }, 0.4)
+  // Counter fades out
+  .to(preCounter, { color: 'rgba(184,151,106,0)', duration: 0.3 }, 2.2)
+  // Brief pause, then fill reveals
+  .to('#prePath1, #prePath2', { fill: 'rgba(184,151,106,0.9)', duration: 0.5, ease: 'power1.in' }, 2.5)
+  .to(prePaths, { stroke: 'rgba(184,151,106,0)', duration: 0.4 }, 2.6)
+  // Logo zooms in dramatically
+  .to(preLogo, { scale: 20, opacity: 0, duration: 0.8, ease: 'expo.in' }, 3.1)
+  // Background transitions from dark to site color and fades
+  .to(preloader, { background: 'var(--bg)', duration: 0.3 }, 3.1)
+  .to(preloader, { opacity: 0, duration: 0.4, onComplete: () => { preloader.style.display = 'none'; } }, 3.4);
+
+// ═══ NAV SCROLL ═══
+ScrollTrigger.create({
+  start: 80,
+  onUpdate: self => document.getElementById('nav').classList.toggle('scrolled', self.progress > 0)
+});
+
+
+// ═══ ABOUT IMAGE REVEAL (wipe) ═══
+gsap.to('#aboutReveal', {
+  scaleX: 0, duration: 1.2, ease: 'expo.inOut',
+  scrollTrigger: { trigger: '#about', start: 'top 60%', toggleActions: 'play none none none' }
+});
+
+// ═══ SHARED MODEL DATA ═══
+var PLANE_SOURCES = [
+  (typeof PLANE_DATA   !== 'undefined') ? PLANE_DATA   : 'assets/branding/plane.glb',
+  (typeof PLANE_DATA_2 !== 'undefined') ? PLANE_DATA_2 : 'assets/branding/plane2.glb',
+];
+var PLANE_INFO = [
+  { name: 'Gulfstream G700', desc: 'The pinnacle of ultra-long-range aviation. Engineered for those who demand the extraordinary on every journey.',
+    stats: [ { val: '7,750', key: 'Range (nm)' }, { val: 'Mach .935', key: 'Top Speed' }, { val: '19', key: 'Passengers' }, { val: '51,000 ft', key: 'Max Altitude' } ],
+    blueprint: {
+      label: 'G700', category: 'Ultra Long Range',
+      specGroups: [
+        { title: 'Dimensions', specs: [
+          { key: 'Overall Length', val: '109 ft 10 in', unit: '33.50 m' },
+          { key: 'Wingspan', val: '103 ft 0 in', unit: '31.39 m' },
+          { key: 'Overall Height', val: '25 ft 5 in', unit: '7.75 m' },
+          { key: 'Wing Area', val: '1,283 sq ft', unit: null }
+        ]},
+        { title: 'Cabin', specs: [
+          { key: 'Cabin Length', val: '56 ft 11 in', unit: '17.35 m' },
+          { key: 'Cabin Width', val: '8 ft 2 in', unit: '2.49 m' },
+          { key: 'Cabin Height', val: '6 ft 5 in', unit: '1.96 m' },
+          { key: 'Cabin Volume', val: '2,948 cu ft', unit: null },
+          { key: 'Living Areas', val: 'Up to 5', unit: null },
+          { key: 'Baggage', val: '195 cu ft', unit: '5.52 cu m' }
+        ]},
+        { title: 'Performance', specs: [
+          { key: 'Max Range', val: '7,750 nm', unit: '14,353 km' },
+          { key: 'High-Speed Cruise', val: 'Mach 0.90', unit: null },
+          { key: 'Max Operating Speed', val: 'Mach 0.935', unit: null },
+          { key: 'Ceiling', val: '51,000 ft', unit: '15,545 m' },
+          { key: 'Takeoff Distance', val: '6,250 ft', unit: '1,905 m' },
+          { key: 'Landing Distance', val: '2,500 ft', unit: '762 m' }
+        ]},
+        { title: 'Powerplant', specs: [
+          { key: 'Engines', val: '2× Rolls-Royce Pearl 700', unit: null },
+          { key: 'Thrust (each)', val: '18,250 lbf', unit: '81.2 kN' },
+          { key: 'MTOW', val: '107,600 lb', unit: '48,807 kg' }
+        ]}
+      ]
+    }
+  },
+  { name: 'Embraer Praetor 600', desc: 'Super-midsize performance with intercontinental reach. The ideal balance of cabin comfort and operational efficiency.',
+    stats: [ { val: '4,018', key: 'Range (nm)' }, { val: 'Mach .83', key: 'Top Speed' }, { val: '12', key: 'Passengers' }, { val: '45,000 ft', key: 'Max Altitude' } ],
+    blueprint: {
+      label: 'P600', category: 'Super Midsize',
+      specGroups: [
+        { title: 'Dimensions', specs: [
+          { key: 'Overall Length', val: '68 ft 2 in', unit: '20.74 m' },
+          { key: 'Wingspan', val: '70 ft 6 in', unit: '21.49 m' },
+          { key: 'Overall Height', val: '21 ft 1 in', unit: '6.43 m' },
+          { key: 'Wing Area', val: '551 sq ft', unit: null }
+        ]},
+        { title: 'Cabin', specs: [
+          { key: 'Cabin Length', val: '27 ft 6 in', unit: '8.38 m' },
+          { key: 'Cabin Width', val: '6 ft 10 in', unit: '2.08 m' },
+          { key: 'Cabin Height', val: '6 ft 0 in', unit: '1.83 m' },
+          { key: 'Cabin Volume', val: '1,105 cu ft', unit: null },
+          { key: 'Baggage', val: '155 cu ft', unit: '4.39 cu m' }
+        ]},
+        { title: 'Performance', specs: [
+          { key: 'Max Range', val: '4,018 nm', unit: '7,441 km' },
+          { key: 'High-Speed Cruise', val: 'Mach 0.80', unit: null },
+          { key: 'Max Operating Speed', val: 'Mach 0.83', unit: null },
+          { key: 'Ceiling', val: '45,000 ft', unit: '13,716 m' },
+          { key: 'Takeoff Distance', val: '4,717 ft', unit: '1,438 m' },
+          { key: 'Landing Distance', val: '2,086 ft', unit: '636 m' }
+        ]},
+        { title: 'Powerplant', specs: [
+          { key: 'Engines', val: '2× Honeywell HTF7500E', unit: null },
+          { key: 'Thrust (each)', val: '7,528 lbf', unit: '33.5 kN' },
+          { key: 'MTOW', val: '42,858 lb', unit: '19,440 kg' }
+        ]}
+      ]
+    }
+  },
+];
+
+// ═══ 3D SKY + CLOUDS HERO ═══
+function initSkyCanvas() {
+  var canvas = document.getElementById('skyCanvas');
+  if (!canvas || typeof THREE === 'undefined') return;
+
+  var hero = document.getElementById('hero');
+  var w = hero.clientWidth;
+  var h = hero.clientHeight;
+
+  var renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: false });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.setSize(w, h);
+  if (renderer.outputEncoding !== undefined) renderer.outputEncoding = THREE.sRGBEncoding;
+
+  var scene = new THREE.Scene();
+
+  // Sky gradient background
+  var skyCanvas = document.createElement('canvas');
+  skyCanvas.width = 2;
+  skyCanvas.height = 512;
+  var skyCtx = skyCanvas.getContext('2d');
+  var g = skyCtx.createLinearGradient(0, 0, 0, 512);
+  g.addColorStop(0,    'rgb(28, 42, 68)');
+  g.addColorStop(0.2,  'rgb(52, 72, 108)');
+  g.addColorStop(0.4,  'rgb(88, 115, 152)');
+  g.addColorStop(0.6,  'rgb(128, 155, 185)');
+  g.addColorStop(0.75, 'rgb(165, 185, 205)');
+  g.addColorStop(0.9,  'rgb(195, 208, 220)');
+  g.addColorStop(1,    'rgb(210, 220, 230)');
+  skyCtx.fillStyle = g;
+  skyCtx.fillRect(0, 0, 2, 512);
+  var skyTex = new THREE.CanvasTexture(skyCanvas);
+  if (skyTex.encoding !== undefined) skyTex.encoding = THREE.sRGBEncoding;
+  scene.background = skyTex;
+
+  // Camera
+  var cam = new THREE.PerspectiveCamera(70, w / h, 0.1, 200);
+  cam.position.set(0, 5, 8);
+  cam.lookAt(0, 8, -10);
+
+  // Cloud formations
+  var formations = [
+    { cx: -5,  cy: -2,  cz: 3,   sx: 3.0, sy: 1.0, sz: 0.8, n: 14 },
+    { cx:  6,  cy: 0,   cz: 2,   sx: 2.5, sy: 1.0, sz: 0.6, n: 12 },
+    { cx:  0,  cy: 1,   cz: 4,   sx: 3.5, sy: 1.2, sz: 1.0, n: 14 },
+    { cx: -9,  cy: -1,  cz: 1,   sx: 2.5, sy: 0.8, sz: 0.5, n: 10 },
+    { cx:  10, cy: 2,   cz: 2,   sx: 2.5, sy: 0.8, sz: 0.7, n: 12 },
+    { cx: -15, cy: 0,   cz: 3,   sx: 3.0, sy: 1.0, sz: 0.8, n: 10 },
+    { cx: -10, cy: 4,   cz: -4,  sx: 4.0, sy: 1.2, sz: 1.0, n: 14 },
+    { cx:  12, cy: 5,   cz: -6,  sx: 3.5, sy: 1.0, sz: 0.8, n: 12 },
+    { cx:  3,  cy: 6,   cz: -3,  sx: 3.0, sy: 1.0, sz: 0.8, n: 12 },
+    { cx: -6,  cy: 3,   cz: -5,  sx: 3.5, sy: 1.0, sz: 0.7, n: 12 },
+    { cx:  16, cy: 7,   cz: -7,  sx: 3.0, sy: 0.8, sz: 0.8, n: 10 },
+    { cx: -14, cy: 9,   cz: -11, sx: 5.0, sy: 1.5, sz: 1.5, n: 16 },
+    { cx:  0,  cy: 11,  cz: -13, sx: 5.5, sy: 1.5, sz: 1.8, n: 16 },
+    { cx:  10, cy: 10,  cz: -10, sx: 4.5, sy: 1.2, sz: 1.2, n: 14 },
+    { cx: -8,  cy: 12,  cz: -14, sx: 4.0, sy: 1.0, sz: 1.0, n: 12 },
+    { cx: -12, cy: 16,  cz: -20, sx: 7.0, sy: 2.0, sz: 2.5, n: 16 },
+    { cx:  8,  cy: 18,  cz: -22, sx: 6.0, sy: 1.8, sz: 2.0, n: 14 },
+    { cx:  0,  cy: 20,  cz: -25, sx: 8.0, sy: 2.0, sz: 3.0, n: 18 },
+    { cx: -18, cy: 17,  cz: -18, sx: 6.5, sy: 1.5, sz: 2.0, n: 14 },
+    { cx:  16, cy: 21,  cz: -24, sx: 7.0, sy: 2.0, sz: 2.5, n: 14 },
+  ];
+
+  var cloudTexture = new THREE.TextureLoader().load('assets/cloud.png');
+  if (cloudTexture.encoding !== undefined) cloudTexture.encoding = THREE.sRGBEncoding;
+  var spriteGeo = new THREE.PlaneGeometry(1, 1);
+  var cloudGroup = new THREE.Group();
+  var cloudMeshes = [];
+
+  formations.forEach(function(f) {
+    for (var i = 0; i < f.n; i++) {
+      var theta = Math.random() * Math.PI * 2;
+      var phi = Math.acos(2 * Math.random() - 1);
+      var r = Math.pow(Math.random(), 1/3);
+
+      var x = f.cx + f.sx * r * Math.sin(phi) * Math.cos(theta);
+      var y = f.cy + f.sy * r * Math.sin(phi) * Math.sin(theta);
+      var z = f.cz + f.sz * r * Math.cos(phi);
+
+      var baseScale = THREE.MathUtils.lerp(3.5, 1.2, r) * (0.8 + Math.random() * 0.4);
+      var baseOpacity = THREE.MathUtils.lerp(0.25, 0.06, r) * (0.7 + Math.random() * 0.6);
+
+      var mat = new THREE.MeshBasicMaterial({
+        map: cloudTexture,
+        color: new THREE.Color(0.85, 0.88, 0.92),
+        transparent: true,
+        depthWrite: false,
+        depthTest: true,
+        side: THREE.DoubleSide,
+        blending: THREE.NormalBlending,
+        opacity: baseOpacity,
+      });
+
+      var mesh = new THREE.Mesh(spriteGeo, mat);
+      mesh.position.set(x, y, z);
+      mesh.scale.setScalar(baseScale);
+
+      var rotQ = new THREE.Quaternion().setFromAxisAngle(
+        new THREE.Vector3(0, 0, 1),
+        Math.random() * Math.PI * 2
+      );
+
+      cloudMeshes.push({ mesh: mesh, rotQ: rotQ });
+      cloudGroup.add(mesh);
+    }
+  });
+  scene.add(cloudGroup);
+
+  // Resize
+  function resize() {
+    w = hero.clientWidth;
+    h = hero.clientHeight;
+    cam.aspect = w / h;
+    cam.updateProjectionMatrix();
+    renderer.setSize(w, h);
+  }
+  window.addEventListener('resize', resize);
+
+  // Render loop
+  var clock = new THREE.Clock();
+  function tick() {
+    requestAnimationFrame(tick);
+    var t = clock.getElapsedTime();
+
+    cam.position.x = Math.sin(t * 0.03) * 0.5;
+    cam.position.y = 5 + Math.sin(t * 0.02) * 0.3;
+
+    for (var i = 0; i < cloudMeshes.length; i++) {
+      cloudMeshes[i].mesh.quaternion.copy(cam.quaternion);
+      cloudMeshes[i].mesh.quaternion.multiply(cloudMeshes[i].rotQ);
+    }
+
+    renderer.render(scene, cam);
+  }
+  tick();
+
+  // Hero dissolve on scroll
+  gsap.to(hero, {
+    opacity: 0, y: -60, ease: 'none',
+    scrollTrigger: { trigger: hero, start: 'top top', end: 'bottom top', scrub: true }
+  });
+  var scrollInd = document.getElementById('heroScroll');
+  if (scrollInd) {
+    gsap.to(scrollInd, {
+      opacity: 0,
+      scrollTrigger: { trigger: hero, start: 'top top', end: '15% top', scrub: true }
+    });
+  }
+}
+
+// ═══ 3D CRYSTAL LOGO — spinning in nav ═══
+function initCrystalLogo() {
+  var canvas = document.getElementById('logoCanvas');
+  if (!canvas || typeof THREE === 'undefined') { showLogoFallback(); return; }
+
+  var size = 64;
+  var renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.outputEncoding = THREE.sRGBEncoding;
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.4;
+  renderer.setClearColor(0x000000, 0);
+  renderer.setSize(size, size);
+
+  var scene = new THREE.Scene();
+  scene.background = null;
+
+  var camera = new THREE.PerspectiveCamera(35, 1, 0.1, 100);
+  camera.position.set(0, 0, 4);
+  camera.lookAt(0, 0, 0);
+
+  scene.add(new THREE.AmbientLight(0xffffff, 0.8));
+  var keyL = new THREE.DirectionalLight(0xffffff, 1.2);
+  keyL.position.set(2, 3, 4);
+  scene.add(keyL);
+  var fillL = new THREE.DirectionalLight(0xddeeff, 0.5);
+  fillL.position.set(-3, 1, 2);
+  scene.add(fillL);
+
+  var crystalModel = null;
+  var loaded = false;
+
+  // Timeout fallback — if GLB takes too long, show SVG
+  var fallbackTimer = setTimeout(function() {
+    if (!loaded) showLogoFallback();
+  }, 4000);
+
+  var loader = new THREE.GLTFLoader();
+  loader.load('assets/branding/crystal-logo.glb', function(gltf) {
+    loaded = true;
+    clearTimeout(fallbackTimer);
+    var model = gltf.scene;
+    var meshes = [];
+    model.traverse(function(child) {
+      if (child.isMesh && child.material) meshes.push(child);
+    });
+    meshes.forEach(function(m) {
+      m.material = new THREE.MeshStandardMaterial({
+        color: 0xffffff,
+        metalness: 0.3,
+        roughness: 0.15,
+        side: THREE.DoubleSide
+      });
+    });
+    var box = new THREE.Box3().setFromObject(model);
+    var center = box.getCenter(new THREE.Vector3());
+    var bsize = box.getSize(new THREE.Vector3());
+    var maxDim = Math.max(bsize.x, bsize.y, bsize.z);
+    var s = 1.8 / maxDim;
+    model.scale.setScalar(s);
+    model.position.sub(center.multiplyScalar(s));
+    model.rotation.x = 0;
+    model.rotation.z = 0;
+    scene.add(model);
+    crystalModel = model;
+    canvas.style.opacity = '1';
+  }, undefined, function() {
+    // GLB load error — show fallback
+    loaded = true;
+    clearTimeout(fallbackTimer);
+    showLogoFallback();
+  });
+
+  var rafId = null;
+  function animate() {
+    rafId = requestAnimationFrame(animate);
+    if (crystalModel) crystalModel.rotation.y += 0.006;
+    renderer.render(scene, camera);
+  }
+  animate();
+  // Pause when tab hidden
+  document.addEventListener('visibilitychange', function() {
+    if (document.hidden) { cancelAnimationFrame(rafId); rafId = null; }
+    else if (!rafId) { animate(); }
+  });
+}
+function showLogoFallback() {
+  var canvas = document.getElementById('logoCanvas');
+  if (canvas) canvas.style.display = 'none';
+  var link = document.getElementById('navLogoLink');
+  if (!link || link.querySelector('.logo-fallback')) return;
+  var svg = document.createElement('div');
+  svg.className = 'logo-fallback';
+  svg.innerHTML = '<svg viewBox="0 0 362 448" width="16" height="20" fill="currentColor"><path d="M200.264 1.188L0.618 225.27C0.263 225.669 0.066 226.185 0.066 226.719V330.356C0.066 331.558 1.041 332.533 2.244 332.533H153.334C154.536 332.533 155.511 331.558 155.511 330.356V258.665C155.511 257.463 154.536 256.488 153.334 256.488H79.937C78.042 256.488 77.051 254.236 78.332 252.839L203.494 116.334C203.862 115.933 204.067 115.408 204.067 114.863V2.637C204.067 0.636 201.595-0.306 200.264 1.188Z"/><path d="M161.803 446.69L361.449 222.608C361.804 222.21 362 221.694 362 221.16V117.523C362 116.32 361.025 115.346 359.823 115.346H208.733C207.531 115.346 206.556 116.32 206.556 117.523V189.214C206.556 190.416 207.531 191.391 208.733 191.391H282.13C284.025 191.391 285.015 193.643 283.735 195.04L158.572 331.545C158.204 331.946 158 332.471 158 333.016V445.242C158 447.243 160.472 448.184 161.803 446.69Z"/></svg>';
+  link.insertBefore(svg, link.firstChild);
+}
+
+// ═══ PLANE SPECS VIEWER — separate 3D viewer in specs section ═══
+function initPlaneViewer() {
+  var canvas = document.getElementById('planeCanvas');
+  if (!canvas || typeof THREE === 'undefined') return;
+
+  var wrap = canvas.parentElement;
+  var w = wrap.offsetWidth || 640;
+  var h = wrap.offsetHeight || 640;
+
+  /* ── Renderer ── */
+  var renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.outputEncoding = THREE.sRGBEncoding;
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.4;
+  renderer.setClearColor(0x000000, 0);
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  renderer.setSize(w, h);
+
+  var scene = new THREE.Scene();
+  scene.background = null;
+
+  var camera = new THREE.PerspectiveCamera(42, w / h, 0.1, 200);
+  camera.position.set(0, 1.5, 8);
+  camera.lookAt(0, 0, 0);
+
+  /* ── Lights ── */
+  scene.add(new THREE.AmbientLight(0xffffff, 0.55));
+  var key = new THREE.DirectionalLight(0xfff8f0, 2.6);
+  key.position.set(2, 10, 4);
+  key.castShadow = true;
+  key.shadow.mapSize.set(1024, 1024);
+  key.shadow.camera.near = 1; key.shadow.camera.far = 20;
+  key.shadow.camera.left = key.shadow.camera.bottom = -4;
+  key.shadow.camera.right = key.shadow.camera.top = 4;
+  key.shadow.bias = -0.001;
+  scene.add(key);
+  scene.add(new THREE.DirectionalLight(0xd0e8ff, 0.7).translateX(-5).translateY(5).translateZ(-3));
+  scene.add(new THREE.DirectionalLight(0xB8976A, 0.5).translateX(3).translateY(-2).translateZ(5));
+
+  // Generate environment map for realistic plane reflections
+  var pmrem = new THREE.PMREMGenerator(renderer);
+  pmrem.compileEquirectangularShader();
+  var envScene = new THREE.Scene();
+  var envGeo = new THREE.SphereGeometry(10, 32, 32);
+  var envColors = [];
+  var posAt = envGeo.getAttribute('position');
+  for (var ei = 0; ei < posAt.count; ei++) {
+    var ey = posAt.getY(ei);
+    var et = (ey / 10 + 1) * 0.5;
+    // Sky gradient: warm bottom, blue top
+    envColors.push(0.95 - et * 0.15, 0.92 - et * 0.05, 0.88 + et * 0.12);
+  }
+  envGeo.setAttribute('color', new THREE.Float32BufferAttribute(envColors, 3));
+  envScene.add(new THREE.Mesh(envGeo, new THREE.MeshBasicMaterial({ vertexColors: true, side: THREE.BackSide })));
+  // Bright spots for specular highlights
+  var spotG = new THREE.SphereGeometry(0.8, 8, 8);
+  var spotM = new THREE.MeshBasicMaterial({ color: 0xffffff });
+  var sp1 = new THREE.Mesh(spotG, spotM); sp1.position.set(4, 6, 5); envScene.add(sp1);
+  var sp2 = new THREE.Mesh(spotG, spotM); sp2.position.set(-5, 3, 4); envScene.add(sp2);
+  var planeEnvMap = pmrem.fromScene(envScene, 0.04).texture;
+  pmrem.dispose();
+
+  var currentIdx = 0;
+  var planeRef = null;
+  var isLoading = false;
+  var isDragging = false;
+  var autoSpin = true;
+  var lastX = 0;
+  var spinVelocity = 0;
+
+  var loader = new THREE.GLTFLoader();
+
+  function loadPlane(idx, onDone) {
+    if (isLoading) return;
+    isLoading = true;
+    var infoCol = document.querySelector('.plane-info-col');
+    if (infoCol) infoCol.classList.add('is-switching');
+
+    setTimeout(function() {
+      if (planeRef) { scene.remove(planeRef); planeRef = null; }
+      loader.load(PLANE_SOURCES[idx], function(gltf) {
+        isLoading = false;
+        var model = gltf.scene;
+        var box = new THREE.Box3().setFromObject(model);
+        var center = box.getCenter(new THREE.Vector3());
+        var size = box.getSize(new THREE.Vector3());
+        var maxDim = Math.max(size.x, size.y, size.z);
+        var s = 3.8 / maxDim;
+        model.scale.setScalar(s);
+        model.position.sub(center.multiplyScalar(s));
+        model.position.y += 0.22;
+        model.traverse(function(n) {
+          if (n.isMesh) {
+            n.castShadow = true;
+            if (n.material) {
+              n.material.envMap = planeEnvMap;
+              n.material.envMapIntensity = 1.2;
+              n.material.metalness = Math.max(n.material.metalness || 0, 0.4);
+              n.material.roughness = Math.min(n.material.roughness || 1, 0.35);
+              n.material.needsUpdate = true;
+            }
+          }
+        });
+        scene.add(model);
+        planeRef = model;
+
+        document.querySelectorAll('.plane-counter-dot').forEach(function(d, i) { d.classList.toggle('active', i === idx); });
+        var info = PLANE_INFO[idx];
+        if (info) {
+          var nameEl = document.getElementById('planeName');
+          var descEl = document.getElementById('planeDesc');
+          var statsEl = document.getElementById('planeStats');
+          if (nameEl) nameEl.textContent = info.name;
+          if (descEl) descEl.textContent = info.desc;
+          if (statsEl) statsEl.innerHTML = info.stats.map(function(st) {
+            return '<div class="plane-stat"><div class="plane-stat-val">' + st.val + '</div><div class="plane-stat-key">' + st.key + '</div></div>';
+          }).join('');
+        }
+        requestAnimationFrame(function() { if (infoCol) infoCol.classList.remove('is-switching'); });
+        if (onDone) onDone();
+      }, undefined, function(err) {
+        isLoading = false;
+        if (infoCol) infoCol.classList.remove('is-switching');
+      });
+    }, 150);
+  }
+
+  /* ── Lazy-load plane-data-2 on demand ── */
+  var plane2Loaded = false;
+  function ensurePlane2(cb) {
+    if (plane2Loaded) { cb(); return; }
+    var s = document.createElement('script');
+    s.src = 'assets/branding/plane-data-2.js';
+    s.onload = function() {
+      PLANE_SOURCES[1] = (typeof PLANE_DATA_2 !== 'undefined') ? PLANE_DATA_2 : PLANE_SOURCES[1];
+      plane2Loaded = true;
+      cb();
+    };
+    s.onerror = function() { console.warn('Failed to load plane-data-2'); };
+    document.body.appendChild(s);
+  }
+
+  /* ── Nav buttons ── */
+  var prevBtn = document.getElementById('planePrev');
+  var nextBtn = document.getElementById('planeNext');
+  function switchPlane(newIdx) {
+    closeBlueprint();
+    if (newIdx !== 0 && !plane2Loaded) {
+      ensurePlane2(function() { currentIdx = newIdx; loadPlane(currentIdx); });
+    } else {
+      currentIdx = newIdx;
+      loadPlane(currentIdx);
+    }
+  }
+  if (prevBtn) prevBtn.addEventListener('click', function() {
+    switchPlane((currentIdx - 1 + PLANE_SOURCES.length) % PLANE_SOURCES.length);
+  });
+  if (nextBtn) nextBtn.addEventListener('click', function() {
+    switchPlane((currentIdx + 1) % PLANE_SOURCES.length);
+  });
+
+  /* ── Blueprint overlay ── */
+  function openBlueprint() {
+    var panel = document.getElementById('blueprintOverlay');
+    var info = PLANE_INFO[currentIdx];
+    if (!panel || !info || !info.blueprint) return;
+
+    document.getElementById('blueprintName').textContent = info.name;
+    document.getElementById('blueprintCategory').textContent = info.blueprint.category;
+    document.getElementById('blueprintDwg').textContent = 'DWG NO: SA-' + info.blueprint.label + '-001';
+
+    var gridEl = document.getElementById('blueprintGrid');
+    gridEl.innerHTML = info.blueprint.specGroups.map(function(group) {
+      return '<div class="blueprint-group">' +
+        '<div class="blueprint-group-title">' + group.title + '</div>' +
+        group.specs.map(function(s) {
+          return '<div class="blueprint-spec">' +
+            '<span class="blueprint-spec-key">' + s.key + '</span>' +
+            '<span class="blueprint-spec-val">' + s.val +
+              (s.unit ? '<span class="blueprint-spec-unit">' + s.unit + '</span>' : '') +
+            '</span></div>';
+        }).join('') +
+      '</div>';
+    }).join('');
+
+    // Expand panel
+    panel.classList.add('active');
+
+    // Scroll down to the blueprint
+    setTimeout(function() {
+      panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 50);
+
+    // Animate contents in
+    var tl = gsap.timeline();
+    tl.from('.blueprint-header', { opacity: 0, y: -20, duration: 0.5, ease: 'power2.out' });
+    tl.from('.blueprint-group', { opacity: 0, y: 30, duration: 0.4, stagger: 0.1, ease: 'power2.out' }, '-=0.2');
+    tl.from('.blueprint-footer', { opacity: 0, duration: 0.4, ease: 'power2.out' }, '-=0.1');
+    document.querySelectorAll('.blueprint-spec').forEach(function(spec, i) {
+      gsap.from(spec, { opacity: 0, x: -10, duration: 0.3, delay: 0.4 + i * 0.03, ease: 'power2.out' });
+    });
+  }
+
+  function closeBlueprint() {
+    var panel = document.getElementById('blueprintOverlay');
+    if (!panel || !panel.classList.contains('active')) return;
+    // Scroll back up to the plane viewer
+    document.getElementById('planeScroll').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    gsap.to(panel.querySelector('.blueprint-inner'), {
+      opacity: 0, y: -20, duration: 0.35, ease: 'power2.in',
+      onComplete: function() {
+        panel.classList.remove('active');
+        gsap.set(panel.querySelector('.blueprint-inner'), { clearProps: 'all' });
+      }
+    });
+  }
+
+  var bpToggle = document.getElementById('blueprintToggle');
+  var bpClose = document.getElementById('blueprintClose');
+  if (bpToggle) bpToggle.addEventListener('click', openBlueprint);
+  if (bpClose) bpClose.addEventListener('click', closeBlueprint);
+
+  /* ── Drag interaction ── */
+  canvas.addEventListener('pointerdown', function(e) {
+    isDragging = true; autoSpin = false; lastX = e.clientX; spinVelocity = 0;
+    canvas.style.cursor = 'grabbing';
+    canvas.setPointerCapture(e.pointerId);
+  });
+  canvas.addEventListener('pointermove', function(e) {
+    if (!isDragging || !planeRef) return;
+    var dx = e.clientX - lastX;
+    planeRef.rotation.y += dx * 0.012;
+    spinVelocity = dx * 0.012;
+    lastX = e.clientX;
+  });
+  canvas.addEventListener('pointerup', function() {
+    isDragging = false; canvas.style.cursor = 'grab';
+    setTimeout(function() { autoSpin = true; }, 2000);
+  });
+
+  /* ── Resize ── */
+  function onResize() {
+    var nw = wrap.offsetWidth || 640;
+    var nh = wrap.offsetHeight || 640;
+    renderer.setSize(nw, nh);
+    camera.aspect = nw / nh;
+    camera.updateProjectionMatrix();
+  }
+  window.addEventListener('resize', onResize);
+
+  /* ── Render loop (only when visible) ── */
+  var sectionVisible = false;
+  var secObs = new IntersectionObserver(function(entries) {
+    sectionVisible = entries[0].isIntersecting;
+  }, { threshold: 0 });
+  secObs.observe(document.getElementById('planeScroll'));
+
+  function animate() {
+    requestAnimationFrame(animate);
+    if (!sectionVisible) return;
+    if (planeRef) {
+      if (autoSpin && !isDragging) {
+        planeRef.rotation.y += 0.004;
+      } else if (!isDragging && Math.abs(spinVelocity) > 0.0001) {
+        planeRef.rotation.y += spinVelocity;
+        spinVelocity *= 0.92;
+      }
+    }
+    renderer.render(scene, camera);
+  }
+
+  loadPlane(0);
+  animate();
+}
+
+// ═══ X-RAY CABIN SCANNER ═══
+(function() {
+  var viewport = document.getElementById('xrayViewport');
+  var wrap     = document.getElementById('xrayWrap');
+  var exterior = document.querySelector('.xray-exterior');
+  var interior = document.getElementById('xrayInterior');
+  var lineTop  = document.getElementById('xrayLineTop');
+  var lineBot  = document.getElementById('xrayLineBot');
+  if (!interior || !wrap || !viewport || !exterior) return;
+
+  var stripPct = 12;
+  var parallax = 0.35; // exterior moves at 65% speed of interior
+  var Hv, Hi, stripPx, scannerTopPx;
+
+  function measure() {
+    Hv = viewport.offsetHeight;
+    Hi = wrap.offsetHeight;
+    stripPx = stripPct / 100 * Hi;
+    scannerTopPx = Hv / 2 - stripPx / 2;
+    lineTop.style.top = scannerTopPx + 'px';
+    lineBot.style.top = (scannerTopPx + stripPx) + 'px';
+  }
+
+  // Wait for both images to load before measuring & initializing
+  var imgs = [exterior, interior];
+  var loaded = 0;
+  function onImgReady() {
+    loaded++;
+    if (loaded < imgs.length) return;
+    init();
+  }
+  imgs.forEach(function(img) {
+    if (img.complete) { onImgReady(); }
+    else { img.addEventListener('load', onImgReady); img.addEventListener('error', onImgReady); }
+  });
+
+  function init() {
+  measure();
+  window.addEventListener('resize', function() {
+    measure();
+    ScrollTrigger.refresh();
+  });
+
+  ScrollTrigger.create({
+    trigger: '.xray-section',
+    start: 'top top',
+    end: '+=200%',
+    pin: true,
+    scrub: 1,
+    onUpdate: function(self) {
+      var p = self.progress;
+      var tyInterior = scannerTopPx - p * (Hi - stripPx);
+      var tyExterior = tyInterior * (1 - parallax);
+
+      wrap.style.transform = 'translateX(-50%)';
+      exterior.style.transform = 'translateY(' + tyExterior + 'px)';
+      interior.style.transform = 'translateY(' + tyInterior + 'px)';
+
+      var topPct = ((scannerTopPx - tyInterior) / Hi) * 100;
+      var botPct = 100 - topPct - stripPct;
+      interior.style.clipPath = 'inset(' + topPct + '% 0 ' + botPct + '% 0)';
+
+      // Fade in first 8%, fade out last 8%
+      var fade = 0.08;
+      var alpha = 1;
+      if (p < fade) alpha = p / fade;
+      else if (p > 1 - fade) alpha = (1 - p) / fade;
+      if (p <= 0.001 || p >= 0.999) alpha = 0;
+      lineTop.style.opacity = alpha;
+      lineBot.style.opacity = alpha;
+      interior.style.opacity = alpha;
+    }
+  });
+  } // end init
+})();
+
+// ═══ SERVICE SLIDES — CLIP-PATH REVEALS ═══
+document.querySelectorAll('.svc-slide').forEach((slide, i) => {
+  const dir = i % 2 === 0 ? 'inset(0 100% 0 0)' : 'inset(0 0 0 100%)';
+  gsap.fromTo(slide.querySelector('img'), {
+    clipPath: dir
+  }, {
+    clipPath: 'inset(0 0% 0 0%)',
+    duration: 1.4,
+    ease: 'expo.inOut',
+    scrollTrigger: { trigger: slide, start: 'top 70%', toggleActions: 'play none none none' }
+  });
+});
+
+// ═══ QUOTE — AUTO TYPE ON ENTER ═══
+const quoteEl = document.getElementById('quoteText');
+const rawText = quoteEl.textContent.trim();
+quoteEl.innerHTML = rawText.split(' ').map(w => {
+  if (w.startsWith('|') && w.endsWith('|')) {
+    return `<span class="word em">${w.replace(/\|/g, '')}</span>`;
+  }
+  if (w.startsWith('|')) return `<span class="word em">${w.replace(/\|/g, '')}`;
+  if (w.endsWith('|')) return `${w.replace(/\|/g, '')}</span>`;
+  return `<span class="word">${w}</span>`;
+}).join(' ');
+
+const words = quoteEl.querySelectorAll('.word');
+const quoteCite = document.getElementById('quoteCite');
+let quoteStarted = false;
+const quoteObs = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting && !quoteStarted) {
+      quoteStarted = true;
+      words.forEach((w, i) => {
+        setTimeout(() => w.classList.add('lit'), i * 80);
+      });
+      setTimeout(() => quoteCite.classList.add('vis'), words.length * 80 + 300);
+      quoteObs.disconnect();
+    }
+  });
+}, { threshold: 0.3 });
+quoteObs.observe(document.querySelector('.quote-section'));
+
+// ═══ SCROLL REVEALS ═══
+const revEls = document.querySelectorAll('.reveal');
+const revObs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('vis'); revObs.unobserve(e.target); } });
+}, { threshold: 0.1 });
+revEls.forEach(el => revObs.observe(el));
+
+// ═══ SMOOTH ANCHORS ═══
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    const t = document.querySelector(a.getAttribute('href'));
+    if (t) t.scrollIntoView({ behavior: 'smooth' });
+    document.getElementById('mobileMenu').classList.remove('open');
+  });
+});
+
+// ═══ MOBILE MENU ═══
+document.getElementById('menuBtn').addEventListener('click', () => document.getElementById('mobileMenu').classList.add('open'));
+document.getElementById('menuClose').addEventListener('click', () => document.getElementById('mobileMenu').classList.remove('open'));
+document.querySelectorAll('.mob-link').forEach(a => a.addEventListener('click', () => document.getElementById('mobileMenu').classList.remove('open')));
+
+// Fleet videos — play once and freeze on last frame
+document.querySelectorAll('.fleet-item video').forEach(v => {
+  v.muted = true; v.playsInline = true;
+  v.loop = false;
+  v.play().catch(() => {});
+});
+
+// ═══ ROTATING DOTTED GLOBE ═══
+(function() {
+  const canvas = document.getElementById('globeCanvas');
+  if (!canvas) return;
+
+  // Wait for async d3 + topojson to be ready
+  function waitForD3() {
+    if (typeof d3 !== 'undefined' && typeof topojson !== 'undefined') {
+      initGlobe();
+    } else {
+      setTimeout(waitForD3, 100);
+    }
+  }
+  waitForD3();
+
+  function initGlobe() {
+  const ctx = canvas.getContext('2d');
+  const w = canvas.width, h = canvas.height;
+  const R = w * 0.45;
+  const cx = w / 2, cy = h / 2;
+  const projection = d3.geoOrthographic()
+    .scale(R)
+    .translate([cx, cy])
+    .clipAngle(90);
+  const path = d3.geoPath(projection, ctx);
+  const graticule = d3.geoGraticule().step([20, 20])();
+  let landDots = [];
+  let oceanDots = [];
+  let rotation = 70; // start facing Americas (Boca Raton, São Paulo, Dallas)
+  let frame = 0;
+  let globeVisible = true;
+  let animId = null;
+
+  // Pause animation when globe is off-screen
+  const observer = new IntersectionObserver(([entry]) => {
+    globeVisible = entry.isIntersecting;
+    if (globeVisible && !animId) animateGlobe();
+  }, { threshold: 0.05 });
+  observer.observe(canvas);
+
+  // Office cities
+  const cities = [
+    { name: 'Boca Raton', coords: [-80.08, 26.36] },
+    { name: 'São Paulo', coords: [-46.63, -23.55] },
+    { name: 'Dallas', coords: [-96.80, 32.78] }
+  ];
+  // City connection pairs
+  const arcs = [
+    [cities[0].coords, cities[1].coords],
+    [cities[0].coords, cities[2].coords],
+    [cities[1].coords, cities[2].coords]
+  ];
+
+  fetch('https://cdn.jsdelivr.net/npm/world-atlas@2/land-110m.json')
+    .then(r => r.json())
+    .then(world => {
+      const land = topojson.feature(world, world.objects.land);
+      for (let lat = -80; lat <= 80; lat += 2) {
+        for (let lon = -180; lon < 180; lon += 2) {
+          if (d3.geoContains(land, [lon, lat])) {
+            landDots.push([lon, lat]);
+          }
+        }
+      }
+      // Ocean dots at lower density to reduce lag
+      for (let lat = -80; lat <= 80; lat += 6) {
+        for (let lon = -180; lon < 180; lon += 6) {
+          if (!d3.geoContains(land, [lon, lat])) {
+            oceanDots.push([lon, lat]);
+          }
+        }
+      }
+      animateGlobe();
+    })
+    .catch(() => {});
+
+  function animateGlobe() {
+    ctx.clearRect(0, 0, w, h);
+    rotation += 0.12;
+    frame++;
+    projection.rotate([rotation, -15, 0]);
+    const center = projection.invert([cx, cy]);
+
+    // 1. Atmospheric glow behind globe
+    const glow = ctx.createRadialGradient(cx, cy, R * 0.6, cx, cy, R * 1.3);
+    glow.addColorStop(0, 'rgba(184,151,106,0.06)');
+    glow.addColorStop(0.5, 'rgba(184,151,106,0.03)');
+    glow.addColorStop(1, 'rgba(184,151,106,0)');
+    ctx.fillStyle = glow;
+    ctx.beginPath();
+    ctx.arc(cx, cy, R * 1.3, 0, Math.PI * 2);
+    ctx.fill();
+
+    // 2. Globe inner depth gradient
+    const depth = ctx.createRadialGradient(cx - R * 0.15, cy - R * 0.15, 0, cx, cy, R);
+    depth.addColorStop(0, 'rgba(248,247,244,0.4)');
+    depth.addColorStop(0.7, 'rgba(220,215,205,0.1)');
+    depth.addColorStop(1, 'rgba(180,175,165,0.15)');
+    ctx.fillStyle = depth;
+    ctx.beginPath();
+    ctx.arc(cx, cy, R, 0, Math.PI * 2);
+    ctx.fill();
+
+    // 3. Globe outline
+    ctx.beginPath();
+    path({ type: 'Sphere' });
+    ctx.strokeStyle = 'rgba(12,18,32,0.15)';
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+
+    // 4. Graticule
+    ctx.beginPath();
+    path(graticule);
+    ctx.strokeStyle = 'rgba(12,18,32,0.04)';
+    ctx.lineWidth = 0.5;
+    ctx.stroke();
+
+    // 5. Ocean dots (very faint)
+    oceanDots.forEach(d => {
+      const p = projection(d);
+      if (p) {
+        const dist = d3.geoDistance(d, center);
+        if (dist < Math.PI / 2) {
+          const fade = 1 - (dist / (Math.PI / 2));
+          ctx.fillStyle = `rgba(12,18,32,${0.02 + fade * 0.025})`;
+          ctx.beginPath();
+          ctx.arc(p[0], p[1], 0.8, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+    });
+
+    // 6. Land dots
+    landDots.forEach(d => {
+      const p = projection(d);
+      if (p) {
+        const dist = d3.geoDistance(d, center);
+        if (dist < Math.PI / 2) {
+          const fade = 1 - (dist / (Math.PI / 2));
+          const alpha = 0.25 + fade * 0.65;
+          ctx.fillStyle = `rgba(12,18,32,${alpha})`;
+          ctx.beginPath();
+          ctx.arc(p[0], p[1], 1.5 + fade * 0.5, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+    });
+
+    // 7. Connection arcs between cities
+    arcs.forEach(([a, b]) => {
+      const interp = d3.geoInterpolate(a, b);
+      const steps = 60;
+      const dashOffset = (frame * 0.02) % 1;
+      ctx.strokeStyle = 'rgba(184,151,106,0.85)';
+      ctx.lineWidth = 2.5;
+      for (let i = 0; i < steps; i++) {
+        const t1 = i / steps;
+        const t2 = (i + 1) / steps;
+        const p1 = projection(interp(t1));
+        const p2 = projection(interp(t2));
+        if (p1 && p2) {
+          const d1 = d3.geoDistance(interp(t1), center);
+          const d2 = d3.geoDistance(interp(t2), center);
+          if (d1 < Math.PI / 2 && d2 < Math.PI / 2) {
+            // Animated dash pattern
+            const segPhase = (t1 + dashOffset) % 0.12;
+            if (segPhase < 0.07) {
+              const fade1 = 1 - d1 / (Math.PI / 2);
+              ctx.globalAlpha = 0.5 + fade1 * 0.5;
+              ctx.beginPath();
+              ctx.moveTo(p1[0], p1[1]);
+              ctx.lineTo(p2[0], p2[1]);
+              ctx.stroke();
+            }
+          }
+        }
+      }
+      ctx.globalAlpha = 1;
+    });
+
+    // 8. Pulsing city markers
+    const pulse = Math.sin(frame * 0.04) * 0.5 + 0.5; // 0→1 oscillation
+    cities.forEach(city => {
+      const p = projection(city.coords);
+      if (p) {
+        const dist = d3.geoDistance(city.coords, center);
+        if (dist < Math.PI / 2) {
+          const fade = 1 - (dist / (Math.PI / 2));
+          // Expanding ring
+          const ringR = 6 + pulse * 12;
+          ctx.beginPath();
+          ctx.arc(p[0], p[1], ringR, 0, Math.PI * 2);
+          ctx.strokeStyle = `rgba(184,151,106,${(1 - pulse) * 0.35 * fade})`;
+          ctx.lineWidth = 1.5;
+          ctx.stroke();
+          // Second ring (offset phase)
+          const pulse2 = Math.sin(frame * 0.04 + Math.PI) * 0.5 + 0.5;
+          const ringR2 = 6 + pulse2 * 12;
+          ctx.beginPath();
+          ctx.arc(p[0], p[1], ringR2, 0, Math.PI * 2);
+          ctx.strokeStyle = `rgba(184,151,106,${(1 - pulse2) * 0.2 * fade})`;
+          ctx.stroke();
+          // Solid center dot
+          ctx.beginPath();
+          ctx.arc(p[0], p[1], 4, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(184,151,106,${0.7 + fade * 0.3})`;
+          ctx.fill();
+          // Bright core
+          ctx.beginPath();
+          ctx.arc(p[0], p[1], 2, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(255,240,220,${0.8 * fade})`;
+          ctx.fill();
+        }
+      }
+    });
+
+    animId = globeVisible ? requestAnimationFrame(animateGlobe) : null;
+  }
+  } // end initGlobe
+})();
+
+</script>
+</body>
+</html>

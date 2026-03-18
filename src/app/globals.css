@@ -2,39 +2,30 @@
 @tailwind components;
 @tailwind utilities;
 
-@font-face {
-  font-family: "Makro";
-  src: url("/fonts/MakroMedium.ttf") format("truetype");
-  font-weight: 500;
-  font-display: swap;
-}
-
 :root {
-  --gold: #B8976A;
-  --navy: #0C1220;
-  --cream: #F8F7F4;
-  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --bg-primary: #F8F7F4;
+  --bg-secondary: #EFEDE8;
+  --ink-primary: #0F0F0D;
+  --ink-secondary: #6B6860;
+  --ink-tertiary: #A8A49E;
+  --highlight: #C8A96E;
 }
 
 ::selection {
-  background: var(--gold);
+  background: var(--highlight);
   color: white;
 }
 
 html {
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 body {
-  background: #0a0906;
-  color: #f5f0e8;
-  overflow-x: hidden;
+  background: var(--bg-primary);
+  color: var(--ink-primary);
+  overflow-x: clip;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-
-.font-editorial {
-  font-family: var(--font-cormorant), "Georgia", serif;
 }
 
 /* Scrollbar */
@@ -42,26 +33,109 @@ body {
   width: 4px;
 }
 ::-webkit-scrollbar-track {
-  background: #0a0906;
+  background: var(--bg-primary);
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(184, 151, 106, 0.4);
+  background: var(--ink-tertiary);
   border-radius: 2px;
 }
 
-@layer components {
-  .glass-card {
-    @apply bg-white/60 backdrop-blur-xl border border-black/5;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
-  }
-  .glass-card-dark {
-    @apply bg-white/5 backdrop-blur-xl border border-white/10;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
   }
 }
 
-@layer base {
-  a, button {
-    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+/* Film grain — cinematic noise overlay (hidden until .grain-active on body) */
+body.grain-active::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  pointer-events: none;
+  opacity: 0.04;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
+  mix-blend-mode: overlay;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body::after {
+    display: none;
   }
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* ─── Fleet cards — hover effects (pointer devices only) ─── */
+.fleet-card {
+  border-radius: 8px;
+  overflow: hidden;
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+              border-color 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.fleet-card-img {
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.fleet-card-preview {
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+@media (pointer: fine) {
+  .fleet-card:hover {
+    transform: scale(1.05);
+    z-index: 10;
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(200, 169, 110, 0.15);
+  }
+  .fleet-card:not(.fleet-card--active):hover {
+    border-color: rgba(184, 151, 106, 0.25);
+  }
+  .fleet-card--active:hover {
+    transform: scale(1.02);
+  }
+  .fleet-card:hover .fleet-card-img {
+    transform: scale(1.08);
+  }
+  .fleet-card:hover .fleet-card-preview {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Fleet card active state */
+.fleet-card--active {
+  border-color: #C8A96E !important;
+  transform: scale(1.02);
+}
+
+/* Scan line animation for tech card thumbnail */
+@keyframes scanSweep {
+  0%, 100% { top: -10%; opacity: 0; }
+  10% { opacity: 0.5; }
+  90% { opacity: 0.5; }
+  95% { top: 110%; opacity: 0; }
+}
+.scan-line-anim {
+  animation: scanSweep 3s ease-in-out infinite;
+}
+
+/* Row entrance animation */
+.fleet-row-line {
+  width: 0;
+  transition: width 0.4s ease;
+}
+.fleet-row-line--visible {
+  width: 20px;
 }

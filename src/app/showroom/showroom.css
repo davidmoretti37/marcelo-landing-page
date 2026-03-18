@@ -1,0 +1,47 @@
+.showroom {
+  --sr-bg: #0a0a0f;
+  --sr-surface: #12121a;
+  --sr-surface-hover: #1a1a25;
+  --sr-gold: #c8a44e;
+  --sr-gold-light: #e8d5a0;
+  --sr-gold-dim: #9a7a38;
+  --sr-text: rgba(255, 255, 255, 0.9);
+  --sr-text-muted: rgba(255, 255, 255, 0.5);
+  --sr-text-dim: rgba(255, 255, 255, 0.3);
+  --sr-border: rgba(255, 255, 255, 0.06);
+  --sr-border-gold: rgba(200, 164, 78, 0.15);
+
+  background: var(--sr-bg);
+  color: var(--sr-text);
+  min-height: 100vh;
+}
+
+/* Gold glow effect for active elements */
+.sr-glow {
+  box-shadow: 0 0 20px rgba(200, 164, 78, 0.15), 0 0 40px rgba(200, 164, 78, 0.05);
+}
+
+/* Frosted glass panel */
+.sr-glass {
+  background: rgba(18, 18, 26, 0.6);
+  backdrop-filter: blur(24px) saturate(1.2);
+  border: 1px solid var(--sr-border);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+/* Gold gradient border */
+.sr-gold-border {
+  border: 1px solid var(--sr-gold);
+  box-shadow: 0 0 12px rgba(200, 164, 78, 0.1);
+}
+
+/* Custom scrollbar for showroom */
+.showroom ::-webkit-scrollbar { width: 4px; }
+.showroom ::-webkit-scrollbar-track { background: var(--sr-bg); }
+.showroom ::-webkit-scrollbar-thumb { background: var(--sr-gold-dim); border-radius: 2px; }
+
+/* Selection color */
+.showroom ::selection {
+  background: var(--sr-gold);
+  color: white;
+}

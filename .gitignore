@@ -3,3 +3,5 @@ raw-assets/
 .DS_Store
 node_modules/
 .next/
+.vercel
+.env*.local

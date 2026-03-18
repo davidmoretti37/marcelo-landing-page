@@ -247,9 +247,10 @@ a { text-decoration: none; color: inherit; }
   background: transparent;
   transition: background 0.5s, padding 0.5s var(--ease-out), backdrop-filter 0.5s;
   opacity: 0;
-  color: var(--white);
-  text-shadow: 0 1px 12px rgba(0,0,0,0.25);
+  color: #0a0e14;
+  text-shadow: none;
 }
+.nav.scrolled { color: var(--white); text-shadow: 0 1px 12px rgba(0,0,0,0.25); }
 .nav.show { opacity: 1; transition: opacity 0.8s 0.3s, background 0.5s, padding 0.5s var(--ease-out); }
 .nav.scrolled {
   padding: 14px 48px;
@@ -267,21 +268,83 @@ a { text-decoration: none; color: inherit; }
   font-size: 18px; font-weight: 500;
   letter-spacing: 0.4em; text-transform: uppercase;
   transition: font-size 0.5s var(--ease-out), letter-spacing 0.5s var(--ease-out);
+  background: linear-gradient(
+    90deg,
+    #0a0e14 0%,
+    #0a0e14 35%,
+    #666666 50%,
+    #0a0e14 65%,
+    #0a0e14 100%
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: navShine 2.7s ease-in-out infinite;
+}
+.nav.scrolled .nav-logo-text {
+  background: linear-gradient(
+    90deg,
+    rgba(255,255,255,0.9) 0%,
+    rgba(255,255,255,0.9) 35%,
+    #ffffff 50%,
+    rgba(255,255,255,0.9) 65%,
+    rgba(255,255,255,0.9) 100%
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: navShine 2.7s ease-in-out infinite;
+}
+@keyframes navShine {
+  0%, 100% { background-position: 200% center; }
+  50% { background-position: -200% center; }
 }
 .nav-links { display: flex; align-items: center; gap: 56px; list-style: none; }
 .nav-links li a {
   font-size: 15px; font-weight: 400;
   letter-spacing: 0.2em; text-transform: uppercase;
-  color: rgba(255,255,255,0.6);
-  transition: color 0.3s, font-size 0.5s var(--ease-out);
+  transition: font-size 0.5s var(--ease-out);
   position: relative;
+  background: linear-gradient(
+    90deg,
+    rgba(10,14,20,0.6) 0%,
+    rgba(10,14,20,0.6) 35%,
+    #555555 50%,
+    rgba(10,14,20,0.6) 65%,
+    rgba(10,14,20,0.6) 100%
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: navShine 2.7s ease-in-out infinite;
+  animation-delay: 0.5s;
+}
+.nav.scrolled .nav-links li a {
+  background: linear-gradient(
+    90deg,
+    rgba(255,255,255,0.6) 0%,
+    rgba(255,255,255,0.6) 35%,
+    #ffffff 50%,
+    rgba(255,255,255,0.6) 65%,
+    rgba(255,255,255,0.6) 100%
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: navShine 2.7s ease-in-out infinite;
+  animation-delay: 0.5s;
 }
 .nav-links li a::after {
   content: ''; position: absolute; bottom: -4px; left: 0;
   width: 0; height: 1px; background: var(--white);
   transition: width 0.4s var(--ease-out);
 }
-.nav-links li a:hover { color: var(--white); }
+.nav-links li a:hover { -webkit-text-fill-color: #0a0e14; animation: none; background: none; }
+.nav.scrolled .nav-links li a:hover { -webkit-text-fill-color: var(--white); }
 .nav-links li a:hover::after { width: 100%; }
 .nav-cta {
   padding: 14px 38px;
@@ -2475,31 +2538,43 @@ ScrollTrigger.create({
       storyDivBottom.style.width = (120 * divBotP) + 'px';
     }
 
-    // Beat 1: fade in, then out
+    // Beat 1: fade in (on mobile: stay visible; on desktop: fade out too)
     var beat1In = gsap.utils.clamp(0, 1, (v - 0.22) / 0.12);
-    var beat1Out = gsap.utils.clamp(0, 1, (v - 0.40) / 0.05);
     if (storyBody1) {
-      var b1Op = beat1In * (1 - beat1Out);
-      storyBody1.style.opacity = b1Op;
-      storyBody1.style.transform = 'translateY(' + (20 * (1 - beat1In) + (-12 * beat1Out)) + 'px)';
+      if (isMobileSmall) {
+        storyBody1.style.opacity = beat1In;
+        storyBody1.style.transform = 'translateY(' + (20 * (1 - beat1In)) + 'px)';
+      } else {
+        var beat1Out = gsap.utils.clamp(0, 1, (v - 0.40) / 0.05);
+        var b1Op = beat1In * (1 - beat1Out);
+        storyBody1.style.opacity = b1Op;
+        storyBody1.style.transform = 'translateY(' + (20 * (1 - beat1In) + (-12 * beat1Out)) + 'px)';
+      }
     }
 
     // ── Phase C (0.45–0.70): Beat 2 ──
-    var beat2In = gsap.utils.clamp(0, 1, (v - 0.45) / 0.10);
-    var beat2Out = gsap.utils.clamp(0, 1, (v - 0.66) / 0.04);
+    var beat2In = gsap.utils.clamp(0, 1, (v - 0.30) / 0.12);
     if (storyBody2) {
-      var b2Op = beat2In * (1 - beat2Out);
-      storyBody2.style.opacity = b2Op;
-      storyBody2.style.transform = 'translateY(' + (20 * (1 - beat2In) + (-12 * beat2Out)) + 'px)';
+      if (isMobileSmall) {
+        storyBody2.style.opacity = beat2In;
+        storyBody2.style.transform = 'translateY(' + (20 * (1 - beat2In)) + 'px)';
+      } else {
+        beat2In = gsap.utils.clamp(0, 1, (v - 0.45) / 0.10);
+        var beat2Out = gsap.utils.clamp(0, 1, (v - 0.66) / 0.04);
+        var b2Op = beat2In * (1 - beat2Out);
+        storyBody2.style.opacity = b2Op;
+        storyBody2.style.transform = 'translateY(' + (20 * (1 - beat2In) + (-12 * beat2Out)) + 'px)';
+      }
     }
     // Gold underline on "U.S. Presidents"
     if (storyAccent) {
-      var accentP = gsap.utils.clamp(0, 1, (v - 0.52) / 0.10);
+      var accentP = gsap.utils.clamp(0, 1, (v - (isMobileSmall ? 0.38 : 0.52)) / 0.10);
       storyAccent.style.setProperty('--accent-scale', accentP);
     }
 
-    // ── Phase D (0.70–0.92): Services + gold glow on counter ──
-    var svcBaseP = gsap.utils.clamp(0, 1, (v - 0.70) / 0.15);
+    // ── Phase D: Services + gold glow on counter ──
+    var svcStart = isMobileSmall ? 0.55 : 0.70;
+    var svcBaseP = gsap.utils.clamp(0, 1, (v - svcStart) / 0.15);
     storyServiceWords.forEach(function(el, i) {
       var delay = i * 0.12;
       var wp = gsap.utils.clamp(0, 1, (svcBaseP - delay) / (1 - delay * 2));
@@ -2513,12 +2588,13 @@ ScrollTrigger.create({
     });
     // Gold rule
     if (storyRule) {
-      var ruleP = gsap.utils.clamp(0, 1, (v - 0.78) / 0.10);
+      var ruleStart = isMobileSmall ? 0.63 : 0.78;
+      var ruleP = gsap.utils.clamp(0, 1, (v - ruleStart) / 0.10);
       storyRule.style.width = (100 * ruleP) + 'px';
     }
     // Counter glow pulse in Phase D
-    if (storyCounterNum && v > 0.70) {
-      var glowP = gsap.utils.clamp(0, 1, (v - 0.70) / 0.15);
+    if (storyCounterNum && v > svcStart) {
+      var glowP = gsap.utils.clamp(0, 1, (v - svcStart) / 0.15);
       storyCounterNum.style.textShadow = '0 0 ' + (20 * glowP) + 'px rgba(184,151,106,' + (0.2 * glowP) + ')';
     } else if (storyCounterNum) {
       storyCounterNum.style.textShadow = '';
@@ -3326,8 +3402,8 @@ function initSkyCanvas() {
   // Wait for fonts then create text in the scene
   document.fonts.ready.then(function() {
     var brandText = createShinyTextMesh('SPARK JETS', {
-      fontSize: 36, fontFamily: "'Inter', sans-serif", color: '#b5b5b5',
-      shineColor: '#ffffff', letterSpacing: 14, meshHeight: 1.2, x: 0, y: 0.5, z: -22
+      fontSize: 36, fontFamily: "'Inter', sans-serif", color: '#1a1a1a',
+      shineColor: '#666666', letterSpacing: 14, meshHeight: 1.2, x: 0, y: 0.5, z: -22
     });
 
     scene.add(brandText.mesh);
@@ -3530,7 +3606,7 @@ function initCrystalLogo() {
   var rafId = null;
   function animate() {
     rafId = requestAnimationFrame(animate);
-    if (crystalModel) crystalModel.rotation.y += 0.006;
+    if (crystalModel) crystalModel.rotation.y += 0.012;
     renderer.render(scene, camera);
   }
   animate();

@@ -15,6 +15,68 @@ export const PLANE_INFO = [
       { val: "19", key: "Passengers" },
       { val: "51,000 ft", key: "Max Altitude" },
     ],
+    cabinZones: [
+      {
+        name: "Cockpit",
+        title: "Command Center",
+        desc: "The Symmetry Flight Deck redefines the art of flying. Active control sidesticks, the industry's most extensive use of touch-screen technology, and 10 windows flooding the deck with natural light.",
+        image: "/images/fleet/fleet-1.jpg",
+        specs: [
+          { key: "Flight Deck", val: "Symmetry" },
+          { key: "Avionics", val: "PlaneView III" },
+          { key: "HUD", val: "Dual Head-Up Display" },
+          { key: "Windows", val: "10" },
+        ],
+      },
+      {
+        name: "Forward Cabin",
+        title: "The Lounge",
+        desc: "A sophisticated conference and dining area that seats six in handcrafted leather chairs. Retractable monitors, wireless charging, and a six-place dining table transform this space from boardroom to fine dining at 51,000 feet.",
+        image: "/images/fleet/detail-1.jpg",
+        specs: [
+          { key: "Seating", val: "6 Club Seats" },
+          { key: "Table", val: "6-Place Dining" },
+          { key: "Displays", val: "Dual 24\" Monitors" },
+          { key: "Connectivity", val: "Ka-band WiFi" },
+        ],
+      },
+      {
+        name: "Mid Cabin",
+        title: "The Suite",
+        desc: "Your private entertainment and relaxation zone. Plush divans convert to full-length beds, while a dedicated 32-inch display and surround sound create a cinematic experience above the clouds.",
+        image: "/images/fleet/fleet-2.jpg",
+        specs: [
+          { key: "Entertainment", val: "32\" 4K Display" },
+          { key: "Seating", val: "4 + Divan" },
+          { key: "Sound", val: "Surround System" },
+          { key: "Lighting", val: "Circadian Rhythm" },
+        ],
+      },
+      {
+        name: "Aft Cabin",
+        title: "The Stateroom",
+        desc: "A fully enclosed private suite with a fixed queen bed, personal wardrobe, and en-suite lavatory. The widest cabin in its class delivers a hotel-suite experience at Mach 0.90.",
+        image: "/images/fleet/detail-2.jpg",
+        specs: [
+          { key: "Bed", val: "Fixed Queen" },
+          { key: "Lavatory", val: "En-Suite" },
+          { key: "Width", val: "8 ft 2 in" },
+          { key: "Storage", val: "Full Wardrobe" },
+        ],
+      },
+      {
+        name: "Grand Galley",
+        title: "The Kitchen",
+        desc: "A full-service galley equipped to deliver multi-course meals for 19 passengers. Steam oven, chiller, espresso maker, and ample storage ensure five-star catering at altitude.",
+        image: "/images/fleet/fleet-3.jpg",
+        specs: [
+          { key: "Oven", val: "Convection + Steam" },
+          { key: "Capacity", val: "19 Passengers" },
+          { key: "Chiller", val: "Dual Zone" },
+          { key: "Service", val: "Full Catering" },
+        ],
+      },
+    ],
     blueprint: {
       label: "G700",
       category: "Ultra Long Range",
@@ -71,6 +133,44 @@ export const PLANE_INFO = [
       { val: "12", key: "Passengers" },
       { val: "45,000 ft", key: "Max Altitude" },
     ],
+    cabinZones: [
+      {
+        name: "Cockpit",
+        title: "The Flight Deck",
+        desc: "The Honeywell Primus Epic avionics suite with synthetic vision delivers unmatched situational awareness. Dual FMS, autothrottle, and head-up display guidance bring big-jet capability to a super-midsize platform.",
+        image: "/images/fleet/fleet-4.jpg",
+        specs: [
+          { key: "Avionics", val: "Primus Epic" },
+          { key: "Vision", val: "Synthetic + EVS" },
+          { key: "Guidance", val: "Head-Up Display" },
+          { key: "Autothrottle", val: "Standard" },
+        ],
+      },
+      {
+        name: "Main Cabin",
+        title: "The Club",
+        desc: "Eight fully reclining club seats in a stand-up cabin with best-in-class width. Power tables, wireless charging, and Ka-band high-speed WiFi keep you productive on intercontinental routes.",
+        image: "/images/fleet/detail-3.jpg",
+        specs: [
+          { key: "Seating", val: "8 Club Seats" },
+          { key: "Height", val: "6 ft Stand-Up" },
+          { key: "WiFi", val: "Ka-band" },
+          { key: "Tables", val: "Powered" },
+        ],
+      },
+      {
+        name: "Aft Suite",
+        title: "The Retreat",
+        desc: "A private aft cabin with a three-place divan that converts to a full-length bed. Enclosed lavatory with vanity and wardrobe space makes overnight journeys feel effortless.",
+        image: "/images/fleet/detail-4.jpg",
+        specs: [
+          { key: "Divan", val: "3-Place Berthing" },
+          { key: "Lavatory", val: "Enclosed + Vanity" },
+          { key: "Baggage", val: "155 cu ft" },
+          { key: "Zones", val: "Private Aft" },
+        ],
+      },
+    ],
     blueprint: {
       label: "P600",
       category: "Super Midsize",
@@ -119,8 +219,7 @@ export const PLANE_INFO = [
 ];
 
 export const WORLD_CLOCKS = [
-  { city: "Boca Raton", timezone: "America/New_York", label: "EST", highlight: true },
-  { city: "New York", timezone: "America/New_York", label: "EST", highlight: false },
+  { city: "New York", timezone: "America/New_York", label: "EST", highlight: true },
   { city: "São Paulo", timezone: "America/Sao_Paulo", label: "BRT", highlight: false },
   { city: "Dubai", timezone: "Asia/Dubai", label: "GST", highlight: false },
 ];
