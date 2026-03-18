@@ -25,7 +25,6 @@ export default function DescentSection() {
   const flyoverRef = useRef<HTMLDivElement>(null);
   const planeRef = useRef<HTMLDivElement>(null);
 
-  const lipRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLDivElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
   const attributionRef = useRef<HTMLDivElement>(null);
