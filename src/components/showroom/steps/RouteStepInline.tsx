@@ -275,11 +275,12 @@ export function RouteStepInline({ filters, onUpdateFilters, filteredCount, onNex
           right: 0,
           zIndex: 10,
           padding: "0 16px 20px",
+          pointerEvents: "none",
         }}
       >
         {/* Selected city pills */}
         {selectedCities.length > 0 && (
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 8, justifyContent: "center", marginBottom: 12 }}>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 8, justifyContent: "center", marginBottom: 12, pointerEvents: "auto" }}>
             {selectedCities.map((city) => (
               <span
                 key={city.name}
@@ -320,7 +321,7 @@ export function RouteStepInline({ filters, onUpdateFilters, filteredCount, onNex
         )}
 
         {/* Popular routes */}
-        <div style={{ textAlign: "center" }}>
+        <div style={{ textAlign: "center", pointerEvents: "auto" }}>
           <h3
             style={{
               fontSize: 10,
