@@ -41,7 +41,7 @@ export function PassengerStep({
         <h2
           className="text-3xl md:text-5xl"
           style={{
-            fontFamily: "var(--font-playfair)",
+            fontFamily: "var(--font-inter)",
             color: "var(--sr-text)",
             fontWeight: 400,
           }}
@@ -52,7 +52,7 @@ export function PassengerStep({
           className="text-base md:text-lg"
           style={{
             color: "var(--sr-text-muted)",
-            fontFamily: "var(--font-dm-sans)",
+            fontFamily: "var(--font-inter)",
           }}
         >
           Typical party size for your flights
@@ -117,7 +117,7 @@ export function PassengerStep({
           <span
             className="relative text-[80px] md:text-[120px] leading-none tabular-nums select-none"
             style={{
-              fontFamily: "var(--font-jetbrains)",
+              fontFamily: "var(--font-inter)",
               color: "var(--sr-text)",
               fontWeight: 300,
             }}
@@ -169,7 +169,7 @@ export function PassengerStep({
         className="text-center text-sm tracking-widest uppercase"
         style={{
           color: "var(--sr-text-dim)",
-          fontFamily: "var(--font-dm-sans)",
+          fontFamily: "var(--font-inter)",
         }}
       >
         passenger{minPassengers !== 1 ? "s" : ""} minimum
@@ -245,7 +245,7 @@ function CabinToggle({
           ? "1.5px solid var(--sr-gold)"
           : "1.5px solid var(--sr-border)",
         color: active ? "var(--sr-gold)" : "var(--sr-text-muted)",
-        fontFamily: "var(--font-dm-sans)",
+        fontFamily: "var(--font-inter)",
         fontSize: "0.875rem",
       }}
       onMouseEnter={(e) => {

@@ -5,7 +5,7 @@ import SectionLabel from "@/components/ui/SectionLabel";
 import StatCounter from "@/components/ui/StatCounter";
 import useScrollFade from "@/hooks/useScrollFade";
 
-const SERIF = "var(--font-cormorant), Georgia, serif";
+const SERIF = "var(--font-inter), system-ui, sans-serif";
 const SANS = "var(--font-inter), system-ui, sans-serif";
 const GOLD = "#B8976A";
 

@@ -108,14 +108,14 @@ const labelStyle: CSSProperties = {
   letterSpacing: "0.2em",
   color: "var(--sr-text-dim)",
   marginBottom: "6px",
-  fontFamily: "var(--font-dm-sans), system-ui, sans-serif",
+  fontFamily: "var(--font-inter), system-ui, sans-serif",
 };
 
 const inputStyle: CSSProperties = {
   width: "100%",
   padding: "10px 12px",
   fontSize: "13px",
-  fontFamily: "var(--font-dm-sans), system-ui, sans-serif",
+  fontFamily: "var(--font-inter), system-ui, sans-serif",
   background: "var(--sr-bg)",
   border: "1px solid var(--sr-border)",
   color: "var(--sr-text)",
@@ -126,7 +126,7 @@ const inputStyle: CSSProperties = {
 const sectionTitleStyle: CSSProperties = {
   fontSize: "14px",
   fontWeight: 500,
-  fontFamily: "var(--font-playfair), Georgia, serif",
+  fontFamily: "var(--font-inter), system-ui, sans-serif",
   color: "var(--sr-text)",
   marginBottom: "20px",
   paddingBottom: "10px",
@@ -226,7 +226,7 @@ export default function AircraftForm({
         step={opts?.step ?? "1"}
         style={{
           ...inputStyle,
-          fontFamily: "var(--font-jetbrains), monospace",
+          fontFamily: "var(--font-inter), system-ui, sans-serif",
           fontSize: "12px",
         }}
         onFocus={focusBorder}
@@ -263,7 +263,7 @@ export default function AircraftForm({
         cursor: "pointer",
         padding: "8px 0",
         fontSize: "13px",
-        fontFamily: "var(--font-dm-sans), system-ui, sans-serif",
+        fontFamily: "var(--font-inter), system-ui, sans-serif",
         color: "var(--sr-text-muted)",
       }}
     >
@@ -345,7 +345,7 @@ export default function AircraftForm({
               onChange={(e) => set("year", Number(e.target.value))}
               style={{
                 ...inputStyle,
-                fontFamily: "var(--font-jetbrains), monospace",
+                fontFamily: "var(--font-inter), system-ui, sans-serif",
                 fontSize: "12px",
               }}
               onFocus={focusBorder}
@@ -418,7 +418,7 @@ export default function AircraftForm({
               onChange={(e) => set("serialNumber", e.target.value)}
               style={{
                 ...inputStyle,
-                fontFamily: "var(--font-jetbrains), monospace",
+                fontFamily: "var(--font-inter), system-ui, sans-serif",
                 fontSize: "12px",
               }}
               onFocus={focusBorder}
@@ -537,7 +537,7 @@ export default function AircraftForm({
               placeholder="0"
               style={{
                 ...inputStyle,
-                fontFamily: "var(--font-jetbrains), monospace",
+                fontFamily: "var(--font-inter), system-ui, sans-serif",
                 fontSize: "14px",
               }}
               onFocus={focusBorder}
@@ -553,7 +553,7 @@ export default function AircraftForm({
                 cursor: "pointer",
                 padding: "10px 0",
                 fontSize: "13px",
-                fontFamily: "var(--font-dm-sans), system-ui, sans-serif",
+                fontFamily: "var(--font-inter), system-ui, sans-serif",
                 color: "var(--sr-text-muted)",
               }}
             >
@@ -647,7 +647,7 @@ export default function AircraftForm({
             padding: "12px 32px",
             fontSize: "12px",
             fontWeight: 600,
-            fontFamily: "var(--font-dm-sans), system-ui, sans-serif",
+            fontFamily: "var(--font-inter), system-ui, sans-serif",
             textTransform: "uppercase",
             letterSpacing: "0.15em",
             background: "transparent",
@@ -673,7 +673,7 @@ export default function AircraftForm({
             padding: "12px 40px",
             fontSize: "12px",
             fontWeight: 600,
-            fontFamily: "var(--font-dm-sans), system-ui, sans-serif",
+            fontFamily: "var(--font-inter), system-ui, sans-serif",
             textTransform: "uppercase",
             letterSpacing: "0.15em",
             background: "var(--sr-gold)",

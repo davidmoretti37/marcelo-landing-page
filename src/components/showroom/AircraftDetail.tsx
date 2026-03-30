@@ -23,7 +23,7 @@ function formatStat(val: number | undefined, suffix: string): string {
   return val.toLocaleString("en-US") + " " + suffix;
 }
 
-const MONO_FONT = "var(--font-b612), 'B612 Mono', monospace";
+const MONO_FONT = "var(--font-inter), system-ui, sans-serif";
 
 // ─── Main Component ────────────────────────────────────────────────────────
 
@@ -348,7 +348,7 @@ export default function AircraftDetail({ aircraft, onClose }: AircraftDetailProp
                       background: "rgba(0,0,0,0.5)",
                       color: "rgba(255,255,255,0.5)",
                       backdropFilter: "blur(4px)",
-                      fontFamily: "var(--font-dm-sans)",
+                      fontFamily: "var(--font-inter)",
                     }}
                   >
                     {aircraft.photos[photoIndex].caption}
@@ -982,7 +982,7 @@ export default function AircraftDetail({ aircraft, onClose }: AircraftDetailProp
                       background: f.active ? "rgba(184,151,106,0.1)" : "rgba(0,0,0,0.03)",
                       border: f.active ? "1px solid rgba(184,151,106,0.3)" : "1px solid rgba(0,0,0,0.06)",
                       color: f.active ? "#B8976A" : "#A8A49E",
-                      fontFamily: "var(--font-dm-sans)",
+                      fontFamily: "var(--font-inter)",
                     }}
                   >
                     {f.active ? (

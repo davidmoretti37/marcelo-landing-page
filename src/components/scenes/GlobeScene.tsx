@@ -9,6 +9,7 @@ import { usePlaneControls } from "@/components/three/PlaneCanvas";
 
 export default function GlobeScene() {
   const section = useRef<HTMLElement>(null);
+  const scrollProgress = useRef(0);
   const { setState } = usePlaneControls();
 
   useLayoutEffect(() => {
@@ -20,6 +21,9 @@ export default function GlobeScene() {
           trigger: section.current, start: "top top", end: "+=200%", pin: true, scrub: 1,
           onEnter: () => setState({ visible: false }),
           onEnterBack: () => setState({ visible: false }),
+          onUpdate: (self) => {
+            scrollProgress.current = self.progress;
+          },
         },
       });
 
@@ -39,7 +43,7 @@ export default function GlobeScene() {
       <div className="g-content" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "clamp(24px, 4vw, 60px)", maxWidth: 1280, margin: "0 auto", height: "100%", padding: "0 clamp(24px, 5vw, 64px)", alignItems: "center" }}>
         <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
           <div className="g-globe" style={{ width: "100%", maxWidth: 480, aspectRatio: "1" }}>
-            <GlobeCanvas />
+            <GlobeCanvas scrollProgress={scrollProgress} />
           </div>
         </div>
         <div>

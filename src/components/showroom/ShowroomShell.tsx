@@ -127,7 +127,7 @@ export function ShowroomShell({ onExit }: ShowroomShellProps) {
             </svg>
             <span
               className="text-sm tracking-widest uppercase"
-              style={{ fontFamily: "var(--font-playfair)" }}
+              style={{ fontFamily: "var(--font-inter)" }}
             >
               Spark Jets
             </span>
@@ -146,7 +146,7 @@ export function ShowroomShell({ onExit }: ShowroomShellProps) {
             className="hidden md:block text-sm"
             style={{
               color: "var(--sr-text-muted)",
-              fontFamily: "var(--font-dm-sans)",
+              fontFamily: "var(--font-inter)",
             }}
           >
             Step {step + 1} of 4
@@ -154,7 +154,10 @@ export function ShowroomShell({ onExit }: ShowroomShellProps) {
         </div>
 
         {/* Main content area */}
-        <div className="flex-1 overflow-y-auto">
+        <div className="flex-1 overflow-y-auto relative" style={{ minHeight: step === 0 ? "100%" : undefined }}>
+          {/* Route step renders fullscreen inside this container */}
+          {!loading && step === 0 && <RouteStep {...stepProps} onNext={handleNext} dark />}
+
           <div
             className="max-w-5xl mx-auto px-6 py-8 md:py-12"
             style={{
@@ -164,6 +167,7 @@ export function ShowroomShell({ onExit }: ShowroomShellProps) {
                 : "translateY(0)",
               transition:
                 "opacity 300ms ease, transform 300ms ease",
+              display: step === 0 ? "none" : undefined,
             }}
           >
             {loading ? (
@@ -181,7 +185,6 @@ export function ShowroomShell({ onExit }: ShowroomShellProps) {
               </div>
             ) : (
               <>
-                {step === 0 && <RouteStep {...stepProps} />}
                 {step === 1 && <PassengerStep {...stepProps} />}
                 {step === 2 && <BudgetStep {...stepProps} />}
                 {step === 3 && (
@@ -210,7 +213,7 @@ export function ShowroomShell({ onExit }: ShowroomShellProps) {
                 style={{
                   color: "var(--sr-text-muted)",
                   border: "1px solid var(--sr-border)",
-                  fontFamily: "var(--font-dm-sans)",
+                  fontFamily: "var(--font-inter)",
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.borderColor =
@@ -246,7 +249,7 @@ export function ShowroomShell({ onExit }: ShowroomShellProps) {
             className="text-sm"
             style={{
               color: "var(--sr-text-muted)",
-              fontFamily: "var(--font-jetbrains)",
+              fontFamily: "var(--font-inter)",
             }}
           >
             <span style={{ color: "var(--sr-gold)" }}>
@@ -264,7 +267,7 @@ export function ShowroomShell({ onExit }: ShowroomShellProps) {
                 style={{
                   background: "var(--sr-gold)",
                   color: "var(--sr-bg)",
-                  fontFamily: "var(--font-dm-sans)",
+                  fontFamily: "var(--font-inter)",
                   fontWeight: 600,
                 }}
                 onMouseEnter={(e) => {
@@ -297,7 +300,7 @@ export function ShowroomShell({ onExit }: ShowroomShellProps) {
                 style={{
                   border: "1px solid var(--sr-gold)",
                   color: "var(--sr-gold)",
-                  fontFamily: "var(--font-dm-sans)",
+                  fontFamily: "var(--font-inter)",
                   fontWeight: 600,
                 }}
                 onMouseEnter={(e) => {

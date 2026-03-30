@@ -97,7 +97,7 @@ export default function PhotoUpload({ photos, onChange }: PhotoUploadProps) {
       >
         <span
           style={{
-            fontFamily: "var(--font-jetbrains), monospace",
+            fontFamily: "var(--font-inter), system-ui, sans-serif",
             fontSize: "12px",
             color: "var(--sr-text-muted)",
           }}
@@ -112,7 +112,7 @@ export default function PhotoUpload({ photos, onChange }: PhotoUploadProps) {
             padding: "8px 20px",
             fontSize: "11px",
             fontWeight: 600,
-            fontFamily: "var(--font-dm-sans), system-ui, sans-serif",
+            fontFamily: "var(--font-inter), system-ui, sans-serif",
             textTransform: "uppercase",
             letterSpacing: "0.15em",
             background: photos.length >= MAX_PHOTOS ? "var(--sr-surface-hover)" : "transparent",
@@ -208,7 +208,7 @@ export default function PhotoUpload({ photos, onChange }: PhotoUploadProps) {
                   marginTop: "6px",
                   padding: "6px 8px",
                   fontSize: "11px",
-                  fontFamily: "var(--font-dm-sans), system-ui, sans-serif",
+                  fontFamily: "var(--font-inter), system-ui, sans-serif",
                   background: "var(--sr-surface)",
                   border: "1px solid var(--sr-border)",
                   color: "var(--sr-text)",
@@ -243,7 +243,7 @@ export default function PhotoUpload({ photos, onChange }: PhotoUploadProps) {
             style={{
               fontSize: "13px",
               color: "var(--sr-text-dim)",
-              fontFamily: "var(--font-dm-sans), system-ui, sans-serif",
+              fontFamily: "var(--font-inter), system-ui, sans-serif",
             }}
           >
             Click to add photos
@@ -253,7 +253,7 @@ export default function PhotoUpload({ photos, onChange }: PhotoUploadProps) {
               fontSize: "11px",
               color: "var(--sr-text-dim)",
               marginTop: "4px",
-              fontFamily: "var(--font-dm-sans), system-ui, sans-serif",
+              fontFamily: "var(--font-inter), system-ui, sans-serif",
               opacity: 0.6,
             }}
           >

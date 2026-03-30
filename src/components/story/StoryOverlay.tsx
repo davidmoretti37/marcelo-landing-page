@@ -13,9 +13,9 @@ import GlassSurface from "@/components/ui/GlassSurface";
   3D scene visible in the right 62vw "window."
 */
 
-const SERIF = "var(--font-cormorant), Georgia, serif";
+const SERIF = "var(--font-inter), system-ui, sans-serif";
 const SANS = "var(--font-inter), system-ui, sans-serif";
-const HUD_FONT = "var(--font-b612), 'B612 Mono', monospace";
+const HUD_FONT = "var(--font-inter), system-ui, sans-serif";
 const GOLD = "#C4A96B";
 const GOLD_BRIGHT = "#d4b978";
 const DIM = "rgba(255,255,255,0.35)";

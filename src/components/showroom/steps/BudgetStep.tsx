@@ -60,7 +60,7 @@ export function BudgetStep({
         <h2
           className="text-3xl md:text-5xl"
           style={{
-            fontFamily: "var(--font-playfair)",
+            fontFamily: "var(--font-inter)",
             color: "var(--sr-text)",
             fontWeight: 400,
           }}
@@ -71,7 +71,7 @@ export function BudgetStep({
           className="text-base md:text-lg"
           style={{
             color: "var(--sr-text-muted)",
-            fontFamily: "var(--font-dm-sans)",
+            fontFamily: "var(--font-inter)",
           }}
         >
           Set your acquisition budget range
@@ -83,7 +83,7 @@ export function BudgetStep({
         <p
           className="text-2xl md:text-4xl tabular-nums"
           style={{
-            fontFamily: "var(--font-jetbrains)",
+            fontFamily: "var(--font-inter)",
             color: "var(--sr-text)",
             fontWeight: 300,
           }}
@@ -134,7 +134,7 @@ export function BudgetStep({
                 color: active
                   ? "var(--sr-gold)"
                   : "var(--sr-text-muted)",
-                fontFamily: "var(--font-dm-sans)",
+                fontFamily: "var(--font-inter)",
                 fontWeight: active ? 600 : 400,
               }}
               onMouseEnter={(e) => {
@@ -164,7 +164,7 @@ export function BudgetStep({
         className="text-center text-sm"
         style={{
           color: "var(--sr-text-dim)",
-          fontFamily: "var(--font-dm-sans)",
+          fontFamily: "var(--font-inter)",
         }}
       >
         {filteredCount > 0 ? (
@@ -172,7 +172,7 @@ export function BudgetStep({
             <span
               style={{
                 color: "var(--sr-gold)",
-                fontFamily: "var(--font-jetbrains)",
+                fontFamily: "var(--font-inter)",
               }}
             >
               {filteredCount}
@@ -324,7 +324,7 @@ function GoldSlider({
           className="text-xs"
           style={{
             color: "var(--sr-text-dim)",
-            fontFamily: "var(--font-jetbrains)",
+            fontFamily: "var(--font-inter)",
           }}
         >
           {formatBudget(min)}
@@ -333,7 +333,7 @@ function GoldSlider({
           className="text-xs"
           style={{
             color: "var(--sr-text-dim)",
-            fontFamily: "var(--font-jetbrains)",
+            fontFamily: "var(--font-inter)",
           }}
         >
           {formatBudget(max)}

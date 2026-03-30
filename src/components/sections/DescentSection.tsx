@@ -211,7 +211,7 @@ export default function DescentSection() {
       <div
         ref={attributionRef}
         className="absolute left-0 right-0 text-center font-sans text-[12px] tracking-[0.2em] uppercase text-[#A8A49E] opacity-0"
-        style={{ top: "calc(50% + 80px)" }}
+        style={{ top: "calc(50% + 120px)" }}
       >
         Marcelo Borin &mdash; Founder, Spark Aviation
       </div>
@@ -237,7 +237,7 @@ export default function DescentSection() {
           <p className={lineClasses.replace("col-start-1 row-start-1 ", "")}>
             He builds <span className="text-[#C8A96E]">legacies.</span>
           </p>
-          <p className="font-sans text-[12px] tracking-[0.2em] uppercase text-[#A8A49E] mt-8">
+          <p className="font-sans text-[12px] tracking-[0.2em] uppercase text-[#A8A49E] mt-16">
             Marcelo Borin &mdash; Founder, Spark Aviation
           </p>
         </div>

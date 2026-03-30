@@ -9,7 +9,7 @@ import { useEffect, useRef, useState } from "react";
 */
 
 const PANEL_W = "38vw"; // briefing panel width
-const HUD = "var(--font-b612), 'B612 Mono', monospace";
+const HUD = "var(--font-inter), system-ui, sans-serif";
 const DIM = "rgba(255,255,255,0.18)";
 const LIVE = "rgba(245,236,216,0.70)";
 const ACCENT = "rgba(196,169,107,0.55)";

@@ -2,9 +2,9 @@
 
 import useScrollFade from "@/hooks/useScrollFade";
 
-const SERIF = "var(--font-cormorant), Georgia, serif";
+const SERIF = "var(--font-inter), system-ui, sans-serif";
 const SANS = "var(--font-inter), system-ui, sans-serif";
-const HUD = "var(--font-b612), 'B612 Mono', monospace";
+const HUD = "var(--font-inter), system-ui, sans-serif";
 const GOLD = "#B8976A";
 
 export default function ContactSection() {

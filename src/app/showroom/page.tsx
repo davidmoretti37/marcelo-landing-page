@@ -23,7 +23,7 @@ export default function ShowroomPage() {
   return (
     <div
       className="relative flex flex-col items-center justify-center min-h-screen overflow-hidden"
-      style={{ fontFamily: "var(--font-dm-sans), system-ui, sans-serif" }}
+      style={{ fontFamily: "var(--font-inter), system-ui, sans-serif" }}
     >
       {/* Subtle gold radial gradient background */}
       <div
@@ -54,7 +54,7 @@ export default function ShowroomPage() {
           <h1
             className="text-5xl md:text-7xl font-medium tracking-tight"
             style={{
-              fontFamily: "var(--font-playfair), Georgia, serif",
+              fontFamily: "var(--font-inter), system-ui, sans-serif",
               color: "var(--sr-text)",
             }}
           >
@@ -80,7 +80,7 @@ export default function ShowroomPage() {
           className="text-xs uppercase tracking-[0.25em]"
           style={{
             color: "var(--sr-text-dim)",
-            fontFamily: "var(--font-jetbrains), monospace",
+            fontFamily: "var(--font-inter), system-ui, sans-serif",
           }}
         >
           {loading ? "Loading Fleet..." : `${availableCount} Aircraft Available`}
@@ -93,7 +93,7 @@ export default function ShowroomPage() {
             background: "transparent",
             border: "1px solid var(--sr-gold)",
             color: "var(--sr-gold-light)",
-            fontFamily: "var(--font-dm-sans), system-ui, sans-serif",
+            fontFamily: "var(--font-inter), system-ui, sans-serif",
           }}
           onMouseEnter={(e) => {
             e.currentTarget.style.background = "var(--sr-gold)";

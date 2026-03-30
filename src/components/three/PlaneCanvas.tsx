@@ -166,8 +166,10 @@ function createStarfield(scene: THREE.Scene) {
   scene.add(points);
 
   return {
-    update(time: number) {
+    update(time: number, skyDarkness?: number) {
       mat.uniforms.uTime.value = time;
+      // Only show stars when sky is dark enough (space section)
+      points.visible = (skyDarkness ?? 0) > 0.3;
     },
     dispose() {
       scene.remove(points);
@@ -308,6 +310,9 @@ export default function PlaneCanvas() {
     // ── Cloud system — stacked texture sprites for volumetric look ──
     const cloudTexture = new THREE.TextureLoader().load("/cloud.png");
     cloudTexture.colorSpace = THREE.SRGBColorSpace;
+    cloudTexture.generateMipmaps = true;
+    cloudTexture.minFilter = THREE.LinearMipmapLinearFilter;
+    cloudTexture.magFilter = THREE.LinearFilter;
 
     interface CloudSpriteData {
       mesh: THREE.Mesh;
@@ -340,8 +345,8 @@ export default function PlaneCanvas() {
 
         // Core sprites (near center): larger + more opaque
         // Edge sprites (far from center): smaller + wispy
-        const baseScale = THREE.MathUtils.lerp(3.5, 1.2, r) * (0.8 + Math.random() * 0.4);
-        const baseOpacity = THREE.MathUtils.lerp(0.25, 0.06, r) * (0.7 + Math.random() * 0.6);
+        const baseScale = THREE.MathUtils.lerp(4.0, 1.5, r) * (0.8 + Math.random() * 0.4);
+        const baseOpacity = THREE.MathUtils.lerp(0.22, 0.02, r) * (0.6 + Math.random() * 0.4);
 
         const mat = new THREE.MeshBasicMaterial({
           map: cloudTexture,
@@ -566,14 +571,13 @@ export default function PlaneCanvas() {
 
     // ── Post-processing ──
     const w = el.clientWidth, h = el.clientHeight;
-    const composer = new EffectComposer(r);
+    const rt = new THREE.WebGLRenderTarget(w, h, {
+      type: THREE.HalfFloatType,
+      minFilter: THREE.LinearFilter,
+      magFilter: THREE.LinearFilter,
+    });
+    const composer = new EffectComposer(r, rt);
     composer.addPass(new RenderPass(sc, cam));
-    composer.addPass(new UnrealBloomPass(
-      new THREE.Vector2(w, h),
-      0.15,  // gentle bloom on cloud edges
-      0.8,
-      0.85
-    ));
     composer.addPass(new OutputPass());
     composerRef.current = composer;
 
@@ -640,8 +644,8 @@ export default function PlaneCanvas() {
         });
       }
 
-      // ── Update starfield — just twinkle, always full brightness ──
-      starfield.update(elapsed);
+      // ── Update starfield — only visible when sky is dark ──
+      starfield.update(elapsed, p.skyDarkness);
 
       // ── Sky darkness ──
       sky.update(p.skyDarkness);

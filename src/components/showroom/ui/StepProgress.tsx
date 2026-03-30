@@ -103,7 +103,7 @@ export function StepProgress({ currentStep, onStepClick }: StepProgressProps) {
                   : isCurrent
                     ? "var(--sr-gold)"
                     : "var(--sr-text-muted)",
-                fontFamily: "var(--font-dm-sans)",
+                fontFamily: "var(--font-inter)",
                 fontWeight: isCurrent ? 600 : 400,
               }}
             >

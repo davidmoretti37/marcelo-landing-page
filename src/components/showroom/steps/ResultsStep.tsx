@@ -72,7 +72,7 @@ export function ResultsStep({
         <h3
           className="text-xl"
           style={{
-            fontFamily: "var(--font-playfair)",
+            fontFamily: "var(--font-inter)",
             color: "var(--sr-text)",
           }}
         >
@@ -82,7 +82,7 @@ export function ResultsStep({
           className="text-sm"
           style={{
             color: "var(--sr-text-muted)",
-            fontFamily: "var(--font-dm-sans)",
+            fontFamily: "var(--font-inter)",
           }}
         >
           Try adjusting your filters -- widen the budget range, reduce
@@ -109,7 +109,7 @@ export function ResultsStep({
         <h2
           className="text-xl md:text-2xl"
           style={{
-            fontFamily: "var(--font-playfair)",
+            fontFamily: "var(--font-inter)",
             color: "var(--sr-text)",
             fontWeight: 400,
           }}
@@ -117,7 +117,7 @@ export function ResultsStep({
           <span
             style={{
               color: "var(--sr-gold)",
-              fontFamily: "var(--font-jetbrains)",
+              fontFamily: "var(--font-inter)",
             }}
           >
             {aircraft.length}
@@ -134,7 +134,7 @@ export function ResultsStep({
             background: "var(--sr-surface)",
             border: "1px solid var(--sr-border)",
             color: "var(--sr-text-muted)",
-            fontFamily: "var(--font-dm-sans)",
+            fontFamily: "var(--font-inter)",
             backgroundImage: `url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='rgba(0,0,0,0.3)' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")`,
             backgroundRepeat: "no-repeat",
             backgroundPosition: "right 12px center",
@@ -233,7 +233,7 @@ function AircraftCard({
             background: "rgba(255,255,255,0.85)",
             border: "1px solid var(--sr-border-gold)",
             color: "var(--sr-gold)",
-            fontFamily: "var(--font-dm-sans)",
+            fontFamily: "var(--font-inter)",
             backdropFilter: "blur(8px)",
           }}
         >
@@ -249,7 +249,7 @@ function AircraftCard({
             className="text-base font-medium leading-tight"
             style={{
               color: "var(--sr-text)",
-              fontFamily: "var(--font-dm-sans)",
+              fontFamily: "var(--font-inter)",
             }}
           >
             {aircraft.name}
@@ -258,7 +258,7 @@ function AircraftCard({
             className="text-xs mt-0.5"
             style={{
               color: "var(--sr-text-dim)",
-              fontFamily: "var(--font-jetbrains)",
+              fontFamily: "var(--font-inter)",
             }}
           >
             {aircraft.year} &middot; S/N {aircraft.serialNumber}
@@ -268,7 +268,7 @@ function AircraftCard({
         {/* Specs mini grid */}
         <div
           className="grid grid-cols-2 gap-x-4 gap-y-2"
-          style={{ fontFamily: "var(--font-jetbrains)" }}
+          style={{ fontFamily: "var(--font-inter)" }}
         >
           <SpecItem label="Range" value={formatRange(aircraft.specs.range_nm)} />
           <SpecItem
@@ -300,7 +300,7 @@ function AircraftCard({
                 style={{
                   background: "rgba(0,0,0,0.04)",
                   color: "var(--sr-text-dim)",
-                  fontFamily: "var(--font-dm-sans)",
+                  fontFamily: "var(--font-inter)",
                 }}
               >
                 {f}
@@ -316,7 +316,7 @@ function AircraftCard({
           style={{
             border: "1px solid var(--sr-border-gold)",
             color: "var(--sr-gold)",
-            fontFamily: "var(--font-dm-sans)",
+            fontFamily: "var(--font-inter)",
             fontWeight: 500,
           }}
           onMouseEnter={(e) => {
@@ -352,7 +352,7 @@ function SpecItem({
         className="text-[10px] uppercase tracking-wider"
         style={{
           color: "var(--sr-text-dim)",
-          fontFamily: "var(--font-dm-sans)",
+          fontFamily: "var(--font-inter)",
         }}
       >
         {label}
@@ -361,7 +361,7 @@ function SpecItem({
         className="text-sm tabular-nums"
         style={{
           color: gold ? "var(--sr-gold)" : "var(--sr-text)",
-          fontFamily: "var(--font-jetbrains)",
+          fontFamily: "var(--font-inter)",
         }}
       >
         {value}

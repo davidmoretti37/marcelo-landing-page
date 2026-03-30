@@ -5,7 +5,7 @@ import type { ShowroomFilters } from "@/lib/showroom/types";
 import { useInventory, seedDemoData } from "@/lib/showroom/store";
 import { filterAircraft } from "@/lib/showroom/filters";
 import { StepProgress } from "@/components/showroom/ui/StepProgress";
-import { RouteStep } from "@/components/showroom/steps/RouteStep";
+import { RouteStepInline as RouteStep } from "@/components/showroom/steps/RouteStepInline";
 import { PassengerStep } from "@/components/showroom/steps/PassengerStep";
 import { BudgetStep } from "@/components/showroom/steps/BudgetStep";
 import { ResultsStep } from "@/components/showroom/steps/ResultsStep";
@@ -75,7 +75,7 @@ export default function ShowroomInline() {
   return (
     <section
       id="showroom"
-      className="py-12 md:py-20"
+      className={step === 0 ? "pt-16 pb-0" : "py-12 md:py-20"}
       style={{
         "--sr-bg": "#F8F7F4",
         "--sr-surface": "#EFEDE8",
@@ -91,10 +91,10 @@ export default function ShowroomInline() {
         background: "#F8F7F4",
       } as React.CSSProperties}
     >
-      {/* Top bar */}
+      {/* Top bar — hidden on step 0 (map has its own side nav) */}
       <div
         className="flex items-center justify-between px-6 py-3 border-b max-w-6xl mx-auto"
-        style={{ borderColor: "var(--sr-border)" }}
+        style={{ borderColor: "var(--sr-border)", display: step === 0 ? "none" : undefined }}
       >
         <div className="flex items-center gap-2" style={{ color: "var(--sr-gold)" }}>
           <svg
@@ -111,7 +111,7 @@ export default function ShowroomInline() {
           </svg>
           <span
             className="text-xs tracking-widest uppercase"
-            style={{ fontFamily: "var(--font-playfair)" }}
+            style={{ fontFamily: "var(--font-inter)" }}
           >
             Digital Showroom
           </span>
@@ -125,7 +125,7 @@ export default function ShowroomInline() {
           className="hidden md:block text-xs"
           style={{
             color: "var(--sr-text-muted)",
-            fontFamily: "var(--font-dm-sans)",
+            fontFamily: "var(--font-inter)",
           }}
         >
           Step {step + 1} of 4
@@ -134,11 +134,12 @@ export default function ShowroomInline() {
 
       {/* Main content */}
       <div
-        className="max-w-5xl mx-auto px-6 py-6 md:py-8"
+        className={step === 0 ? "" : "max-w-5xl mx-auto px-6 py-6 md:py-8"}
         style={{
           opacity: transitioning ? 0 : 1,
           transform: transitioning ? "translateY(12px)" : "translateY(0)",
           transition: "opacity 250ms ease, transform 250ms ease",
+          ...(step === 0 ? { overflow: "visible" } : {}),
         }}
       >
         {loading ? (
@@ -156,7 +157,7 @@ export default function ShowroomInline() {
           </div>
         ) : (
           <>
-            {step === 0 && <RouteStep {...stepProps} />}
+            {step === 0 && <RouteStep {...stepProps} onNext={handleNext} currentStep={step} onStepClick={handleStepClick} />}
             {step === 1 && <PassengerStep {...stepProps} />}
             {step === 2 && <BudgetStep {...stepProps} />}
             {step === 3 && (
@@ -170,10 +171,10 @@ export default function ShowroomInline() {
         )}
       </div>
 
-      {/* Bottom bar */}
+      {/* Bottom bar — hidden on step 0 (map has its own overlaid controls) */}
       <div
         className="flex items-center justify-between px-6 py-3 border-t max-w-6xl mx-auto"
-        style={{ borderColor: "var(--sr-border)" }}
+        style={{ borderColor: "var(--sr-border)", display: step === 0 ? "none" : undefined }}
       >
         <div className="w-24">
           {step > 0 && (
@@ -183,7 +184,7 @@ export default function ShowroomInline() {
               style={{
                 color: "var(--sr-text-muted)",
                 border: "1px solid var(--sr-border)",
-                fontFamily: "var(--font-dm-sans)",
+                fontFamily: "var(--font-inter)",
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.borderColor = "var(--sr-border-gold)";
@@ -215,7 +216,7 @@ export default function ShowroomInline() {
           className="text-sm"
           style={{
             color: "var(--sr-text-muted)",
-            fontFamily: "var(--font-jetbrains)",
+            fontFamily: "var(--font-inter)",
           }}
         >
           <span style={{ color: "var(--sr-gold)" }}>
@@ -232,7 +233,7 @@ export default function ShowroomInline() {
               style={{
                 background: "var(--sr-gold)",
                 color: "var(--sr-bg)",
-                fontFamily: "var(--font-dm-sans)",
+                fontFamily: "var(--font-inter)",
                 fontWeight: 600,
               }}
               onMouseEnter={(e) => {
@@ -266,7 +267,7 @@ export default function ShowroomInline() {
               style={{
                 border: "1px solid var(--sr-gold)",
                 color: "var(--sr-gold)",
-                fontFamily: "var(--font-dm-sans)",
+                fontFamily: "var(--font-inter)",
                 fontWeight: 600,
               }}
               onMouseEnter={(e) => {

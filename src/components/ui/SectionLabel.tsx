@@ -1,7 +1,7 @@
 "use client";
 
 const GOLD = "#B8976A";
-const HUD = "var(--font-b612), 'B612 Mono', monospace";
+const HUD = "var(--font-inter), system-ui, sans-serif";
 
 export default function SectionLabel({ text }: { text: string }) {
   return (

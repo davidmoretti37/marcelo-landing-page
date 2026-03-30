@@ -51,7 +51,6 @@ export const SHOWROOM_CITIES: City[] = [
   { name: "Hong Kong",     coords: [114.1694, 22.3193],  region: "Asia-Pacific" },
   { name: "Mumbai",        coords: [72.8777,  19.076],   region: "Asia-Pacific" },
   { name: "Shanghai",      coords: [121.4737, 31.2304],  region: "Asia-Pacific" },
-  { name: "Sydney",        coords: [151.2093, -33.8688], region: "Asia-Pacific" },
   { name: "Maldives",      coords: [73.5093,  4.1755],   region: "Asia-Pacific" },
 
   // ── South America ─────────────────────────────────────────────────────────
@@ -83,5 +82,5 @@ export const QUICK_ROUTES: { label: string; cities: [string, string] }[] = [
   { label: "Hong Kong \u2194 Tokyo",   cities: ["Hong Kong", "Tokyo"] },
   { label: "NYC \u2194 Paris",         cities: ["New York", "Paris"] },
   { label: "Miami \u2194 Cancun",      cities: ["Miami", "Cancun"] },
-  { label: "Sydney \u2194 Singapore",  cities: ["Sydney", "Singapore"] },
+  { label: "Dubai \u2194 Mumbai",      cities: ["Dubai", "Mumbai"] },
 ];

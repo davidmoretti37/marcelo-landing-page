@@ -45,34 +45,34 @@ export default function IntroSplash({ onComplete }: IntroSplashProps) {
       const tl = gsap.timeline();
 
       // Fade in SVG
-      tl.to(svg, { opacity: 1, duration: 0.4, ease: "power2.out" }, 0.2);
+      tl.to(svg, { opacity: 1, duration: 0.25, ease: "power2.out" }, 0.1);
 
-      // Draw both paths
-      tl.to(p1, { strokeDashoffset: 0, duration: 1.6, ease: "power2.inOut" }, 0.3);
-      tl.to(p2, { strokeDashoffset: 0, duration: 1.6, ease: "power2.inOut" }, 0.5);
+      // Draw both paths (faster, overlapping)
+      tl.to(p1, { strokeDashoffset: 0, duration: 0.8, ease: "power2.inOut" }, 0.15);
+      tl.to(p2, { strokeDashoffset: 0, duration: 0.8, ease: "power2.inOut" }, 0.25);
 
       // Flash glow behind logo
-      tl.to(glow, { opacity: 1, duration: 0.12, ease: "power2.in" }, 2.1);
-      tl.to(glow, { opacity: 0, duration: 0.5, ease: "power2.out" }, 2.22);
+      tl.to(glow, { opacity: 1, duration: 0.08, ease: "power2.in" }, 1.0);
+      tl.to(glow, { opacity: 0, duration: 0.3, ease: "power2.out" }, 1.08);
 
       // Fill paths + hide stroke
-      tl.to([p1, p2], { fill: "rgba(184,151,106,0.9)", duration: 0.3, ease: "power1.in" }, 2.1);
-      tl.to([p1, p2], { stroke: "transparent", duration: 0.2 }, 2.3);
+      tl.to([p1, p2], { fill: "rgba(184,151,106,0.9)", duration: 0.2, ease: "power1.in" }, 1.0);
+      tl.to([p1, p2], { stroke: "transparent", duration: 0.15 }, 1.15);
 
       // Zoom + fade out logo
       tl.to(svg, {
         scale: 15,
         opacity: 0,
-        duration: 0.7,
+        duration: 0.5,
         ease: "expo.in",
-      }, 2.6);
+      }, 1.3);
 
       // Overlay fades
       tl.to(overlay, {
         opacity: 0,
-        duration: 0.4,
+        duration: 0.3,
         onComplete: () => { setDone(true); onComplete?.(); },
-      }, 3.0);
+      }, 1.55);
     }, overlayRef);
 
     return () => ctx.revert();

@@ -49,7 +49,7 @@ export default function InventoryTable({
           style={{
             fontSize: "15px",
             color: "var(--sr-text-muted)",
-            fontFamily: "var(--font-dm-sans), system-ui, sans-serif",
+            fontFamily: "var(--font-inter), system-ui, sans-serif",
             marginBottom: "8px",
           }}
         >
@@ -59,7 +59,7 @@ export default function InventoryTable({
           style={{
             fontSize: "12px",
             color: "var(--sr-text-dim)",
-            fontFamily: "var(--font-dm-sans), system-ui, sans-serif",
+            fontFamily: "var(--font-inter), system-ui, sans-serif",
           }}
         >
           Click &quot;Add Aircraft&quot; above to add your first listing
@@ -74,7 +74,7 @@ export default function InventoryTable({
         style={{
           width: "100%",
           borderCollapse: "collapse",
-          fontFamily: "var(--font-dm-sans), system-ui, sans-serif",
+          fontFamily: "var(--font-inter), system-ui, sans-serif",
         }}
       >
         <thead>
@@ -149,7 +149,7 @@ export default function InventoryTable({
                         style={{
                           fontSize: "10px",
                           color: "var(--sr-text-dim)",
-                          fontFamily: "var(--font-jetbrains), monospace",
+                          fontFamily: "var(--font-inter), system-ui, sans-serif",
                         }}
                       >
                         --
@@ -189,7 +189,7 @@ export default function InventoryTable({
                     padding: "10px 16px",
                     fontSize: "12px",
                     color: "var(--sr-text-muted)",
-                    fontFamily: "var(--font-jetbrains), monospace",
+                    fontFamily: "var(--font-inter), system-ui, sans-serif",
                   }}
                 >
                   {ac.year}
@@ -225,7 +225,7 @@ export default function InventoryTable({
                   style={{
                     padding: "10px 16px",
                     fontSize: "12px",
-                    fontFamily: "var(--font-jetbrains), monospace",
+                    fontFamily: "var(--font-inter), system-ui, sans-serif",
                     color: ac.pricing.showPrice
                       ? "var(--sr-gold-light)"
                       : "var(--sr-text-dim)",
@@ -249,7 +249,7 @@ export default function InventoryTable({
                       padding: "5px 14px",
                       fontSize: "11px",
                       fontWeight: 500,
-                      fontFamily: "var(--font-dm-sans), system-ui, sans-serif",
+                      fontFamily: "var(--font-inter), system-ui, sans-serif",
                       textTransform: "uppercase",
                       letterSpacing: "0.1em",
                       background: "transparent",
@@ -284,7 +284,7 @@ export default function InventoryTable({
                       padding: "5px 14px",
                       fontSize: "11px",
                       fontWeight: 500,
-                      fontFamily: "var(--font-dm-sans), system-ui, sans-serif",
+                      fontFamily: "var(--font-inter), system-ui, sans-serif",
                       textTransform: "uppercase",
                       letterSpacing: "0.1em",
                       background: "transparent",

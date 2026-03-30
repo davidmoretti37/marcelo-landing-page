@@ -31,7 +31,7 @@ export default function Home() {
       // Give 3D a moment to start, then load below-fold
       const t = setTimeout(() => {
         setPhase(3);
-        document.body.classList.add("grain-active");
+        // grain effect removed
       }, 200);
       return () => clearTimeout(t);
     }
@@ -52,7 +52,6 @@ export default function Home() {
                 <GlobeSection />
                 <HangarSection />
                 <ShowroomInline />
-                <LandingCTA />
               </div>
             )}
           </main>

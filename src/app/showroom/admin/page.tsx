@@ -79,7 +79,7 @@ export default function AdminDashboard() {
             textTransform: "uppercase",
             letterSpacing: "0.25em",
             color: "var(--sr-text-dim)",
-            fontFamily: "var(--font-dm-sans), system-ui, sans-serif",
+            fontFamily: "var(--font-inter), system-ui, sans-serif",
           }}
         >
           Loading inventory...
@@ -106,7 +106,7 @@ export default function AdminDashboard() {
             style={{
               fontSize: "28px",
               fontWeight: 500,
-              fontFamily: "var(--font-playfair), Georgia, serif",
+              fontFamily: "var(--font-inter), system-ui, sans-serif",
               color: "var(--sr-text)",
               margin: 0,
               letterSpacing: "-0.01em",
@@ -121,7 +121,7 @@ export default function AdminDashboard() {
               letterSpacing: "0.25em",
               color: "var(--sr-text-dim)",
               marginTop: "6px",
-              fontFamily: "var(--font-dm-sans), system-ui, sans-serif",
+              fontFamily: "var(--font-inter), system-ui, sans-serif",
             }}
           >
             {aircraft.length} aircraft &middot; {formatBytes(storageBytes)} used
@@ -136,7 +136,7 @@ export default function AdminDashboard() {
                 padding: "10px 24px",
                 fontSize: "11px",
                 fontWeight: 600,
-                fontFamily: "var(--font-dm-sans), system-ui, sans-serif",
+                fontFamily: "var(--font-inter), system-ui, sans-serif",
                 textTransform: "uppercase",
                 letterSpacing: "0.15em",
                 background: "transparent",
@@ -155,7 +155,7 @@ export default function AdminDashboard() {
                 padding: "10px 24px",
                 fontSize: "11px",
                 fontWeight: 600,
-                fontFamily: "var(--font-dm-sans), system-ui, sans-serif",
+                fontFamily: "var(--font-inter), system-ui, sans-serif",
                 textTransform: "uppercase",
                 letterSpacing: "0.15em",
                 background: "var(--sr-gold)",
@@ -178,7 +178,7 @@ export default function AdminDashboard() {
               padding: "10px 20px",
               fontSize: "11px",
               fontWeight: 500,
-              fontFamily: "var(--font-dm-sans), system-ui, sans-serif",
+              fontFamily: "var(--font-inter), system-ui, sans-serif",
               textTransform: "uppercase",
               letterSpacing: "0.15em",
               background: "transparent",

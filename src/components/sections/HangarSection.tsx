@@ -584,7 +584,7 @@ export default function HangarSection() {
           <p
             className="font-editorial"
             style={{
-              fontSize: isMobile ? "36px" : "72px",
+              fontSize: isMobile ? "28px" : "48px",
               fontWeight: 300,
               fontStyle: "italic",
               color: "#FFFFFF",
@@ -594,7 +594,7 @@ export default function HangarSection() {
               textShadow: "0 4px 40px rgba(0,0,0,0.6)",
             }}
           >
-            Ready for your next aircraft?
+            Your next aircraft awaits.
           </p>
         </div>
       </div>

@@ -37,7 +37,7 @@ export default function WorldClock() {
             style={{
               fontSize: 26,
               color: clock.highlight ? "#C8A96E" : "#0F0F0D",
-              fontFamily: "var(--font-b612), 'B612 Mono', monospace",
+              fontFamily: "var(--font-inter), system-ui, sans-serif",
             }}
           >
             {times[i] || "--:--:--"}

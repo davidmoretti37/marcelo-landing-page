@@ -4,7 +4,7 @@ import { useRef, useLayoutEffect, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-const SERIF = "var(--font-cormorant), Georgia, serif";
+const SERIF = "var(--font-inter), system-ui, sans-serif";
 
 interface StatCounterProps {
   value: number;

@@ -456,7 +456,7 @@ export default function FleetSection() {
               <div className="grid grid-cols-2 gap-x-7 gap-y-4 mt-6">
                 {plane.stats.map((s) => (
                   <div key={s.key} className="border-t border-[rgba(255,255,255,0.08)] pt-3">
-                    <div className="text-white text-[22px] font-light" style={{ fontFamily: "var(--font-b612), 'B612 Mono', monospace" }}>{s.val}</div>
+                    <div className="text-white text-[22px] font-light" style={{ fontFamily: "var(--font-inter), system-ui, sans-serif" }}>{s.val}</div>
                     <div className="font-sans text-[10px] tracking-[0.18em] uppercase text-[rgba(255,255,255,0.35)] mt-1">{s.key}</div>
                   </div>
                 ))}
@@ -528,7 +528,7 @@ export default function FleetSection() {
                   className="text-white font-light tracking-[0.02em] leading-none"
                   style={{
                     fontSize: 24,
-                    fontFamily: "var(--font-b612), 'B612 Mono', monospace",
+                    fontFamily: "var(--font-inter), system-ui, sans-serif",
                   }}
                 >
                   {stat.val}
@@ -577,7 +577,7 @@ export default function FleetSection() {
                   {i === activeIndex && (
                     <span
                       className="font-sans text-[9px] tracking-[0.15em] uppercase text-[rgba(255,255,255,0.35)]"
-                      style={{ fontFamily: "var(--font-b612), 'B612 Mono', monospace" }}
+                      style={{ fontFamily: "var(--font-inter), system-ui, sans-serif" }}
                     >
                       {plane.blueprint.label}
                     </span>
@@ -626,7 +626,7 @@ export default function FleetSection() {
 
           <div
             className="absolute bottom-6 right-8 pointer-events-none hidden md:block"
-            style={{ fontFamily: "var(--font-b612), 'B612 Mono', monospace" }}
+            style={{ fontFamily: "var(--font-inter), system-ui, sans-serif" }}
           >
             <span className="text-[#C8A96E] text-[28px] font-light">
               {String(activeIndex + 1).padStart(2, "0")}
@@ -712,7 +712,7 @@ export default function FleetSection() {
                         {zone.specs.slice(0, 2).map((s) => (
                           <div key={s.key}>
                             <div className="font-sans text-[8px] text-[rgba(255,255,255,0.3)] tracking-[0.08em] uppercase">{s.key}</div>
-                            <div className="text-white text-[11px] mt-0.5" style={{ fontFamily: "var(--font-b612), 'B612 Mono', monospace" }}>{s.val}</div>
+                            <div className="text-white text-[11px] mt-0.5" style={{ fontFamily: "var(--font-inter), system-ui, sans-serif" }}>{s.val}</div>
                           </div>
                         ))}
                       </div>
@@ -806,7 +806,7 @@ export default function FleetSection() {
                   <div className="flex items-center gap-2 mb-2">
                     <span
                       className="text-[#C8A96E] text-[11px] tracking-[0.3em] uppercase"
-                      style={{ fontFamily: "var(--font-b612), 'B612 Mono', monospace" }}
+                      style={{ fontFamily: "var(--font-inter), system-ui, sans-serif" }}
                     >
                       Zone {String(detailZone + 1).padStart(2, "0")} / {String(zones.length).padStart(2, "0")}
                     </span>
@@ -833,7 +833,7 @@ export default function FleetSection() {
                       </div>
                       <div
                         className="text-white text-[13px] mt-0.5"
-                        style={{ fontFamily: "var(--font-b612), 'B612 Mono', monospace" }}
+                        style={{ fontFamily: "var(--font-inter), system-ui, sans-serif" }}
                       >
                         {spec.val}
                       </div>
@@ -885,7 +885,7 @@ export default function FleetSection() {
                 <div className="absolute inset-0 flex flex-col items-center justify-center">
                   <div
                     className="text-[#C8A96E] text-[32px] font-light opacity-30 mb-2"
-                    style={{ fontFamily: "var(--font-b612), 'B612 Mono', monospace" }}
+                    style={{ fontFamily: "var(--font-inter), system-ui, sans-serif" }}
                   >
                     {bp.label}
                   </div>
@@ -911,11 +911,11 @@ export default function FleetSection() {
                   <div className="fleet-card-preview mt-3 flex gap-4">
                     <div>
                       <div className="font-sans text-[8px] text-[rgba(255,255,255,0.3)] tracking-[0.08em] uppercase">Range</div>
-                      <div className="text-white text-[11px] mt-0.5" style={{ fontFamily: "var(--font-b612), 'B612 Mono', monospace" }}>{aircraft.stats[0]?.val}</div>
+                      <div className="text-white text-[11px] mt-0.5" style={{ fontFamily: "var(--font-inter), system-ui, sans-serif" }}>{aircraft.stats[0]?.val}</div>
                     </div>
                     <div>
                       <div className="font-sans text-[8px] text-[rgba(255,255,255,0.3)] tracking-[0.08em] uppercase">Speed</div>
-                      <div className="text-white text-[11px] mt-0.5" style={{ fontFamily: "var(--font-b612), 'B612 Mono', monospace" }}>{aircraft.stats[1]?.val}</div>
+                      <div className="text-white text-[11px] mt-0.5" style={{ fontFamily: "var(--font-inter), system-ui, sans-serif" }}>{aircraft.stats[1]?.val}</div>
                     </div>
                   </div>
                 </div>
@@ -1055,7 +1055,7 @@ export default function FleetSection() {
                           <span className="font-sans text-[12px] text-[rgba(255,255,255,0.45)] tracking-[0.05em]">
                             {spec.key}
                           </span>
-                          <span className="text-white text-[14px] tracking-[0.03em] tabular-nums" style={{ fontFamily: "var(--font-b612), 'B612 Mono', monospace" }}>
+                          <span className="text-white text-[14px] tracking-[0.03em] tabular-nums" style={{ fontFamily: "var(--font-inter), system-ui, sans-serif" }}>
                             {spec.val}
                             {spec.unit && (
                               <span className="text-[10px] text-[rgba(255,255,255,0.2)] ml-1.5">{spec.unit}</span>

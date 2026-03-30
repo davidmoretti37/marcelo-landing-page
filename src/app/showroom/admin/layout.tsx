@@ -26,7 +26,7 @@ function AdminLogin({ onAuth }: { onAuth: () => void }) {
         <h1
           className="text-2xl font-medium tracking-tight"
           style={{
-            fontFamily: "var(--font-playfair), Georgia, serif",
+            fontFamily: "var(--font-inter), system-ui, sans-serif",
             color: "var(--sr-text)",
           }}
         >
@@ -53,7 +53,7 @@ function AdminLogin({ onAuth }: { onAuth: () => void }) {
               ? "1px solid rgba(220, 80, 80, 0.6)"
               : "1px solid var(--sr-border)",
             color: "var(--sr-text)",
-            fontFamily: "var(--font-dm-sans), system-ui, sans-serif",
+            fontFamily: "var(--font-inter), system-ui, sans-serif",
           }}
           onFocus={(e) => {
             if (!error) e.currentTarget.style.borderColor = "var(--sr-gold-dim)";
