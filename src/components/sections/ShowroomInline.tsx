@@ -4,7 +4,6 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import type { ShowroomFilters } from "@/lib/showroom/types";
 import { useInventory, seedDemoData } from "@/lib/showroom/store";
 import { filterAircraft } from "@/lib/showroom/filters";
-import { StepProgress } from "@/components/showroom/ui/StepProgress";
 import { RouteStepInline as RouteStep } from "@/components/showroom/steps/RouteStepInline";
 import { PassengerStep } from "@/components/showroom/steps/PassengerStep";
 import { BudgetStep } from "@/components/showroom/steps/BudgetStep";
@@ -19,6 +18,8 @@ const DEFAULT_FILTERS: ShowroomFilters = {
   budgetMax: 100_000_000,
   sortBy: "price_desc",
 };
+
+const STEP_LABELS = ["Routes", "Passengers", "Budget", "Results"];
 
 export default function ShowroomInline() {
   const [step, setStep] = useState(0);
@@ -89,50 +90,127 @@ export default function ShowroomInline() {
         "--sr-border": "rgba(0,0,0,0.08)",
         "--sr-border-gold": "rgba(184,151,106,0.3)",
         background: "#F8F7F4",
+        position: "relative",
       } as React.CSSProperties}
     >
-      {/* Top bar — hidden on step 0 (map has its own side nav) */}
+      {/* ── Vertical step progress — right side, always visible ─────── */}
       <div
-        className="flex items-center justify-between px-6 py-3 border-b max-w-6xl mx-auto"
-        style={{ borderColor: "var(--sr-border)", display: step === 0 ? "none" : undefined }}
+        style={{
+          position: "absolute",
+          right: 24,
+          top: step === 0 ? "50%" : "40%",
+          transform: "translateY(-50%)",
+          zIndex: 30,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          gap: 6,
+          padding: "16px 10px",
+          borderRadius: 20,
+          background: "rgba(255,255,255,0.85)",
+          backdropFilter: "blur(16px)",
+          WebkitBackdropFilter: "blur(16px)",
+          border: "1px solid rgba(0,0,0,0.04)",
+          boxShadow: "0 4px 24px rgba(0,0,0,0.06), 0 0 0 0.5px rgba(184,151,106,0.08)",
+        }}
       >
-        <div className="flex items-center gap-2" style={{ color: "var(--sr-gold)" }}>
-          <svg
-            width="18"
-            height="18"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path d="M17.8 19.2L16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z" />
-          </svg>
-          <span
-            className="text-xs tracking-widest uppercase"
-            style={{ fontFamily: "var(--font-inter)" }}
-          >
-            Digital Showroom
-          </span>
-        </div>
-
-        <div className="flex-1 max-w-md mx-6">
-          <StepProgress currentStep={step} onStepClick={handleStepClick} />
-        </div>
-
-        <div
-          className="hidden md:block text-xs"
-          style={{
-            color: "var(--sr-text-muted)",
-            fontFamily: "var(--font-inter)",
-          }}
-        >
-          Step {step + 1} of 4
-        </div>
+        {STEP_LABELS.map((label, i) => {
+          const isActive = i === step;
+          const isDone = i < step;
+          return (
+            <button
+              key={label}
+              onClick={() => handleStepClick(i)}
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                gap: 3,
+                background: "none",
+                border: "none",
+                cursor: i < step ? "pointer" : "default",
+                padding: "4px 2px",
+                opacity: isActive || isDone ? 1 : 0.3,
+                transition: "all 300ms ease",
+              }}
+            >
+              {/* Connector line above (skip first) */}
+              {i > 0 && (
+                <div
+                  style={{
+                    width: 1.5,
+                    height: 12,
+                    marginBottom: 2,
+                    background: isDone || isActive
+                      ? "rgba(184,151,106,0.4)"
+                      : "rgba(0,0,0,0.06)",
+                    borderRadius: 1,
+                    transition: "background 300ms ease",
+                  }}
+                />
+              )}
+              <div
+                style={{
+                  width: isActive ? 32 : 26,
+                  height: isActive ? 32 : 26,
+                  borderRadius: "50%",
+                  border: isActive
+                    ? "2px solid #B8976A"
+                    : isDone
+                      ? "2px solid #B8976A"
+                      : "1.5px solid rgba(0,0,0,0.1)",
+                  background: isDone
+                    ? "linear-gradient(135deg, #C8A96E, #A07D4E)"
+                    : isActive
+                      ? "rgba(184,151,106,0.08)"
+                      : "transparent",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  transition: "all 300ms ease",
+                  boxShadow: isDone
+                    ? "0 2px 8px rgba(184,151,106,0.3)"
+                    : isActive
+                      ? "0 0 0 4px rgba(184,151,106,0.1)"
+                      : "none",
+                }}
+              >
+                {isDone ? (
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="20 6 9 17 4 12" />
+                  </svg>
+                ) : (
+                  <div
+                    style={{
+                      width: isActive ? 8 : 6,
+                      height: isActive ? 8 : 6,
+                      borderRadius: "50%",
+                      background: isActive ? "#B8976A" : "rgba(0,0,0,0.12)",
+                      transition: "all 300ms ease",
+                    }}
+                  />
+                )}
+              </div>
+              <span
+                style={{
+                  fontSize: 8,
+                  fontFamily: "var(--font-inter)",
+                  textTransform: "uppercase",
+                  letterSpacing: "0.12em",
+                  color: isActive ? "#B8976A" : isDone ? "#6B6660" : "#A8A49E",
+                  fontWeight: isActive ? 700 : 400,
+                  transition: "all 300ms ease",
+                  lineHeight: 1,
+                }}
+              >
+                {label}
+              </span>
+            </button>
+          );
+        })}
       </div>
 
-      {/* Main content */}
+      {/* ── Main content ───────────────────────────────────────────── */}
       <div
         className={step === 0 ? "" : "max-w-5xl mx-auto px-6 py-6 md:py-8"}
         style={{
@@ -171,89 +249,95 @@ export default function ShowroomInline() {
         )}
       </div>
 
-      {/* Bottom bar — hidden on step 0 (map has its own overlaid controls) */}
-      <div
-        className="flex items-center justify-between px-6 py-3 border-t max-w-6xl mx-auto"
-        style={{ borderColor: "var(--sr-border)", display: step === 0 ? "none" : undefined }}
-      >
-        <div className="w-24">
-          {step > 0 && (
-            <button
-              onClick={handleBack}
-              className="flex items-center gap-2 px-3 py-1.5 text-sm rounded-lg transition-all duration-200"
-              style={{
-                color: "var(--sr-text-muted)",
-                border: "1px solid var(--sr-border)",
-                fontFamily: "var(--font-inter)",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.borderColor = "var(--sr-border-gold)";
-                e.currentTarget.style.color = "var(--sr-text)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.borderColor = "var(--sr-border)";
-                e.currentTarget.style.color = "var(--sr-text-muted)";
-              }}
-            >
-              <svg
-                width="14"
-                height="14"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <polyline points="15 18 9 12 15 6" />
-              </svg>
-              Back
-            </button>
-          )}
-        </div>
-
+      {/* ── Floating bottom controls — steps 1+ ────────────────────── */}
+      {step > 0 && (
         <div
-          className="text-sm"
           style={{
-            color: "var(--sr-text-muted)",
-            fontFamily: "var(--font-inter)",
+            position: "absolute",
+            bottom: 24,
+            left: "50%",
+            transform: "translateX(-50%)",
+            zIndex: 30,
+            display: "flex",
+            alignItems: "center",
+            gap: 16,
+            padding: "10px 12px",
+            borderRadius: 16,
+            background: "rgba(255,255,255,0.9)",
+            backdropFilter: "blur(16px)",
+            WebkitBackdropFilter: "blur(16px)",
+            border: "1px solid rgba(0,0,0,0.04)",
+            boxShadow: "0 4px 24px rgba(0,0,0,0.08), 0 0 0 0.5px rgba(184,151,106,0.08)",
           }}
         >
-          <span style={{ color: "var(--sr-gold)" }}>
-            {filteredAircraft.length}
-          </span>{" "}
-          aircraft match
-        </div>
+          <button
+            onClick={handleBack}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 6,
+              padding: "8px 14px",
+              borderRadius: 10,
+              border: "1px solid rgba(0,0,0,0.06)",
+              background: "transparent",
+              color: "#6B6860",
+              cursor: "pointer",
+              fontFamily: "var(--font-inter)",
+              fontSize: 13,
+              fontWeight: 500,
+              transition: "all 200ms",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.borderColor = "rgba(184,151,106,0.3)";
+              e.currentTarget.style.color = "#0F0F0D";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.borderColor = "rgba(0,0,0,0.06)";
+              e.currentTarget.style.color = "#6B6860";
+            }}
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <polyline points="15 18 9 12 15 6" />
+            </svg>
+            Back
+          </button>
 
-        <div className="w-24 flex justify-end">
+          <div
+            style={{
+              padding: "0 12px",
+              fontFamily: "var(--font-inter)",
+              fontSize: 13,
+              color: "#6B6860",
+            }}
+          >
+            <span style={{ color: "#B8976A", fontWeight: 600 }}>{filteredAircraft.length}</span>
+            {" "}aircraft match
+          </div>
+
           {step < 3 ? (
             <button
               onClick={handleNext}
-              className="flex items-center gap-2 px-4 py-1.5 text-sm rounded-lg transition-all duration-200"
               style={{
-                background: "var(--sr-gold)",
-                color: "var(--sr-bg)",
+                display: "flex",
+                alignItems: "center",
+                gap: 6,
+                padding: "8px 18px",
+                borderRadius: 10,
+                border: "none",
+                background: "linear-gradient(135deg, #C8A96E, #A07D4E)",
+                color: "#FAF7F2",
+                cursor: "pointer",
                 fontFamily: "var(--font-inter)",
+                fontSize: 13,
                 fontWeight: 600,
+                boxShadow: "0 2px 10px rgba(184,151,106,0.3)",
+                transition: "all 200ms",
               }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = "var(--sr-gold-light)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = "var(--sr-gold)";
-              }}
+              onMouseEnter={(e) => { e.currentTarget.style.boxShadow = "0 4px 16px rgba(184,151,106,0.45)"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.boxShadow = "0 2px 10px rgba(184,151,106,0.3)"; }}
             >
-              {step === 2 ? "View" : "Next"}
-              <svg
-                width="14"
-                height="14"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
+              {step === 2 ? "View Results" : "Next"}
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <polyline points="9 18 15 12 9 6" />
               </svg>
             </button>
@@ -263,27 +347,32 @@ export default function ShowroomInline() {
                 const contact = document.getElementById("contact");
                 if (contact) contact.scrollIntoView({ behavior: "smooth" });
               }}
-              className="px-4 py-1.5 text-sm rounded-lg transition-all duration-200"
               style={{
-                border: "1px solid var(--sr-gold)",
-                color: "var(--sr-gold)",
+                padding: "8px 18px",
+                borderRadius: 10,
+                border: "1.5px solid #B8976A",
+                background: "transparent",
+                color: "#B8976A",
+                cursor: "pointer",
                 fontFamily: "var(--font-inter)",
+                fontSize: 13,
                 fontWeight: 600,
+                transition: "all 200ms",
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.background = "var(--sr-gold)";
-                e.currentTarget.style.color = "var(--sr-bg)";
+                e.currentTarget.style.background = "#B8976A";
+                e.currentTarget.style.color = "#FAF7F2";
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.background = "transparent";
-                e.currentTarget.style.color = "var(--sr-gold)";
+                e.currentTarget.style.color = "#B8976A";
               }}
             >
               Done
             </button>
           )}
         </div>
-      </div>
+      )}
     </section>
   );
 }

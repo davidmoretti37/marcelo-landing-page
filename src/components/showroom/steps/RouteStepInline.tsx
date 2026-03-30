@@ -14,7 +14,7 @@ interface RouteStepInlineProps {
   onStepClick?: (step: number) => void;
 }
 
-export function RouteStepInline({ filters, onUpdateFilters, filteredCount, onNext, currentStep = 0, onStepClick }: RouteStepInlineProps) {
+export function RouteStepInline({ filters, onUpdateFilters, filteredCount, onNext }: RouteStepInlineProps) {
   const { selectedCities } = filters;
 
   const isCitySelected = useCallback(
@@ -79,94 +79,6 @@ export function RouteStepInline({ filters, onUpdateFilters, filteredCount, onNex
         <ShowroomMap selectedCities={selectedCities} onCityToggle={handleCityToggle} />
       </div>
 
-      {/* Step progress — right side, vertical */}
-      <div
-        style={{
-          position: "absolute",
-          right: 24,
-          top: "50%",
-          transform: "translateY(-50%)",
-          zIndex: 10,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          gap: 20,
-          padding: "20px 12px",
-          borderRadius: 16,
-          background: "rgba(255,255,255,0.8)",
-          backdropFilter: "blur(10px)",
-          WebkitBackdropFilter: "blur(10px)",
-          border: "1px solid rgba(0,0,0,0.05)",
-          boxShadow: "0 4px 20px rgba(0,0,0,0.06)",
-        }}
-      >
-        {["Routes", "Passengers", "Budget", "Results"].map((label, i) => {
-          const isActive = i === currentStep;
-          const isDone = i < currentStep;
-          return (
-            <button
-              key={label}
-              onClick={() => onStepClick?.(i)}
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                gap: 4,
-                background: "none",
-                border: "none",
-                cursor: i < currentStep ? "pointer" : "default",
-                padding: 0,
-                opacity: isActive || isDone ? 1 : 0.35,
-              }}
-            >
-              <div
-                style={{
-                  width: 28,
-                  height: 28,
-                  borderRadius: "50%",
-                  border: isActive
-                    ? "2px solid #B8976A"
-                    : isDone
-                      ? "2px solid #B8976A"
-                      : "2px solid rgba(0,0,0,0.12)",
-                  background: isDone ? "#B8976A" : "transparent",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                {isDone ? (
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                    <polyline points="20 6 9 17 4 12" />
-                  </svg>
-                ) : (
-                  <div
-                    style={{
-                      width: 8,
-                      height: 8,
-                      borderRadius: "50%",
-                      background: isActive ? "#B8976A" : "rgba(0,0,0,0.15)",
-                    }}
-                  />
-                )}
-              </div>
-              <span
-                style={{
-                  fontSize: 9,
-                  fontFamily: "var(--font-inter)",
-                  textTransform: "uppercase",
-                  letterSpacing: "0.1em",
-                  color: isActive ? "#B8976A" : isDone ? "#6B6660" : "#A8A49E",
-                  fontWeight: isActive ? 600 : 400,
-                }}
-              >
-                {label}
-              </span>
-            </button>
-          );
-        })}
-      </div>
-
       {/* Aircraft count — bottom left */}
       {filteredCount !== undefined && (
         <div
@@ -174,7 +86,7 @@ export function RouteStepInline({ filters, onUpdateFilters, filteredCount, onNex
             position: "absolute",
             bottom: 20,
             left: 24,
-            zIndex: 10,
+            zIndex: 20,
             display: "flex",
             alignItems: "center",
             gap: 6,
@@ -203,7 +115,7 @@ export function RouteStepInline({ filters, onUpdateFilters, filteredCount, onNex
             position: "absolute",
             bottom: 20,
             right: 24,
-            zIndex: 10,
+            zIndex: 20,
             display: "flex",
             alignItems: "center",
             gap: 8,
