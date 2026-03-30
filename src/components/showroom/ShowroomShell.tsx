@@ -156,7 +156,7 @@ export function ShowroomShell({ onExit }: ShowroomShellProps) {
         {/* Main content area */}
         <div className="flex-1 overflow-y-auto relative" style={{ minHeight: step === 0 ? "100%" : undefined }}>
           {/* Route step renders fullscreen inside this container */}
-          {!loading && step === 0 && <RouteStep {...stepProps} onNext={handleNext} dark />}
+          {!loading && step === 0 && <RouteStep {...stepProps} onNext={handleNext} />}
 
           <div
             className="max-w-5xl mx-auto px-6 py-8 md:py-12"

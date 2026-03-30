@@ -262,7 +262,9 @@ export function ShowroomMap({ selectedCities, onCityToggle }: ShowroomMapProps) 
         projection.clipExtent([[0, 0], [w, h]]);
 
         path = d3.geoPath(projection, ctx!);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         landFeature = (topoClient as any).feature(world, world.objects.land);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         countriesFeature = (topoClient as any).feature(countriesWorld, countriesWorld.objects.countries);
 
         renderTerrainLayer();

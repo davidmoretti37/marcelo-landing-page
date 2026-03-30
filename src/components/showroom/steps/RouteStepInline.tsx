@@ -4,7 +4,6 @@ import { useCallback } from "react";
 import type { City, ShowroomFilters } from "@/lib/showroom/types";
 import { SHOWROOM_CITIES, QUICK_ROUTES } from "@/lib/showroom/cities";
 import { ShowroomMap } from "@/components/showroom/map/ShowroomMap";
-import { StepProgress } from "@/components/showroom/ui/StepProgress";
 
 interface RouteStepInlineProps {
   filters: ShowroomFilters;

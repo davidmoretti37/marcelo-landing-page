@@ -5,7 +5,6 @@ import {
   useEffect,
   useRef,
   useState,
-  type RefObject,
 } from "react";
 import { createPortal } from "react-dom";
 import { SHOWROOM_CITIES, QUICK_ROUTES } from "@/lib/showroom/cities";
@@ -49,9 +48,6 @@ const CLICK_RADIUS = 18;
 
 const GOLD = "#d4a84b";
 const GOLD_BRIGHT = "#f5d280";
-const GOLD_DIM = "rgba(180,140,50,0.25)";
-const OCEAN_DOT = "rgba(100,120,180,0.08)";
-const GLOW_COLOR = "rgba(80,60,200,0.18)";
 const ATMO_INNER = "rgba(100,80,220,0.0)";
 const ATMO_OUTER = "rgba(60,40,180,0.22)";
 const ARC_COLOR = "rgba(212,168,75,0.55)";
@@ -120,7 +116,7 @@ export function RouteStep({ filters, onUpdateFilters, onNext }: RouteStepProps) 
     selectedRef.current = filters.selectedCities;
   }, [filters.selectedCities]);
 
-  const [ready, setReady] = useState(false);
+  const [, setReady] = useState(false);
 
   /* ── Toggle a city ────────────────────────────────────────────────────── */
   const toggleCity = useCallback(
@@ -219,11 +215,12 @@ export function RouteStep({ filters, onUpdateFilters, onNext }: RouteStepProps) 
       d3Ref.current = d3;
 
       // Extract land geometry
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      /* eslint-disable @typescript-eslint/no-explicit-any */
       const landGeo = topo.feature(
         worldData as any,
         worldData.objects.land as any,
       ) as any;
+      /* eslint-enable @typescript-eslint/no-explicit-any */
       const landGeom = landGeo.features[0].geometry as GeoJSON.MultiPolygon;
 
       // Build dots
@@ -339,12 +336,6 @@ export function RouteStep({ filters, onUpdateFilters, onNext }: RouteStepProps) 
         ctx.stroke();
 
         // ── Dots ───────────────────────────────────────────────────────
-        const rot = proj.rotate();
-        const cosRotLng = Math.cos((-rot[0] * Math.PI) / 180);
-        const sinRotLng = Math.sin((-rot[0] * Math.PI) / 180);
-        const cosRotLat = Math.cos((-rot[1] * Math.PI) / 180);
-        const sinRotLat = Math.sin((-rot[1] * Math.PI) / 180);
-
         for (const dot of dotsRef.current) {
           const projected = proj([dot.lng, dot.lat]);
           if (!projected) continue;

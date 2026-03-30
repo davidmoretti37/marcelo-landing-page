@@ -12,7 +12,6 @@ const DescentSection = dynamic(() => import("@/components/sections/DescentSectio
 const GlobeSection = dynamic(() => import("@/components/sections/GlobeSection"));
 const HangarSection = dynamic(() => import("@/components/sections/HangarSection"));
 const ShowroomInline = dynamic(() => import("@/components/sections/ShowroomInline"));
-const LandingCTA = dynamic(() => import("@/components/sections/LandingCTA"));
 
 export default function Home() {
   const [phase, setPhase] = useState(0);
