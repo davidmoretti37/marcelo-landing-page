@@ -1,13 +1,14 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
-import type { ShowroomFilters } from "@/lib/showroom/types";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import type { Aircraft, ShowroomFilters } from "@/lib/showroom/types";
 import { useInventory, seedDemoData } from "@/lib/showroom/store";
 import { filterAircraft } from "@/lib/showroom/filters";
 import { RouteStepInline as RouteStep } from "@/components/showroom/steps/RouteStepInline";
 import { PassengerStep } from "@/components/showroom/steps/PassengerStep";
 import { BudgetStep } from "@/components/showroom/steps/BudgetStep";
 import { ResultsStep } from "@/components/showroom/steps/ResultsStep";
+import AircraftDetail from "@/components/showroom/AircraftDetail";
 
 const DEFAULT_FILTERS: ShowroomFilters = {
   selectedCities: [],
@@ -25,6 +26,20 @@ export default function ShowroomInline() {
   const [step, setStep] = useState(0);
   const [filters, setFilters] = useState<ShowroomFilters>(DEFAULT_FILTERS);
   const [transitioning, setTransitioning] = useState(false);
+  const [showroomVisible, setShowroomVisible] = useState(false);
+  const [detailAircraft, setDetailAircraft] = useState<Aircraft | null>(null);
+  const sectionRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => setShowroomVisible(entry.isIntersecting),
+      { threshold: 0.1 },
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
 
   const { aircraft, loading } = useInventory();
 
@@ -48,6 +63,9 @@ export default function ShowroomInline() {
     setTransitioning(true);
     setTimeout(() => {
       setStep(nextStep);
+      // Scroll showroom into view so controls are visible
+      const el = document.getElementById("showroom");
+      if (el && nextStep > 0) el.scrollIntoView({ behavior: "smooth", block: "start" });
       setTimeout(() => setTransitioning(false), 50);
     }, 300);
   }, []);
@@ -73,10 +91,30 @@ export default function ShowroomInline() {
     filteredCount: filteredAircraft.length,
   };
 
+  // ─── Detail view: render outside all containers ──────────────────
+  if (detailAircraft) {
+    return (
+      <section ref={sectionRef} id="showroom">
+        <AircraftDetail
+          aircraft={detailAircraft}
+          onClose={() => {
+            setDetailAircraft(null);
+            // Scroll back to showroom
+            setTimeout(() => {
+              const el = document.getElementById("showroom");
+              if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+            }, 50);
+          }}
+        />
+      </section>
+    );
+  }
+
   return (
     <section
+      ref={sectionRef}
       id="showroom"
-      className={step === 0 ? "pt-16 pb-0" : "py-12 md:py-20"}
+      className={step === 0 ? "pt-16 pb-0" : "pt-24 pb-20 md:pt-32 md:pb-28 min-h-screen"}
       style={{
         "--sr-bg": "#F8F7F4",
         "--sr-surface": "#EFEDE8",
@@ -96,12 +134,12 @@ export default function ShowroomInline() {
       {/* ── Vertical step progress — right side, always visible ─────── */}
       <div
         style={{
-          position: "absolute",
+          position: showroomVisible ? "fixed" : "absolute",
           right: 24,
-          top: step === 0 ? "50%" : "40%",
+          top: "50%",
           transform: "translateY(-50%)",
           zIndex: 30,
-          display: "flex",
+          display: showroomVisible && step < 3 ? "flex" : "none",
           flexDirection: "column",
           alignItems: "center",
           gap: 6,
@@ -243,6 +281,7 @@ export default function ShowroomInline() {
                 filters={filters}
                 onUpdateFilters={handleUpdateFilters}
                 aircraft={filteredAircraft}
+                onSelectAircraft={setDetailAircraft}
               />
             )}
           </>
@@ -250,10 +289,10 @@ export default function ShowroomInline() {
       </div>
 
       {/* ── Floating bottom controls — steps 1+ ────────────────────── */}
-      {step > 0 && (
+      {step > 0 && showroomVisible && (
         <div
           style={{
-            position: "absolute",
+            position: "fixed",
             bottom: 24,
             left: "50%",
             transform: "translateX(-50%)",

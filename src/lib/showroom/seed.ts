@@ -18,7 +18,7 @@ export const SEED_AIRCRAFT: SeedAircraft[] = [
     serialNumber: "73142",
     description:
       "The flagship of business aviation. The G700 offers the tallest, widest, and longest cabin in the industry at nearly 57 feet, with up to five living areas and a dedicated crew rest. Powered by twin Rolls-Royce Pearl 700 engines producing 18,250 lbf each, it cruises at Mach 0.90 and reaches 7,500 nautical miles nonstop — New York to Tokyo, São Paulo to London, or Los Angeles to Sydney with one stop. The Symmetry Flight Deck features active-control sidesticks, ten touchscreen displays, and Gulfstream's award-winning Predictive Landing Performance System.",
-    photos: [],
+    photos: [{ url: "/images/fleet/planes/g700.jpg?v=3", caption: "Gulfstream G700" }],
     specs: {
       range_nm: 7500,
       maxPassengers: 19,
@@ -61,7 +61,7 @@ export const SEED_AIRCRAFT: SeedAircraft[] = [
         name: "Cockpit",
         title: "Symmetry Flight Deck",
         desc: "The most advanced flight deck in business aviation. Ten touchscreen displays, active-control sidesticks, dual HUDs with Enhanced Flight Vision System, and Predictive Landing Performance — technology derived from military-grade fly-by-wire systems.",
-        image: "",
+        image: "/images/fleet/cabins/gulfstream-cockpit.jpg",
         specs: [
           { key: "Avionics", val: "Symmetry with Primus Epic" },
           { key: "Displays", val: "10 touchscreens" },
@@ -73,7 +73,7 @@ export const SEED_AIRCRAFT: SeedAircraft[] = [
         name: "Forward Cabin",
         title: "The Grand Suite",
         desc: "Six-place club configuration in hand-stitched full-grain leather. The cabin is 8 feet 2 inches wide — wider than many first-class airline suites. Circadian lighting system adjusts color temperature to reduce jet lag across time zones.",
-        image: "",
+        image: "/images/fleet/cabins/g650-cabin.jpg",
         specs: [
           { key: "Seating", val: "6-place club" },
           { key: "Width", val: "8 ft 2 in (widest in class)" },
@@ -85,7 +85,7 @@ export const SEED_AIRCRAFT: SeedAircraft[] = [
         name: "Mid Cabin",
         title: "The Living Room",
         desc: "Full entertainment suite with a four-place conference grouping, 42-inch Ultra HD display, and a three-place divan that converts to a certified lie-flat berth. Whisper-quiet cabin noise levels under 50 dB — quieter than a library.",
-        image: "",
+        image: "/images/fleet/cabins/g650-cabin2.jpg",
         specs: [
           { key: "Conference", val: "4-place with production table" },
           { key: "Display", val: '42" Ultra HD' },
@@ -97,7 +97,7 @@ export const SEED_AIRCRAFT: SeedAircraft[] = [
         name: "Aft Stateroom",
         title: "The Private Suite",
         desc: "A true master bedroom at 51,000 feet. Queen-size berthing surface, full-length wardrobe, vanity with natural lighting, and a private lavatory with shower option. The aft compartment is completely isolated from the main cabin by a solid privacy door.",
-        image: "",
+        image: "/images/fleet/cabins/g650-cabin3.jpg",
         specs: [
           { key: "Bed", val: "Queen-size lie-flat" },
           { key: "Lavatory", val: "Private with shower option" },
@@ -106,6 +106,51 @@ export const SEED_AIRCRAFT: SeedAircraft[] = [
         ],
       },
     ],
+    blueprint: {
+      label: "G700",
+      category: "Ultra Long Range",
+      specGroups: [
+        {
+          title: "Dimensions",
+          specs: [
+            { key: "Overall Length", val: "109 ft 10 in", unit: "33.50 m" },
+            { key: "Wingspan", val: "103 ft 0 in", unit: "31.39 m" },
+            { key: "Overall Height", val: "25 ft 5 in", unit: "7.75 m" },
+            { key: "Wing Area", val: "1,283 sq ft", unit: null },
+          ],
+        },
+        {
+          title: "Cabin",
+          specs: [
+            { key: "Cabin Length", val: "56 ft 11 in", unit: "17.35 m" },
+            { key: "Cabin Width", val: "8 ft 2 in", unit: "2.49 m" },
+            { key: "Cabin Height", val: "6 ft 4 in", unit: "1.93 m" },
+            { key: "Cabin Volume", val: "2,948 cu ft", unit: null },
+            { key: "Living Areas", val: "Up to 5", unit: null },
+            { key: "Baggage", val: "195 cu ft", unit: "5.52 cu m" },
+          ],
+        },
+        {
+          title: "Performance",
+          specs: [
+            { key: "Max Range", val: "7,500 nm", unit: "13,890 km" },
+            { key: "High-Speed Cruise", val: "Mach 0.90", unit: null },
+            { key: "Max Operating Speed", val: "Mach 0.925", unit: null },
+            { key: "Ceiling", val: "51,000 ft", unit: "15,545 m" },
+            { key: "Takeoff Distance", val: "6,250 ft", unit: "1,905 m" },
+            { key: "Landing Distance", val: "2,500 ft", unit: "762 m" },
+          ],
+        },
+        {
+          title: "Powerplant",
+          specs: [
+            { key: "Engines", val: "2\u00d7 Rolls-Royce Pearl 700", unit: null },
+            { key: "Thrust (each)", val: "18,250 lbf", unit: "81.2 kN" },
+            { key: "MTOW", val: "107,600 lb", unit: "48,807 kg" },
+          ],
+        },
+      ],
+    },
     status: "available" as AircraftStatus,
   },
 
@@ -119,7 +164,7 @@ export const SEED_AIRCRAFT: SeedAircraft[] = [
     serialNumber: "70215",
     description:
       "The world's longest-range purpose-built business jet at 7,700 nautical miles — enough for Singapore to San Francisco or Dubai to Los Angeles nonstop. The Global 7500 is the only business aircraft with four true living spaces and a dedicated crew suite. Its patented smooth-ride Flex Wing uses real-time turbulence sensors to actively dampen gusts, delivering the smoothest ride in business aviation. Twin GE Passport engines are the first clean-sheet powerplants designed for business jets in over a decade.",
-    photos: [],
+    photos: [{ url: "/images/fleet/planes/global7500.jpg?v=3", caption: "Bombardier Global 7500" }],
     specs: {
       range_nm: 7700,
       maxPassengers: 19,
@@ -162,7 +207,7 @@ export const SEED_AIRCRAFT: SeedAircraft[] = [
         name: "Cockpit",
         title: "Vision Flight Deck",
         desc: "Bombardier's revolutionary cockpit with the industry's first combined synthetic and enhanced vision system displayed on a head-up display. Fly-by-wire controls with auto-throttle and steep-approach capability for accessing challenging airports.",
-        image: "",
+        image: "/images/fleet/cabins/gulfstream-cockpit.jpg",
         specs: [
           { key: "Avionics", val: "Pro Line Fusion" },
           { key: "Displays", val: "4 × 15.1\" HD" },
@@ -174,7 +219,7 @@ export const SEED_AIRCRAFT: SeedAircraft[] = [
         name: "Forward Cabin",
         title: "The Club Suite",
         desc: "Four-place club with the Bombardier Nuage seat — the first new seat architecture in business aviation in 30 years. Features a floating base, deep recline, and zero-gravity tilt position for ultimate comfort on 16-hour flights.",
-        image: "",
+        image: "/images/fleet/cabins/global7500-cabin1.jpg",
         specs: [
           { key: "Seating", val: "4x Nuage seats" },
           { key: "Recline", val: "Zero-gravity position" },
@@ -186,7 +231,7 @@ export const SEED_AIRCRAFT: SeedAircraft[] = [
         name: "Mid Cabin",
         title: "The Conference Suite",
         desc: "Dedicated conference and entertainment zone with a four-place dining/meeting area, Bombardier's nice Touch cabin management system on a 4K display, and a three-place divan that converts to a full-length bed.",
-        image: "",
+        image: "/images/fleet/cabins/global7500-cabin2.jpg",
         specs: [
           { key: "Conference", val: "4-place with credenza" },
           { key: "Display", val: 'nice Touch 4K' },
@@ -198,7 +243,7 @@ export const SEED_AIRCRAFT: SeedAircraft[] = [
         name: "Aft Stateroom",
         title: "The Master Suite",
         desc: "A permanent, enclosed master bedroom — not a conversion. Full-size bed, dedicated wardrobe, vanity station, and a private en-suite lavatory. The fourth living space in the world's only four-zone business jet cabin.",
-        image: "",
+        image: "/images/fleet/cabins/global7500-cabin3.jpg",
         specs: [
           { key: "Bed", val: "Permanent full-size" },
           { key: "Lavatory", val: "Private en-suite" },
@@ -207,6 +252,51 @@ export const SEED_AIRCRAFT: SeedAircraft[] = [
         ],
       },
     ],
+    blueprint: {
+      label: "G7500",
+      category: "Ultra Long Range",
+      specGroups: [
+        {
+          title: "Dimensions",
+          specs: [
+            { key: "Overall Length", val: "111 ft 0 in", unit: "33.83 m" },
+            { key: "Wingspan", val: "104 ft 0 in", unit: "31.69 m" },
+            { key: "Overall Height", val: "27 ft 5 in", unit: "8.36 m" },
+            { key: "Wing Area", val: "1,271 sq ft", unit: null },
+          ],
+        },
+        {
+          title: "Cabin",
+          specs: [
+            { key: "Cabin Length", val: "54 ft 5 in", unit: "16.59 m" },
+            { key: "Cabin Width", val: "8 ft 0 in", unit: "2.44 m" },
+            { key: "Cabin Height", val: "6 ft 2 in", unit: "1.88 m" },
+            { key: "Cabin Volume", val: "2,637 cu ft", unit: null },
+            { key: "Living Areas", val: "Up to 4", unit: null },
+            { key: "Baggage", val: "195 cu ft", unit: "5.52 cu m" },
+          ],
+        },
+        {
+          title: "Performance",
+          specs: [
+            { key: "Max Range", val: "7,700 nm", unit: "14,260 km" },
+            { key: "High-Speed Cruise", val: "Mach 0.90", unit: null },
+            { key: "Max Operating Speed", val: "Mach 0.925", unit: null },
+            { key: "Ceiling", val: "51,000 ft", unit: "15,545 m" },
+            { key: "Takeoff Distance", val: "5,800 ft", unit: "1,768 m" },
+            { key: "Landing Distance", val: "2,740 ft", unit: "835 m" },
+          ],
+        },
+        {
+          title: "Powerplant",
+          specs: [
+            { key: "Engines", val: "2\u00d7 GE Passport", unit: null },
+            { key: "Thrust (each)", val: "18,920 lbf", unit: "84.2 kN" },
+            { key: "MTOW", val: "114,850 lb", unit: "52,095 kg" },
+          ],
+        },
+      ],
+    },
     status: "available" as AircraftStatus,
   },
 
@@ -220,7 +310,7 @@ export const SEED_AIRCRAFT: SeedAircraft[] = [
     serialNumber: "6389",
     description:
       "The aircraft that redefined ultra-long-range travel. The G650ER connects any two cities on Earth with at most one stop — 7,500 NM range at Mach 0.85, or 6,400 NM at its maximum operating speed of Mach 0.925. It held over 100 city-pair speed records at launch. This low-time example features a fresh 2023 interior in premium hand-stitched leather, electrochromic windows, and is enrolled on Rolls-Royce CorporateCare.",
-    photos: [],
+    photos: [{ url: "/images/fleet/planes/g650er.jpg?v=3", caption: "Gulfstream G650ER" }],
     specs: {
       range_nm: 7500,
       maxPassengers: 19,
@@ -263,7 +353,7 @@ export const SEED_AIRCRAFT: SeedAircraft[] = [
         name: "Cockpit",
         title: "The Flight Deck",
         desc: "Gulfstream PlaneView II avionics suite with dual HUDs, synthetic vision, and enhanced navigation. The G650ER was the first business jet certified with a Head-Up Display with Enhanced Vision System as standard equipment.",
-        image: "",
+        image: "/images/fleet/cabins/gulfstream-cockpit.jpg",
         specs: [
           { key: "Avionics", val: "PlaneView II" },
           { key: "Displays", val: '4 × 14" LCD' },
@@ -275,7 +365,7 @@ export const SEED_AIRCRAFT: SeedAircraft[] = [
         name: "Forward Cabin",
         title: "The Club",
         desc: "Four-place club seating in premium hand-stitched leather with full berthing capability. Dual 24-inch high-definition monitors and 16 electrochromic windows that dim at the touch of a button — no manual shades.",
-        image: "",
+        image: "/images/fleet/cabins/g650-cabin.jpg",
         specs: [
           { key: "Seating", val: "4-place club" },
           { key: "Monitors", val: '2 × 24" HD' },
@@ -287,7 +377,7 @@ export const SEED_AIRCRAFT: SeedAircraft[] = [
         name: "Mid Cabin",
         title: "The Suite",
         desc: "Spacious midcabin lounge with a three-place divan converting to a full-size sleeping surface, credenza with integrated refreshment center, and a surround-sound entertainment system. The 8.5-foot-wide cabin gives this space a penthouse feel.",
-        image: "",
+        image: "/images/fleet/cabins/g650-cabin2.jpg",
         specs: [
           { key: "Divan", val: "Converts to full bed" },
           { key: "Entertainment", val: "Surround sound" },
@@ -299,7 +389,7 @@ export const SEED_AIRCRAFT: SeedAircraft[] = [
         name: "Aft Stateroom",
         title: "The Retreat",
         desc: "Private aft suite with a dedicated enclosed lavatory, full-length wardrobe, executive credenza, and a lie-flat berthing surface — a true private bedroom at 51,000 feet.",
-        image: "",
+        image: "/images/fleet/cabins/g650-cabin3.jpg",
         specs: [
           { key: "Bed", val: "Lie-flat queen" },
           { key: "Lavatory", val: "Private enclosed" },
@@ -308,6 +398,51 @@ export const SEED_AIRCRAFT: SeedAircraft[] = [
         ],
       },
     ],
+    blueprint: {
+      label: "G650ER",
+      category: "Ultra Long Range",
+      specGroups: [
+        {
+          title: "Dimensions",
+          specs: [
+            { key: "Overall Length", val: "99 ft 9 in", unit: "30.41 m" },
+            { key: "Wingspan", val: "99 ft 7 in", unit: "30.36 m" },
+            { key: "Overall Height", val: "25 ft 8 in", unit: "7.82 m" },
+            { key: "Wing Area", val: "1,137 sq ft", unit: null },
+          ],
+        },
+        {
+          title: "Cabin",
+          specs: [
+            { key: "Cabin Length", val: "46 ft 10 in", unit: "14.27 m" },
+            { key: "Cabin Width", val: "8 ft 6 in", unit: "2.59 m" },
+            { key: "Cabin Height", val: "6 ft 5 in", unit: "1.95 m" },
+            { key: "Cabin Volume", val: "2,138 cu ft", unit: null },
+            { key: "Living Areas", val: "Up to 4", unit: null },
+            { key: "Baggage", val: "195 cu ft", unit: "5.52 cu m" },
+          ],
+        },
+        {
+          title: "Performance",
+          specs: [
+            { key: "Max Range", val: "7,500 nm", unit: "13,890 km" },
+            { key: "High-Speed Cruise", val: "Mach 0.85", unit: null },
+            { key: "Max Operating Speed", val: "Mach 0.925", unit: null },
+            { key: "Ceiling", val: "51,000 ft", unit: "15,545 m" },
+            { key: "Takeoff Distance", val: "5,858 ft", unit: "1,785 m" },
+            { key: "Landing Distance", val: "3,100 ft", unit: "945 m" },
+          ],
+        },
+        {
+          title: "Powerplant",
+          specs: [
+            { key: "Engines", val: "2\u00d7 Rolls-Royce BR725 A1-12", unit: null },
+            { key: "Thrust (each)", val: "16,900 lbf", unit: "75.2 kN" },
+            { key: "MTOW", val: "99,600 lb", unit: "45,178 kg" },
+          ],
+        },
+      ],
+    },
     status: "available" as AircraftStatus,
   },
 
@@ -321,7 +456,7 @@ export const SEED_AIRCRAFT: SeedAircraft[] = [
     serialNumber: "6X-0042",
     description:
       "Dassault's newest wide-body jet and the widest cabin in business aviation at 8 feet 6 inches — wider than aircraft twice its price. The Falcon 6X flies 5,500 NM nonstop, connecting London to Hong Kong, Paris to Tokyo, or New York to Riyadh. Its digital flight control system, derived from Dassault's Rafale fighter jet, delivers unmatched handling precision and automatic turbulence recovery. The FalconEye Combined Vision System was the first to receive EASA approval for dual-HUD operations in low visibility.",
-    photos: [],
+    photos: [{ url: "/images/fleet/planes/falcon6x.jpg?v=3", caption: "Dassault Falcon 6X" }],
     specs: {
       range_nm: 5500,
       maxPassengers: 16,
@@ -364,7 +499,7 @@ export const SEED_AIRCRAFT: SeedAircraft[] = [
         name: "Cockpit",
         title: "EASy IV Flight Deck",
         desc: "Fourth-generation EASy flight deck with dual FalconEye HUDs — the world's first combined synthetic/enhanced vision system certified for operational credit. Digital flight controls derived from Dassault's military fighter technology.",
-        image: "",
+        image: "/images/fleet/cabins/falcon-cockpit.jpg",
         specs: [
           { key: "Avionics", val: "EASy IV" },
           { key: "HUD", val: "Dual FalconEye CVS" },
@@ -376,7 +511,7 @@ export const SEED_AIRCRAFT: SeedAircraft[] = [
         name: "Forward Cabin",
         title: "The Lounge",
         desc: "An 8-foot-6-inch-wide cabin that feels like a living room. Six-place club seating with electrically adjustable recline, integrated personal device connectivity, and 30 oversized windows flooding the cabin with natural light. The widest cross-section of any purpose-built business jet.",
-        image: "",
+        image: "/images/fleet/cabins/falcon6x-cabin1.jpg",
         specs: [
           { key: "Seating", val: "6-place club" },
           { key: "Width", val: '8 ft 6 in (industry widest)' },
@@ -388,7 +523,7 @@ export const SEED_AIRCRAFT: SeedAircraft[] = [
         name: "Mid Cabin",
         title: "The Skylounge",
         desc: "Versatile mid-cabin with conference grouping, a three-place divan converting to a certified berth, and Dassault's FalconCabin HD+ entertainment system. The flat floor runs the full length of the cabin — no steps, no compromises.",
-        image: "",
+        image: "/images/fleet/cabins/falcon6x-cabin3.jpg",
         specs: [
           { key: "Conference", val: "4-place with worktable" },
           { key: "Divan", val: "Converts to full berth" },
@@ -400,7 +535,7 @@ export const SEED_AIRCRAFT: SeedAircraft[] = [
         name: "Aft Stateroom",
         title: "The Retreat",
         desc: "Private aft cabin with lie-flat sleeping surface, enclosed lavatory with skylight window, full wardrobe, and a vanity area. Solid-wall privacy divider isolates the stateroom from the main cabin.",
-        image: "",
+        image: "/images/fleet/cabins/falcon6x-cabin4.jpg",
         specs: [
           { key: "Bed", val: "Lie-flat full-size" },
           { key: "Lavatory", val: "Private with skylight" },
@@ -409,6 +544,51 @@ export const SEED_AIRCRAFT: SeedAircraft[] = [
         ],
       },
     ],
+    blueprint: {
+      label: "F6X",
+      category: "Long Range",
+      specGroups: [
+        {
+          title: "Dimensions",
+          specs: [
+            { key: "Overall Length", val: "77 ft 1 in", unit: "23.50 m" },
+            { key: "Wingspan", val: "84 ft 7 in", unit: "25.78 m" },
+            { key: "Overall Height", val: "24 ft 4 in", unit: "7.42 m" },
+            { key: "Wing Area", val: "699 sq ft", unit: null },
+          ],
+        },
+        {
+          title: "Cabin",
+          specs: [
+            { key: "Cabin Length", val: "40 ft 4 in", unit: "12.30 m" },
+            { key: "Cabin Width", val: "8 ft 6 in", unit: "2.58 m" },
+            { key: "Cabin Height", val: "6 ft 6 in", unit: "1.98 m" },
+            { key: "Cabin Volume", val: "1,843 cu ft", unit: null },
+            { key: "Living Areas", val: "Up to 3", unit: null },
+            { key: "Baggage", val: "155 cu ft", unit: "4.39 cu m" },
+          ],
+        },
+        {
+          title: "Performance",
+          specs: [
+            { key: "Max Range", val: "5,500 nm", unit: "10,186 km" },
+            { key: "High-Speed Cruise", val: "Mach 0.85", unit: null },
+            { key: "Max Operating Speed", val: "Mach 0.90", unit: null },
+            { key: "Ceiling", val: "51,000 ft", unit: "15,545 m" },
+            { key: "Takeoff Distance", val: "5,480 ft", unit: "1,670 m" },
+            { key: "Landing Distance", val: "2,430 ft", unit: "741 m" },
+          ],
+        },
+        {
+          title: "Powerplant",
+          specs: [
+            { key: "Engines", val: "2\u00d7 Pratt & Whitney Canada PW812D", unit: null },
+            { key: "Thrust (each)", val: "13,460 lbf", unit: "59.9 kN" },
+            { key: "MTOW", val: "77,460 lb", unit: "35,136 kg" },
+          ],
+        },
+      ],
+    },
     status: "available" as AircraftStatus,
   },
 
@@ -422,7 +602,7 @@ export const SEED_AIRCRAFT: SeedAircraft[] = [
     serialNumber: "73058",
     description:
       "Gulfstream's long-range thoroughbred with 6,600 NM of range — enough for London to Singapore, New York to Dubai, or Los Angeles to London nonstop. The G600 shares its Symmetry Flight Deck with the flagship G700, including active-control sidesticks and ten touchscreen displays. Cabin altitude at 41,000 feet is just 3,840 feet — lower than Denver — so passengers arrive refreshed rather than fatigued. Powered by Pratt & Whitney PW815GA engines, the cleanest and quietest powerplants in the long-range category.",
-    photos: [],
+    photos: [{ url: "/images/fleet/planes/g600.jpg?v=3", caption: "Gulfstream G600" }],
     specs: {
       range_nm: 6600,
       maxPassengers: 19,
@@ -465,7 +645,7 @@ export const SEED_AIRCRAFT: SeedAircraft[] = [
         name: "Cockpit",
         title: "Symmetry Flight Deck",
         desc: "Same award-winning Symmetry Flight Deck as the flagship G700. Ten touchscreen displays, active-control sidesticks with force feedback, dual HUDs with Enhanced Vision System, and Predictive Landing Performance. The most advanced cockpit in the long-range class.",
-        image: "",
+        image: "/images/fleet/cabins/gulfstream-cockpit.jpg",
         specs: [
           { key: "Avionics", val: "Symmetry with Primus Epic" },
           { key: "Displays", val: "10 touchscreens" },
@@ -477,7 +657,7 @@ export const SEED_AIRCRAFT: SeedAircraft[] = [
         name: "Forward Cabin",
         title: "The Club",
         desc: "Four-place club seating in hand-stitched leather with full berthing capability. Electrochromic windows, integrated wireless charging, and Gulfstream's cabin management system controllable from any personal device.",
-        image: "",
+        image: "/images/fleet/cabins/g600-cabin.jpg",
         specs: [
           { key: "Seating", val: "4-place club" },
           { key: "Windows", val: "14 electrochromic" },
@@ -489,7 +669,7 @@ export const SEED_AIRCRAFT: SeedAircraft[] = [
         name: "Mid Cabin",
         title: "The Lounge",
         desc: "Three-place divan with full berthing certification, a credenza with refreshment center, and a 32-inch HD display. Cabin altitude at cruise is just 3,840 feet — passengers feel like they're at sea level.",
-        image: "",
+        image: "/images/fleet/cabins/g650-cabin2.jpg",
         specs: [
           { key: "Divan", val: "Converts to full bed" },
           { key: "Display", val: '32" HD' },
@@ -501,7 +681,7 @@ export const SEED_AIRCRAFT: SeedAircraft[] = [
         name: "Aft Stateroom",
         title: "The Retreat",
         desc: "Private aft suite with lie-flat berthing, enclosed lavatory, full-length wardrobe, and an executive work surface. A pocket door seals the stateroom from the main cabin for complete privacy on overnight flights.",
-        image: "",
+        image: "/images/fleet/cabins/g650-cabin3.jpg",
         specs: [
           { key: "Bed", val: "Lie-flat full-size" },
           { key: "Lavatory", val: "Private enclosed" },
@@ -510,6 +690,51 @@ export const SEED_AIRCRAFT: SeedAircraft[] = [
         ],
       },
     ],
+    blueprint: {
+      label: "G600",
+      category: "Long Range",
+      specGroups: [
+        {
+          title: "Dimensions",
+          specs: [
+            { key: "Overall Length", val: "96 ft 1 in", unit: "29.29 m" },
+            { key: "Wingspan", val: "94 ft 2 in", unit: "28.70 m" },
+            { key: "Overall Height", val: "25 ft 2 in", unit: "7.67 m" },
+            { key: "Wing Area", val: "1,083 sq ft", unit: null },
+          ],
+        },
+        {
+          title: "Cabin",
+          specs: [
+            { key: "Cabin Length", val: "45 ft 2 in", unit: "13.77 m" },
+            { key: "Cabin Width", val: "7 ft 11 in", unit: "2.41 m" },
+            { key: "Cabin Height", val: "6 ft 2 in", unit: "1.88 m" },
+            { key: "Cabin Volume", val: "1,884 cu ft", unit: null },
+            { key: "Living Areas", val: "Up to 3", unit: null },
+            { key: "Baggage", val: "175 cu ft", unit: "4.95 cu m" },
+          ],
+        },
+        {
+          title: "Performance",
+          specs: [
+            { key: "Max Range", val: "6,600 nm", unit: "12,223 km" },
+            { key: "High-Speed Cruise", val: "Mach 0.90", unit: null },
+            { key: "Max Operating Speed", val: "Mach 0.925", unit: null },
+            { key: "Ceiling", val: "51,000 ft", unit: "15,545 m" },
+            { key: "Takeoff Distance", val: "5,700 ft", unit: "1,737 m" },
+            { key: "Landing Distance", val: "3,100 ft", unit: "945 m" },
+          ],
+        },
+        {
+          title: "Powerplant",
+          specs: [
+            { key: "Engines", val: "2\u00d7 Pratt & Whitney Canada PW815GA", unit: null },
+            { key: "Thrust (each)", val: "15,680 lbf", unit: "69.8 kN" },
+            { key: "MTOW", val: "95,000 lb", unit: "43,091 kg" },
+          ],
+        },
+      ],
+    },
     status: "available" as AircraftStatus,
   },
 
@@ -523,7 +748,7 @@ export const SEED_AIRCRAFT: SeedAircraft[] = [
     serialNumber: "8X-0441",
     description:
       "The pinnacle of Dassault's tri-engine lineage. Three Pratt & Whitney Canada PW307D engines give the Falcon 8X unmatched operational flexibility — it can fly 6,450 NM nonstop from Beijing to New York, yet land on short, steep-approach runways like London City (5.5° glideslope) that twin-engine competitors cannot access. The 42-foot cabin offers over 30 interior configurations. Digital flight controls, adapted from the Rafale fighter, deliver the most precise handling in business aviation with automatic wind-shear recovery.",
-    photos: [],
+    photos: [{ url: "/images/fleet/planes/falcon8x.jpg?v=3", caption: "Dassault Falcon 8X" }],
     specs: {
       range_nm: 6450,
       maxPassengers: 16,
@@ -566,7 +791,7 @@ export const SEED_AIRCRAFT: SeedAircraft[] = [
         name: "Cockpit",
         title: "EASy III Flight Deck",
         desc: "Third-generation EASy avionics with FalconEye Head-Up Display combining synthetic and enhanced vision into a single conformal image. Digital flight controls provide automatic angle-of-attack protection and turbulence damping.",
-        image: "",
+        image: "/images/fleet/cabins/falcon-cockpit.jpg",
         specs: [
           { key: "Avionics", val: "EASy III" },
           { key: "HUD", val: "FalconEye CVS" },
@@ -578,7 +803,7 @@ export const SEED_AIRCRAFT: SeedAircraft[] = [
         name: "Forward Cabin",
         title: "The Salon",
         desc: "Six-place club arrangement with electrically adjustable seats, fold-out worktables, and Dassault's signature oversized windows. The tri-engine configuration places all engines aft of the cabin, resulting in remarkably low noise levels forward.",
-        image: "",
+        image: "/images/fleet/cabins/falcon7x-forward.jpg",
         specs: [
           { key: "Seating", val: "6-place club" },
           { key: "Noise", val: "Ultra-quiet (engines aft)" },
@@ -590,7 +815,7 @@ export const SEED_AIRCRAFT: SeedAircraft[] = [
         name: "Mid Cabin",
         title: "The Gallery",
         desc: "Versatile mid-section with a four-place conference group, three-place divan, full galley with espresso machine, and 24-inch entertainment display. Over 30 possible cabin configurations available from the factory.",
-        image: "",
+        image: "/images/fleet/cabins/falcon7x-mid.jpg",
         specs: [
           { key: "Conference", val: "4-place group" },
           { key: "Divan", val: "Converts to berth" },
@@ -602,7 +827,7 @@ export const SEED_AIRCRAFT: SeedAircraft[] = [
         name: "Aft Stateroom",
         title: "The Haven",
         desc: "Private aft suite with dedicated lie-flat berth, enclosed lavatory, wardrobe, and a vanity area. The longest cabin in the tri-engine Falcon family at 42 feet 8 inches allows generous space allocation to every zone.",
-        image: "",
+        image: "/images/fleet/cabins/falcon7x-aft.jpg",
         specs: [
           { key: "Bed", val: "Dedicated lie-flat" },
           { key: "Lavatory", val: "Private enclosed" },
@@ -611,6 +836,51 @@ export const SEED_AIRCRAFT: SeedAircraft[] = [
         ],
       },
     ],
+    blueprint: {
+      label: "F8X",
+      category: "Long Range",
+      specGroups: [
+        {
+          title: "Dimensions",
+          specs: [
+            { key: "Overall Length", val: "80 ft 3 in", unit: "24.46 m" },
+            { key: "Wingspan", val: "86 ft 3 in", unit: "26.29 m" },
+            { key: "Overall Height", val: "26 ft 1 in", unit: "7.94 m" },
+            { key: "Wing Area", val: "699 sq ft", unit: null },
+          ],
+        },
+        {
+          title: "Cabin",
+          specs: [
+            { key: "Cabin Length", val: "42 ft 8 in", unit: "13.00 m" },
+            { key: "Cabin Width", val: "7 ft 8 in", unit: "2.34 m" },
+            { key: "Cabin Height", val: "6 ft 2 in", unit: "1.88 m" },
+            { key: "Cabin Volume", val: "1,695 cu ft", unit: null },
+            { key: "Living Areas", val: "Up to 3", unit: null },
+            { key: "Baggage", val: "140 cu ft", unit: "3.96 cu m" },
+          ],
+        },
+        {
+          title: "Performance",
+          specs: [
+            { key: "Max Range", val: "6,450 nm", unit: "11,945 km" },
+            { key: "High-Speed Cruise", val: "Mach 0.86", unit: null },
+            { key: "Max Operating Speed", val: "Mach 0.90", unit: null },
+            { key: "Ceiling", val: "51,000 ft", unit: "15,545 m" },
+            { key: "Takeoff Distance", val: "5,590 ft", unit: "1,704 m" },
+            { key: "Landing Distance", val: "2,150 ft", unit: "655 m" },
+          ],
+        },
+        {
+          title: "Powerplant",
+          specs: [
+            { key: "Engines", val: "3\u00d7 Pratt & Whitney Canada PW307D", unit: null },
+            { key: "Thrust (each)", val: "6,722 lbf", unit: "29.9 kN" },
+            { key: "MTOW", val: "73,000 lb", unit: "33,113 kg" },
+          ],
+        },
+      ],
+    },
     status: "available" as AircraftStatus,
   },
 
@@ -624,7 +894,7 @@ export const SEED_AIRCRAFT: SeedAircraft[] = [
     serialNumber: "7X-0278",
     description:
       "The world's first business jet with digital flight controls — technology Dassault pioneered on the Mirage and Rafale fighter jets. Three PW307A engines deliver 5,950 NM of range with the safety and short-field performance that only a tri-engine design can provide. The Falcon 7X can operate from runways as short as 2,070 feet on landing — shorter than any competitor in the large-cabin class. With over 500 in service, it has established one of the strongest residual values in business aviation.",
-    photos: [],
+    photos: [{ url: "/images/fleet/planes/falcon7x.jpg?v=3", caption: "Dassault Falcon 7X" }],
     specs: {
       range_nm: 5950,
       maxPassengers: 16,
@@ -667,7 +937,7 @@ export const SEED_AIRCRAFT: SeedAircraft[] = [
         name: "Cockpit",
         title: "EASy II Flight Deck",
         desc: "The flight deck that introduced digital fly-by-wire to business aviation. EASy II avionics with FalconEye HUD, synthetic vision, and the precision handling that made Dassault synonymous with pilot-centric design.",
-        image: "",
+        image: "/images/fleet/cabins/falcon-cockpit.jpg",
         specs: [
           { key: "Avionics", val: "EASy II" },
           { key: "HUD", val: "FalconEye" },
@@ -679,7 +949,7 @@ export const SEED_AIRCRAFT: SeedAircraft[] = [
         name: "Forward Cabin",
         title: "The Salon",
         desc: "Four-place club in hand-stitched leather with full berthing. The Falcon 7X cabin is known for its quiet ride — the tri-engine layout pushes all powerplants behind the pressure vessel, keeping the cabin library-quiet.",
-        image: "",
+        image: "/images/fleet/cabins/falcon7x-forward.jpg",
         specs: [
           { key: "Seating", val: "4-place club" },
           { key: "Berthing", val: "Certified lie-flat" },
@@ -691,7 +961,7 @@ export const SEED_AIRCRAFT: SeedAircraft[] = [
         name: "Mid Cabin",
         title: "The Lounge",
         desc: "Conference and entertainment zone with a four-place grouping, three-place divan, and full galley. The flat-floor cabin runs uninterrupted from forward galley to aft lavatory.",
-        image: "",
+        image: "/images/fleet/cabins/falcon7x-mid.jpg",
         specs: [
           { key: "Conference", val: "4-place" },
           { key: "Divan", val: "3-place convertible" },
@@ -700,6 +970,51 @@ export const SEED_AIRCRAFT: SeedAircraft[] = [
         ],
       },
     ],
+    blueprint: {
+      label: "F7X",
+      category: "Long Range",
+      specGroups: [
+        {
+          title: "Dimensions",
+          specs: [
+            { key: "Overall Length", val: "76 ft 1 in", unit: "23.19 m" },
+            { key: "Wingspan", val: "86 ft 0 in", unit: "26.21 m" },
+            { key: "Overall Height", val: "25 ft 11 in", unit: "7.89 m" },
+            { key: "Wing Area", val: "699 sq ft", unit: null },
+          ],
+        },
+        {
+          title: "Cabin",
+          specs: [
+            { key: "Cabin Length", val: "39 ft 1 in", unit: "11.91 m" },
+            { key: "Cabin Width", val: "7 ft 8 in", unit: "2.34 m" },
+            { key: "Cabin Height", val: "6 ft 2 in", unit: "1.88 m" },
+            { key: "Cabin Volume", val: "1,552 cu ft", unit: null },
+            { key: "Living Areas", val: "Up to 3", unit: null },
+            { key: "Baggage", val: "140 cu ft", unit: "3.96 cu m" },
+          ],
+        },
+        {
+          title: "Performance",
+          specs: [
+            { key: "Max Range", val: "5,950 nm", unit: "11,019 km" },
+            { key: "High-Speed Cruise", val: "Mach 0.86", unit: null },
+            { key: "Max Operating Speed", val: "Mach 0.90", unit: null },
+            { key: "Ceiling", val: "51,000 ft", unit: "15,545 m" },
+            { key: "Takeoff Distance", val: "5,328 ft", unit: "1,624 m" },
+            { key: "Landing Distance", val: "2,070 ft", unit: "631 m" },
+          ],
+        },
+        {
+          title: "Powerplant",
+          specs: [
+            { key: "Engines", val: "3\u00d7 Pratt & Whitney Canada PW307A", unit: null },
+            { key: "Thrust (each)", val: "6,402 lbf", unit: "28.5 kN" },
+            { key: "MTOW", val: "69,000 lb", unit: "31,298 kg" },
+          ],
+        },
+      ],
+    },
     status: "available" as AircraftStatus,
   },
 
@@ -713,7 +1028,7 @@ export const SEED_AIRCRAFT: SeedAircraft[] = [
     serialNumber: "700-0165",
     description:
       "Textron Aviation's flagship super-midsize jet, purpose-built for transcontinental missions with 3,500 NM of range — New York to London or Los Angeles to Hawaii nonstop. The Citation Longitude holds the lowest cabin altitude in its class at 5,950 feet when cruising at FL450, keeping passengers comfortable on long flights. Its FADEC-controlled Honeywell HTF7700L engines deliver exceptional fuel efficiency, and the Garmin G5000 flight deck provides autothrottle, WAAS/LPV approaches, and synthetic vision.",
-    photos: [],
+    photos: [{ url: "/images/fleet/planes/longitude.jpg?v=3", caption: "Cessna Citation Longitude" }],
     specs: {
       range_nm: 3500,
       maxPassengers: 12,
@@ -756,7 +1071,7 @@ export const SEED_AIRCRAFT: SeedAircraft[] = [
         name: "Cockpit",
         title: "Garmin G5000 Flight Deck",
         desc: "Three-display Garmin G5000 integrated avionics suite with autothrottle, synthetic vision, WAAS/LPV approach capability, and intuitive touchscreen controllers. One of the most pilot-friendly cockpits in business aviation.",
-        image: "",
+        image: "/images/fleet/cabins/gulfstream-cockpit.jpg",
         specs: [
           { key: "Avionics", val: "Garmin G5000" },
           { key: "Displays", val: "3 × 14\" HD" },
@@ -768,7 +1083,7 @@ export const SEED_AIRCRAFT: SeedAircraft[] = [
         name: "Main Cabin",
         title: "The Executive Cabin",
         desc: "Eight executive seats in a flat-floor, stand-up cabin with the lowest cabin altitude in the super-midsize class. Every seat is a window seat in the narrow-but-tall configuration, and the cabin is remarkably quiet thanks to sound-suppressing fuselage design.",
-        image: "",
+        image: "/images/fleet/cabins/citation-cabin.jpg",
         specs: [
           { key: "Seating", val: "8 executive seats" },
           { key: "Cabin Altitude", val: "5,950 ft at FL450" },
@@ -780,7 +1095,7 @@ export const SEED_AIRCRAFT: SeedAircraft[] = [
         name: "Aft Suite",
         title: "The Retreat",
         desc: "Aft section features a three-place divan with berthing, a fully enclosed private lavatory with vanity, and an externally accessible 112-cubic-foot baggage compartment.",
-        image: "",
+        image: "/images/fleet/cabins/citation-cabin2.jpg",
         specs: [
           { key: "Divan", val: "3-place with berthing" },
           { key: "Lavatory", val: "Fully enclosed" },
@@ -789,6 +1104,49 @@ export const SEED_AIRCRAFT: SeedAircraft[] = [
         ],
       },
     ],
+    blueprint: {
+      label: "CL",
+      category: "Super Midsize",
+      specGroups: [
+        {
+          title: "Dimensions",
+          specs: [
+            { key: "Overall Length", val: "73 ft 2 in", unit: "22.30 m" },
+            { key: "Wingspan", val: "68 ft 7 in", unit: "20.90 m" },
+            { key: "Overall Height", val: "19 ft 5 in", unit: "5.92 m" },
+            { key: "Wing Area", val: "543 sq ft", unit: null },
+          ],
+        },
+        {
+          title: "Cabin",
+          specs: [
+            { key: "Cabin Length", val: "25 ft 0 in", unit: "7.62 m" },
+            { key: "Cabin Width", val: "6 ft 5 in", unit: "1.96 m" },
+            { key: "Cabin Height", val: "6 ft 0 in", unit: "1.83 m" },
+            { key: "Baggage", val: "112 cu ft", unit: "3.17 cu m" },
+          ],
+        },
+        {
+          title: "Performance",
+          specs: [
+            { key: "Max Range", val: "3,500 nm", unit: "6,482 km" },
+            { key: "High-Speed Cruise", val: "Mach 0.80", unit: null },
+            { key: "Max Operating Speed", val: "Mach 0.84", unit: null },
+            { key: "Ceiling", val: "45,000 ft", unit: "13,716 m" },
+            { key: "Takeoff Distance", val: "4,810 ft", unit: "1,466 m" },
+            { key: "Landing Distance", val: "2,930 ft", unit: "893 m" },
+          ],
+        },
+        {
+          title: "Powerplant",
+          specs: [
+            { key: "Engines", val: "2\u00d7 Honeywell HTF7700L", unit: null },
+            { key: "Thrust (each)", val: "7,665 lbf", unit: "34.1 kN" },
+            { key: "MTOW", val: "39,500 lb", unit: "17,917 kg" },
+          ],
+        },
+      ],
+    },
     status: "available" as AircraftStatus,
   },
 
@@ -802,7 +1160,7 @@ export const SEED_AIRCRAFT: SeedAircraft[] = [
     serialNumber: "60452",
     description:
       "The latest evolution of the legendary Challenger 600 series — over 1,100 aircraft delivered since 1980 and still the benchmark for large-cabin value. The Challenger 650 flies 4,000 NM nonstop with a wide, flat-floor cabin that seats up to 12. Its 28-foot cabin length and 7-foot-11-inch width create a spacious three-zone interior. GE CF34-3B engines are among the most proven and reliable powerplants in business aviation, and the aircraft benefits from one of the lowest direct operating costs in the large-cabin category.",
-    photos: [],
+    photos: [{ url: "/images/fleet/planes/challenger650.jpg?v=3", caption: "Bombardier Challenger 650" }],
     specs: {
       range_nm: 4000,
       maxPassengers: 12,
@@ -845,7 +1203,7 @@ export const SEED_AIRCRAFT: SeedAircraft[] = [
         name: "Cockpit",
         title: "Vision Flight Deck",
         desc: "Collins Aerospace Pro Line 21 Advanced integrated avionics with Bombardier Vision cockpit. Four large LCD displays, synthetic vision, and an advanced autopilot system trusted by over 1,100 Challenger operators worldwide.",
-        image: "",
+        image: "/images/fleet/cabins/gulfstream-cockpit.jpg",
         specs: [
           { key: "Avionics", val: "Pro Line 21 Advanced" },
           { key: "Displays", val: '4 × LCD' },
@@ -857,7 +1215,7 @@ export const SEED_AIRCRAFT: SeedAircraft[] = [
         name: "Forward Cabin",
         title: "The Club",
         desc: "Four-place club seating in a nearly 8-foot-wide cabin — one of the widest in business aviation at any price. The Challenger's signature wide-body feel makes transcontinental flights feel like sitting in a premium living room.",
-        image: "",
+        image: "/images/fleet/cabins/challenger-cabin1.jpg",
         specs: [
           { key: "Seating", val: "4-place club" },
           { key: "Width", val: '7 ft 11 in' },
@@ -869,7 +1227,7 @@ export const SEED_AIRCRAFT: SeedAircraft[] = [
         name: "Mid Cabin",
         title: "The Lounge",
         desc: "Four-place conference or dining arrangement with a three-place divan. Full galley forward with steam oven, espresso capability, and full meal prep. The 28-foot cabin provides generous space for work or rest.",
-        image: "",
+        image: "/images/fleet/cabins/challenger-cabin2.jpg",
         specs: [
           { key: "Conference", val: "4-place group" },
           { key: "Divan", val: "3-place convertible" },
@@ -878,6 +1236,50 @@ export const SEED_AIRCRAFT: SeedAircraft[] = [
         ],
       },
     ],
+    blueprint: {
+      label: "CL650",
+      category: "Large Cabin",
+      specGroups: [
+        {
+          title: "Dimensions",
+          specs: [
+            { key: "Overall Length", val: "68 ft 5 in", unit: "20.85 m" },
+            { key: "Wingspan", val: "64 ft 4 in", unit: "19.61 m" },
+            { key: "Overall Height", val: "20 ft 10 in", unit: "6.35 m" },
+            { key: "Wing Area", val: "587 sq ft", unit: null },
+          ],
+        },
+        {
+          title: "Cabin",
+          specs: [
+            { key: "Cabin Length", val: "28 ft 4 in", unit: "8.63 m" },
+            { key: "Cabin Width", val: "7 ft 11 in", unit: "2.41 m" },
+            { key: "Cabin Height", val: "6 ft 1 in", unit: "1.85 m" },
+            { key: "Cabin Volume", val: "1,146 cu ft", unit: null },
+            { key: "Baggage", val: "115 cu ft", unit: "3.26 cu m" },
+          ],
+        },
+        {
+          title: "Performance",
+          specs: [
+            { key: "Max Range", val: "4,000 nm", unit: "7,408 km" },
+            { key: "High-Speed Cruise", val: "Mach 0.80", unit: null },
+            { key: "Max Operating Speed", val: "Mach 0.85", unit: null },
+            { key: "Ceiling", val: "41,000 ft", unit: "12,497 m" },
+            { key: "Takeoff Distance", val: "5,460 ft", unit: "1,664 m" },
+            { key: "Landing Distance", val: "2,600 ft", unit: "792 m" },
+          ],
+        },
+        {
+          title: "Powerplant",
+          specs: [
+            { key: "Engines", val: "2\u00d7 GE CF34-3B", unit: null },
+            { key: "Thrust (each)", val: "9,220 lbf", unit: "41.0 kN" },
+            { key: "MTOW", val: "48,200 lb", unit: "21,863 kg" },
+          ],
+        },
+      ],
+    },
     status: "available" as AircraftStatus,
   },
 
@@ -891,7 +1293,7 @@ export const SEED_AIRCRAFT: SeedAircraft[] = [
     serialNumber: "55020118",
     description:
       "The intercontinental super-midsize jet with best-in-class range of 3,900 NM — London to New York nonstop in a super-midsize frame. The Praetor 600 is the only aircraft in its category with full fly-by-wire flight controls, delivering fighter-jet precision handling with automatic envelope protection. Its flat-floor cabin offers full stand-up headroom, and the industry-leading six-foot-tall baggage compartment is accessible in flight. Embraer's DNA from building over 8,000 aircraft shows in every detail.",
-    photos: [],
+    photos: [{ url: "/images/fleet/planes/praetor600.jpg?v=3", caption: "Embraer Praetor 600" }],
     specs: {
       range_nm: 3900,
       maxPassengers: 12,
@@ -934,7 +1336,7 @@ export const SEED_AIRCRAFT: SeedAircraft[] = [
         name: "Cockpit",
         title: "The Flight Deck",
         desc: "Honeywell Primus Epic 2.0 integrated avionics with Collins Aerospace HGS-3500 Head-Up Display, synthetic vision, and full fly-by-wire flight controls — the only super-midsize jet with this level of flight control technology.",
-        image: "",
+        image: "/images/fleet/cabins/gulfstream-cockpit.jpg",
         specs: [
           { key: "Avionics", val: "Primus Epic 2.0" },
           { key: "HUD", val: "Collins HGS-3500" },
@@ -946,7 +1348,7 @@ export const SEED_AIRCRAFT: SeedAircraft[] = [
         name: "Main Cabin",
         title: "The Club",
         desc: "Eight wide-body club seats in a flat-floor, stand-up cabin with the longest range in the super-midsize category. Full galley forward, Gogo AVANCE L5 high-speed connectivity, and a whisper-quiet cabin environment.",
-        image: "",
+        image: "/images/fleet/cabins/praetor-cabin1.jpg",
         specs: [
           { key: "Seating", val: "8 club seats" },
           { key: "Cabin Height", val: "6 ft stand-up" },
@@ -958,7 +1360,7 @@ export const SEED_AIRCRAFT: SeedAircraft[] = [
         name: "Aft Suite",
         title: "The Retreat",
         desc: "Private aft cabin with a three-place divan that converts to a lie-flat sleeping surface, a fully enclosed private lavatory, and the tallest in-flight-accessible baggage compartment in business aviation at six feet.",
-        image: "",
+        image: "/images/fleet/cabins/praetor-cabin2.jpg",
         specs: [
           { key: "Divan", val: "Converts to full bed" },
           { key: "Lavatory", val: "Private enclosed" },
@@ -967,6 +1369,50 @@ export const SEED_AIRCRAFT: SeedAircraft[] = [
         ],
       },
     ],
+    blueprint: {
+      label: "P600",
+      category: "Super Midsize",
+      specGroups: [
+        {
+          title: "Dimensions",
+          specs: [
+            { key: "Overall Length", val: "68 ft 2 in", unit: "20.74 m" },
+            { key: "Wingspan", val: "70 ft 6 in", unit: "21.49 m" },
+            { key: "Overall Height", val: "21 ft 1 in", unit: "6.43 m" },
+            { key: "Wing Area", val: "551 sq ft", unit: null },
+          ],
+        },
+        {
+          title: "Cabin",
+          specs: [
+            { key: "Cabin Length", val: "24 ft 5 in", unit: "7.44 m" },
+            { key: "Cabin Width", val: "6 ft 10 in", unit: "2.08 m" },
+            { key: "Cabin Height", val: "6 ft 0 in", unit: "1.83 m" },
+            { key: "Cabin Volume", val: "1,105 cu ft", unit: null },
+            { key: "Baggage", val: "150 cu ft", unit: "4.25 cu m" },
+          ],
+        },
+        {
+          title: "Performance",
+          specs: [
+            { key: "Max Range", val: "3,900 nm", unit: "7,223 km" },
+            { key: "High-Speed Cruise", val: "Mach 0.80", unit: null },
+            { key: "Max Operating Speed", val: "Mach 0.83", unit: null },
+            { key: "Ceiling", val: "45,000 ft", unit: "13,716 m" },
+            { key: "Takeoff Distance", val: "4,717 ft", unit: "1,438 m" },
+            { key: "Landing Distance", val: "2,090 ft", unit: "637 m" },
+          ],
+        },
+        {
+          title: "Powerplant",
+          specs: [
+            { key: "Engines", val: "2\u00d7 Honeywell HTF7500E", unit: null },
+            { key: "Thrust (each)", val: "7,528 lbf", unit: "33.5 kN" },
+            { key: "MTOW", val: "42,858 lb", unit: "19,440 kg" },
+          ],
+        },
+      ],
+    },
     status: "available" as AircraftStatus,
   },
 
@@ -980,7 +1426,7 @@ export const SEED_AIRCRAFT: SeedAircraft[] = [
     serialNumber: "680A-0292",
     description:
       "The best-selling midsize jet in the world for over seven consecutive years. The Citation Latitude offers a flat-floor, stand-up cabin with the widest cross-section in the midsize class — wider than some super-midsize competitors. Its 2,700 NM range covers coast-to-coast U.S. flights nonstop, and the Garmin G5000 flight deck with autothrottle makes it one of the easiest jets to fly. Very low total time, single private owner, meticulously maintained in a climate-controlled hangar.",
-    photos: [],
+    photos: [{ url: "/images/fleet/planes/latitude.jpg?v=3", caption: "Cessna Citation Latitude" }],
     specs: {
       range_nm: 2700,
       maxPassengers: 9,
@@ -1023,7 +1469,7 @@ export const SEED_AIRCRAFT: SeedAircraft[] = [
         name: "Cockpit",
         title: "Garmin G5000 Flight Deck",
         desc: "Three-display Garmin G5000 with autothrottle, synthetic vision, and WAAS/LPV approach capability. Intuitive touchscreen controllers make the Latitude one of the most approachable cockpits for owner-pilots stepping up to a midsize jet.",
-        image: "",
+        image: "/images/fleet/cabins/gulfstream-cockpit.jpg",
         specs: [
           { key: "Avionics", val: "Garmin G5000" },
           { key: "Autothrottle", val: "Standard" },
@@ -1035,7 +1481,7 @@ export const SEED_AIRCRAFT: SeedAircraft[] = [
         name: "Main Cabin",
         title: "The Executive Cabin",
         desc: "Seven executive seats in a flat-floor cabin with the widest cross-section in the midsize class at 6 feet 5 inches. Every seat tracks forward and aft, and the cabin features large windows that flood the interior with natural light.",
-        image: "",
+        image: "/images/fleet/cabins/latitude-cabin1.jpg",
         specs: [
           { key: "Seating", val: "7 executive seats" },
           { key: "Width", val: "6 ft 5 in (widest in class)" },
@@ -1047,7 +1493,7 @@ export const SEED_AIRCRAFT: SeedAircraft[] = [
         name: "Aft Section",
         title: "The Aft Suite",
         desc: "Enclosed aft lavatory with vanity and externally accessible baggage compartment with 100 cubic feet of heated, pressurized storage. A belted lavatory seat adds one more passenger position.",
-        image: "",
+        image: "/images/fleet/cabins/latitude-cabin2.jpg",
         specs: [
           { key: "Lavatory", val: "Enclosed with vanity" },
           { key: "Baggage", val: "100 cu ft" },
@@ -1056,6 +1502,49 @@ export const SEED_AIRCRAFT: SeedAircraft[] = [
         ],
       },
     ],
+    blueprint: {
+      label: "CLatitude",
+      category: "Midsize",
+      specGroups: [
+        {
+          title: "Dimensions",
+          specs: [
+            { key: "Overall Length", val: "62 ft 3 in", unit: "18.97 m" },
+            { key: "Wingspan", val: "72 ft 4 in", unit: "22.05 m" },
+            { key: "Overall Height", val: "20 ft 8 in", unit: "6.30 m" },
+            { key: "Wing Area", val: "527 sq ft", unit: null },
+          ],
+        },
+        {
+          title: "Cabin",
+          specs: [
+            { key: "Cabin Length", val: "22 ft 2 in", unit: "6.76 m" },
+            { key: "Cabin Width", val: "6 ft 5 in", unit: "1.96 m" },
+            { key: "Cabin Height", val: "6 ft 0 in", unit: "1.83 m" },
+            { key: "Baggage", val: "100 cu ft", unit: "2.83 cu m" },
+          ],
+        },
+        {
+          title: "Performance",
+          specs: [
+            { key: "Max Range", val: "2,700 nm", unit: "5,000 km" },
+            { key: "High-Speed Cruise", val: "Mach 0.77", unit: null },
+            { key: "Max Operating Speed", val: "Mach 0.80", unit: null },
+            { key: "Ceiling", val: "45,000 ft", unit: "13,716 m" },
+            { key: "Takeoff Distance", val: "3,580 ft", unit: "1,091 m" },
+            { key: "Landing Distance", val: "2,480 ft", unit: "756 m" },
+          ],
+        },
+        {
+          title: "Powerplant",
+          specs: [
+            { key: "Engines", val: "2\u00d7 Pratt & Whitney Canada PW306D1", unit: null },
+            { key: "Thrust (each)", val: "5,907 lbf", unit: "26.3 kN" },
+            { key: "MTOW", val: "30,800 lb", unit: "13,971 kg" },
+          ],
+        },
+      ],
+    },
     status: "available" as AircraftStatus,
   },
 
@@ -1069,7 +1558,7 @@ export const SEED_AIRCRAFT: SeedAircraft[] = [
     serialNumber: "20648",
     description:
       "The world's best-selling super-midsize business jet — and for good reason. The Challenger 350 combines the widest cabin in the super-midsize class at nearly 8 feet with a 3,200 NM range that covers coast-to-coast missions and transatlantic flights with a fuel stop. It delivers the ride quality of a large-cabin jet at super-midsize operating costs. Bombardier's smooth-ride technology and the wide, flat-floor cabin have made it the charter fleet workhorse of choice for operators worldwide.",
-    photos: [],
+    photos: [{ url: "/images/fleet/planes/challenger350.jpg?v=3", caption: "Bombardier Challenger 350" }],
     specs: {
       range_nm: 3200,
       maxPassengers: 10,
@@ -1112,7 +1601,7 @@ export const SEED_AIRCRAFT: SeedAircraft[] = [
         name: "Cockpit",
         title: "Pro Line 21 Advanced",
         desc: "Collins Aerospace Pro Line 21 Advanced avionics with four large displays, synthetic vision, and FANS/CPDLC for oceanic operations. The cockpit that has earned the Challenger 350 its reputation as a pilot favorite.",
-        image: "",
+        image: "/images/fleet/cabins/gulfstream-cockpit.jpg",
         specs: [
           { key: "Avionics", val: "Pro Line 21 Advanced" },
           { key: "Displays", val: "4 × LCD" },
@@ -1124,7 +1613,7 @@ export const SEED_AIRCRAFT: SeedAircraft[] = [
         name: "Main Cabin",
         title: "The Wide-Body Cabin",
         desc: "Eight executive seats in a cabin that is nearly 8 feet wide and over 6 feet tall — wider than many large-cabin jets costing twice as much. The flat floor runs the full cabin length, and large windows provide abundant natural light.",
-        image: "",
+        image: "/images/fleet/cabins/challenger-cabin1.jpg",
         specs: [
           { key: "Seating", val: "8 executive seats" },
           { key: "Width", val: "7 ft 11 in" },
@@ -1136,7 +1625,7 @@ export const SEED_AIRCRAFT: SeedAircraft[] = [
         name: "Aft Section",
         title: "The Aft Suite",
         desc: "Enclosed lavatory with vanity, a 106-cubic-foot baggage compartment accessible in flight, and optional three-place divan for berthing. Full-service galley forward with steam oven and espresso capability.",
-        image: "",
+        image: "/images/fleet/cabins/challenger-cabin3.jpg",
         specs: [
           { key: "Lavatory", val: "Enclosed with vanity" },
           { key: "Baggage", val: "106 cu ft, in-flight access" },
@@ -1145,6 +1634,50 @@ export const SEED_AIRCRAFT: SeedAircraft[] = [
         ],
       },
     ],
+    blueprint: {
+      label: "CL350",
+      category: "Super Midsize",
+      specGroups: [
+        {
+          title: "Dimensions",
+          specs: [
+            { key: "Overall Length", val: "68 ft 7 in", unit: "20.90 m" },
+            { key: "Wingspan", val: "69 ft 0 in", unit: "21.03 m" },
+            { key: "Overall Height", val: "20 ft 4 in", unit: "6.20 m" },
+            { key: "Wing Area", val: "587 sq ft", unit: null },
+          ],
+        },
+        {
+          title: "Cabin",
+          specs: [
+            { key: "Cabin Length", val: "25 ft 2 in", unit: "7.67 m" },
+            { key: "Cabin Width", val: "7 ft 11 in", unit: "2.41 m" },
+            { key: "Cabin Height", val: "6 ft 1 in", unit: "1.85 m" },
+            { key: "Cabin Volume", val: "1,050 cu ft", unit: null },
+            { key: "Baggage", val: "106 cu ft", unit: "3.00 cu m" },
+          ],
+        },
+        {
+          title: "Performance",
+          specs: [
+            { key: "Max Range", val: "3,200 nm", unit: "5,926 km" },
+            { key: "High-Speed Cruise", val: "Mach 0.80", unit: null },
+            { key: "Max Operating Speed", val: "Mach 0.83", unit: null },
+            { key: "Ceiling", val: "45,000 ft", unit: "13,716 m" },
+            { key: "Takeoff Distance", val: "4,835 ft", unit: "1,474 m" },
+            { key: "Landing Distance", val: "2,480 ft", unit: "756 m" },
+          ],
+        },
+        {
+          title: "Powerplant",
+          specs: [
+            { key: "Engines", val: "2\u00d7 Honeywell HTF7350", unit: null },
+            { key: "Thrust (each)", val: "7,323 lbf", unit: "32.6 kN" },
+            { key: "MTOW", val: "40,600 lb", unit: "18,416 kg" },
+          ],
+        },
+      ],
+    },
     status: "available" as AircraftStatus,
   },
 
@@ -1158,7 +1691,7 @@ export const SEED_AIRCRAFT: SeedAircraft[] = [
     serialNumber: "50500492",
     description:
       "The best-selling light jet in the world for over a decade running — and the fastest in its class at 464 knots. The Phenom 300E delivers a rare combination: light-jet economics with midsize-jet performance. Its 2,010 NM range covers New York to Miami, Los Angeles to Cabo, or London to Marrakech nonstop. The cabin features Embraer's DNA Design interior with premium finishes typically found on jets twice its size, and the Garmin Prodigy Touch G3000 avionics make it accessible to owner-pilots.",
-    photos: [],
+    photos: [{ url: "/images/fleet/planes/phenom300e.jpg?v=3", caption: "Embraer Phenom 300E" }],
     specs: {
       range_nm: 2010,
       maxPassengers: 10,
@@ -1201,7 +1734,7 @@ export const SEED_AIRCRAFT: SeedAircraft[] = [
         name: "Cockpit",
         title: "Prodigy Touch G3000",
         desc: "Garmin Prodigy Touch G3000 avionics suite with three 14-inch displays, synthetic vision, and runway overrun awareness. The single-pilot certified cockpit makes the Phenom 300E the top choice for owner-operators worldwide.",
-        image: "",
+        image: "/images/fleet/cabins/gulfstream-cockpit.jpg",
         specs: [
           { key: "Avionics", val: "Garmin G3000" },
           { key: "Displays", val: '3 × 14"' },
@@ -1213,7 +1746,7 @@ export const SEED_AIRCRAFT: SeedAircraft[] = [
         name: "Cabin",
         title: "The DNA Design Cabin",
         desc: "Up to seven passengers in club and side-facing configurations with Embraer's signature DNA Design interior. Premium materials, ambient LED lighting, and large oval windows create an unexpectedly spacious feel. The fastest cabin in the light-jet class at 464 knots.",
-        image: "",
+        image: "/images/fleet/cabins/phenom300-cabin.jpg",
         specs: [
           { key: "Seating", val: "4 club + side-facing" },
           { key: "Speed", val: "464 ktas (fastest in class)" },
@@ -1222,6 +1755,49 @@ export const SEED_AIRCRAFT: SeedAircraft[] = [
         ],
       },
     ],
+    blueprint: {
+      label: "P300E",
+      category: "Light Jet",
+      specGroups: [
+        {
+          title: "Dimensions",
+          specs: [
+            { key: "Overall Length", val: "51 ft 2 in", unit: "15.60 m" },
+            { key: "Wingspan", val: "53 ft 4 in", unit: "16.26 m" },
+            { key: "Overall Height", val: "17 ft 2 in", unit: "5.23 m" },
+            { key: "Wing Area", val: "318 sq ft", unit: null },
+          ],
+        },
+        {
+          title: "Cabin",
+          specs: [
+            { key: "Cabin Length", val: "17 ft 2 in", unit: "5.24 m" },
+            { key: "Cabin Width", val: "5 ft 1 in", unit: "1.55 m" },
+            { key: "Cabin Height", val: "4 ft 11 in", unit: "1.50 m" },
+            { key: "Baggage", val: "84 cu ft", unit: "2.38 cu m" },
+          ],
+        },
+        {
+          title: "Performance",
+          specs: [
+            { key: "Max Range", val: "2,010 nm", unit: "3,723 km" },
+            { key: "High-Speed Cruise", val: "Mach 0.78", unit: null },
+            { key: "Max Operating Speed", val: "Mach 0.80", unit: null },
+            { key: "Ceiling", val: "45,000 ft", unit: "13,716 m" },
+            { key: "Takeoff Distance", val: "3,138 ft", unit: "956 m" },
+            { key: "Landing Distance", val: "2,621 ft", unit: "799 m" },
+          ],
+        },
+        {
+          title: "Powerplant",
+          specs: [
+            { key: "Engines", val: "2\u00d7 Pratt & Whitney Canada PW535E1", unit: null },
+            { key: "Thrust (each)", val: "3,478 lbf", unit: "15.5 kN" },
+            { key: "MTOW", val: "18,387 lb", unit: "8,340 kg" },
+          ],
+        },
+      ],
+    },
     status: "available" as AircraftStatus,
   },
 
@@ -1235,7 +1811,7 @@ export const SEED_AIRCRAFT: SeedAircraft[] = [
     serialNumber: "50000428",
     description:
       "The entry-level jet that doesn't feel like a compromise. The Phenom 100E carries up to seven passengers at 1,178 NM — New York to Miami, Dallas to Denver, or Paris to Barcelona. It's the only very-light jet with a fully enclosed lavatory, and its Garmin Prodigy G1000 NXi avionics are the same platform trusted by thousands of pilots worldwide. With direct operating costs under $1,500 per hour, the Phenom 100E makes jet ownership accessible while still delivering the speed, comfort, and safety that only a jet can provide.",
-    photos: [],
+    photos: [{ url: "/images/fleet/planes/phenom100e.jpg?v=3", caption: "Embraer Phenom 100E" }],
     specs: {
       range_nm: 1178,
       maxPassengers: 7,
@@ -1278,7 +1854,7 @@ export const SEED_AIRCRAFT: SeedAircraft[] = [
         name: "Cockpit",
         title: "Prodigy G1000 NXi",
         desc: "Garmin Prodigy G1000 NXi integrated avionics — the world's most popular glass cockpit platform, now with wireless database updates and enhanced synthetic vision. Single-pilot certified for owner-operator convenience.",
-        image: "",
+        image: "/images/fleet/cabins/gulfstream-cockpit.jpg",
         specs: [
           { key: "Avionics", val: "Garmin G1000 NXi" },
           { key: "Displays", val: "2 × 10.4\" PFD/MFD" },
@@ -1290,7 +1866,7 @@ export const SEED_AIRCRAFT: SeedAircraft[] = [
         name: "Cabin",
         title: "The Executive Cabin",
         desc: "Four executive seats in a club arrangement with Embraer's DNA Design interior. The only very-light jet with a fully enclosed lavatory — a feature passengers notice immediately. Heated, pressurized baggage compartment accessible from outside.",
-        image: "",
+        image: "/images/fleet/cabins/phenom100-cabin.jpg",
         specs: [
           { key: "Seating", val: "4 executive club" },
           { key: "Lavatory", val: "Fully enclosed (only in class)" },
@@ -1299,6 +1875,49 @@ export const SEED_AIRCRAFT: SeedAircraft[] = [
         ],
       },
     ],
+    blueprint: {
+      label: "P100EV",
+      category: "Very Light",
+      specGroups: [
+        {
+          title: "Dimensions",
+          specs: [
+            { key: "Overall Length", val: "42 ft 1 in", unit: "12.82 m" },
+            { key: "Wingspan", val: "40 ft 4 in", unit: "12.30 m" },
+            { key: "Overall Height", val: "14 ft 3 in", unit: "4.35 m" },
+            { key: "Wing Area", val: "233 sq ft", unit: null },
+          ],
+        },
+        {
+          title: "Cabin",
+          specs: [
+            { key: "Cabin Length", val: "11 ft 0 in", unit: "3.35 m" },
+            { key: "Cabin Width", val: "5 ft 1 in", unit: "1.55 m" },
+            { key: "Cabin Height", val: "4 ft 11 in", unit: "1.50 m" },
+            { key: "Baggage", val: "60 cu ft", unit: "1.70 cu m" },
+          ],
+        },
+        {
+          title: "Performance",
+          specs: [
+            { key: "Max Range", val: "1,178 nm", unit: "2,182 km" },
+            { key: "High-Speed Cruise", val: "Mach 0.65", unit: null },
+            { key: "Max Operating Speed", val: "Mach 0.70", unit: null },
+            { key: "Ceiling", val: "41,000 ft", unit: "12,497 m" },
+            { key: "Takeoff Distance", val: "3,190 ft", unit: "972 m" },
+            { key: "Landing Distance", val: "2,473 ft", unit: "754 m" },
+          ],
+        },
+        {
+          title: "Powerplant",
+          specs: [
+            { key: "Engines", val: "2\u00d7 Pratt & Whitney Canada PW617F1-E", unit: null },
+            { key: "Thrust (each)", val: "1,695 lbf", unit: "7.5 kN" },
+            { key: "MTOW", val: "10,582 lb", unit: "4,801 kg" },
+          ],
+        },
+      ],
+    },
     status: "available" as AircraftStatus,
   },
 
@@ -1312,7 +1931,7 @@ export const SEED_AIRCRAFT: SeedAircraft[] = [
     serialNumber: "0812",
     description:
       "The world's first — and only — single-engine personal jet, and the best-selling jet in general aviation. The Vision Jet SF50 is powered by a single Williams FJ33-5A turbofan mounted above the fuselage in a distinctive V-tail configuration that keeps engine noise out of the cabin. Its defining feature is Garmin Autoland (Safe Return) — in an emergency, a single button press commands the aircraft to autonomously select the nearest suitable airport, fly an instrument approach, and land itself. No pilot in the world has a safer emergency backup. Range of 1,200 NM at a fraction of traditional jet operating costs.",
-    photos: [],
+    photos: [{ url: "/images/fleet/planes/visionjet.jpg?v=3", caption: "Cirrus Vision Jet SF50" }],
     specs: {
       range_nm: 1200,
       maxPassengers: 5,
@@ -1355,7 +1974,7 @@ export const SEED_AIRCRAFT: SeedAircraft[] = [
         name: "Cockpit",
         title: "Perspective Touch+",
         desc: "Garmin Perspective Touch+ with the revolutionary Autoland system — branded as Safe Return. In any emergency, a single red button triggers autonomous diversion, approach, and landing at the nearest suitable airport. The safest cockpit in personal aviation.",
-        image: "",
+        image: "/images/fleet/cabins/visionjet-cockpit.jpg",
         specs: [
           { key: "Avionics", val: "Garmin Perspective Touch+" },
           { key: "Autoland", val: "Safe Return (autonomous)" },
@@ -1367,7 +1986,7 @@ export const SEED_AIRCRAFT: SeedAircraft[] = [
         name: "Cabin",
         title: "The Personal Jet Cabin",
         desc: "Five passengers across two rows in the distinctive egg-shaped fuselage. Panoramic windows, a molded composite interior, and the quietest cabin in the personal jet category thanks to the over-wing engine mounting. The V-tail configuration directs exhaust above and away from the cabin.",
-        image: "",
+        image: "/images/fleet/cabins/visionjet-cabin.jpg",
         specs: [
           { key: "Seating", val: "2 + 3 (5 total)" },
           { key: "Engine", val: "Single, over-wing mounted" },
@@ -1376,6 +1995,49 @@ export const SEED_AIRCRAFT: SeedAircraft[] = [
         ],
       },
     ],
+    blueprint: {
+      label: "SF50",
+      category: "Very Light",
+      specGroups: [
+        {
+          title: "Dimensions",
+          specs: [
+            { key: "Overall Length", val: "30 ft 10 in", unit: "9.40 m" },
+            { key: "Wingspan", val: "38 ft 7 in", unit: "11.76 m" },
+            { key: "Overall Height", val: "10 ft 11 in", unit: "3.33 m" },
+            { key: "Wing Area", val: "191 sq ft", unit: null },
+          ],
+        },
+        {
+          title: "Cabin",
+          specs: [
+            { key: "Cabin Length", val: "12 ft 0 in", unit: "3.66 m" },
+            { key: "Cabin Width", val: "5 ft 1 in", unit: "1.55 m" },
+            { key: "Cabin Height", val: "4 ft 1 in", unit: "1.25 m" },
+            { key: "Baggage", val: "53 cu ft", unit: "1.50 cu m" },
+          ],
+        },
+        {
+          title: "Performance",
+          specs: [
+            { key: "Max Range", val: "1,200 nm", unit: "2,222 km" },
+            { key: "High-Speed Cruise", val: "305 ktas", unit: null },
+            { key: "Max Operating Speed", val: "Mach 0.53", unit: null },
+            { key: "Ceiling", val: "31,000 ft", unit: "9,449 m" },
+            { key: "Takeoff Distance", val: "2,036 ft", unit: "621 m" },
+            { key: "Landing Distance", val: "1,628 ft", unit: "496 m" },
+          ],
+        },
+        {
+          title: "Powerplant",
+          specs: [
+            { key: "Engine", val: "1\u00d7 Williams International FJ33-5A", unit: null },
+            { key: "Thrust", val: "1,846 lbf", unit: "8.2 kN" },
+            { key: "MTOW", val: "6,000 lb", unit: "2,722 kg" },
+          ],
+        },
+      ],
+    },
     status: "available" as AircraftStatus,
   },
 ];

@@ -3,11 +3,13 @@
 import { useCallback, useState } from "react";
 import type { Aircraft, ShowroomFilters } from "@/lib/showroom/types";
 import AircraftDetail from "@/components/showroom/AircraftDetail";
+import ExpandCards from "@/components/ui/expand-cards";
 
 interface ResultsStepProps {
   filters: ShowroomFilters;
   onUpdateFilters: (partial: Partial<ShowroomFilters>) => void;
   aircraft: Aircraft[];
+  onSelectAircraft?: (aircraft: Aircraft) => void;
 }
 
 function formatPrice(price: number): string {
@@ -28,10 +30,13 @@ export function ResultsStep({
   filters,
   onUpdateFilters,
   aircraft,
+  onSelectAircraft,
 }: ResultsStepProps) {
   const [detailAircraft, setDetailAircraft] = useState<Aircraft | null>(
     null,
   );
+
+  const handleSelect = onSelectAircraft ?? setDetailAircraft;
 
   const handleSortChange = useCallback(
     (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -92,8 +97,8 @@ export function ResultsStep({
     );
   }
 
-  // Show Fleet-style detail view when an aircraft is selected
-  if (detailAircraft) {
+  // Show Fleet-style detail view when an aircraft is selected (internal fallback)
+  if (detailAircraft && !onSelectAircraft) {
     return (
       <AircraftDetail
         aircraft={detailAircraft}
@@ -103,61 +108,30 @@ export function ResultsStep({
   }
 
   return (
-    <div className="space-y-6">
-      {/* Header row */}
-      <div className="flex items-center justify-between">
+    <div className="space-y-8">
+      {/* Header */}
+      <div className="text-center">
         <h2
           className="text-xl md:text-2xl"
           style={{
             fontFamily: "var(--font-inter)",
             color: "var(--sr-text)",
-            fontWeight: 400,
+            fontWeight: 300,
           }}
         >
-          <span
-            style={{
-              color: "var(--sr-gold)",
-              fontFamily: "var(--font-inter)",
-            }}
-          >
-            {aircraft.length}
-          </span>{" "}
-          {aircraft.length === 1 ? "aircraft" : "aircraft"} found
+          <span style={{ color: "var(--sr-gold)" }}>{aircraft.length}</span>{" "}
+          aircraft found
         </h2>
-
-        {/* Sort dropdown */}
-        <select
-          value={filters.sortBy}
-          onChange={handleSortChange}
-          className="appearance-none px-4 py-2 pr-8 rounded-lg text-sm cursor-pointer outline-none transition-colors"
-          style={{
-            background: "var(--sr-surface)",
-            border: "1px solid var(--sr-border)",
-            color: "var(--sr-text-muted)",
-            fontFamily: "var(--font-inter)",
-            backgroundImage: `url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='rgba(0,0,0,0.3)' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")`,
-            backgroundRepeat: "no-repeat",
-            backgroundPosition: "right 12px center",
-          }}
+        <p
+          className="text-sm mt-1"
+          style={{ color: "var(--sr-text-dim)", fontFamily: "var(--font-inter)" }}
         >
-          <option value="price_desc">Price: High to Low</option>
-          <option value="price_asc">Price: Low to High</option>
-          <option value="year_desc">Newest First</option>
-          <option value="range_desc">Longest Range</option>
-          <option value="pax_desc">Most Passengers</option>
-        </select>
+          Hover to explore, click to view details
+        </p>
       </div>
 
-      {/* Aircraft grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-        {aircraft.map((ac) => (
-          <AircraftCard
-            key={ac.id}
-            aircraft={ac}
-            onViewDetails={() => setDetailAircraft(ac)}
-          />
-        ))}
-      </div>
+      {/* Expanding cards — full showcase */}
+      <ExpandCards aircraft={aircraft} onSelect={handleSelect} />
     </div>
   );
 }
@@ -206,6 +180,8 @@ function AircraftCard({
           <img
             src={aircraft.photos[0].url}
             alt={aircraft.name}
+            loading="lazy"
+            decoding="async"
             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
           />
         ) : (

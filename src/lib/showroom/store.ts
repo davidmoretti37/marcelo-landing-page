@@ -11,7 +11,7 @@ import { SEED_AIRCRAFT } from "./seed";
 const STORAGE_KEY = "sparkjets_inventory";
 const CHANGE_EVENT = "sparkjets-inventory-changed";
 const SEED_VERSION_KEY = "sparkjets_seed_version";
-const SEED_VERSION = 2;
+const SEED_VERSION = 11;
 
 // ── Internal helpers ─────────────────────────────────────────────────────────
 
