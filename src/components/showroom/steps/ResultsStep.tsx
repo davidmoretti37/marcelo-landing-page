@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import type { Aircraft, ShowroomFilters } from "@/lib/showroom/types";
 import AircraftDetail from "@/components/showroom/AircraftDetail";
 import ExpandCards from "@/components/ui/expand-cards";
@@ -12,23 +12,8 @@ interface ResultsStepProps {
   onSelectAircraft?: (aircraft: Aircraft) => void;
 }
 
-function formatPrice(price: number): string {
-  return "$" + price.toLocaleString("en-US");
-}
-
-function formatRange(nm: number | undefined): string {
-  if (nm == null) return "N/A";
-  return nm.toLocaleString("en-US") + " NM";
-}
-
-function formatSpeed(ktas: number | undefined): string {
-  if (ktas == null) return "N/A";
-  return ktas + " ktas";
-}
 
 export function ResultsStep({
-  filters,
-  onUpdateFilters,
   aircraft,
   onSelectAircraft,
 }: ResultsStepProps) {
@@ -37,15 +22,6 @@ export function ResultsStep({
   );
 
   const handleSelect = onSelectAircraft ?? setDetailAircraft;
-
-  const handleSortChange = useCallback(
-    (e: React.ChangeEvent<HTMLSelectElement>) => {
-      onUpdateFilters({
-        sortBy: e.target.value as ShowroomFilters["sortBy"],
-      });
-    },
-    [onUpdateFilters],
-  );
 
   // Empty state
   if (aircraft.length === 0) {
@@ -136,214 +112,3 @@ export function ResultsStep({
   );
 }
 
-// ── AircraftCard ────────────────────────────────────────────────────────────
-
-function AircraftCard({
-  aircraft,
-  onViewDetails,
-}: {
-  aircraft: Aircraft;
-  onViewDetails: () => void;
-}) {
-  const hasPhoto = aircraft.photos.length > 0;
-  const pax =
-    aircraft.specs.maxPassengers ?? aircraft.specs.typicalPax ?? null;
-
-  const featurePills: string[] = [];
-  if (aircraft.features.standupCabin) featurePills.push("Stand-up cabin");
-  if (aircraft.features.flatBerthing) featurePills.push("Flat-bed");
-  if (aircraft.features.wifi) featurePills.push("WiFi");
-  if (aircraft.features.freshInterior) featurePills.push("Fresh interior");
-
-  return (
-    <div
-      className="rounded-xl overflow-hidden transition-all duration-300 group"
-      style={{
-        background: "var(--sr-surface)",
-        border: "1px solid var(--sr-border)",
-      }}
-      onMouseEnter={(e) => {
-        e.currentTarget.style.borderColor = "var(--sr-border-gold)";
-        e.currentTarget.style.transform = "translateY(-2px)";
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.borderColor = "var(--sr-border)";
-        e.currentTarget.style.transform = "translateY(0)";
-      }}
-    >
-      {/* Photo area */}
-      <div
-        className="relative w-full overflow-hidden"
-        style={{ aspectRatio: "16/10", background: "#E8E5DF" }}
-      >
-        {hasPhoto ? (
-          <img
-            src={aircraft.photos[0].url}
-            alt={aircraft.name}
-            loading="lazy"
-            decoding="async"
-            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-          />
-        ) : (
-          <div className="absolute inset-0 flex items-center justify-center">
-            <svg
-              width="48"
-              height="48"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="0.8"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              style={{ color: "var(--sr-text-dim)", opacity: 0.4 }}
-            >
-              <path d="M17.8 19.2L16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z" />
-            </svg>
-          </div>
-        )}
-
-        {/* Category badge */}
-        <div
-          className="absolute top-3 left-3 px-2.5 py-1 rounded-full text-[10px] uppercase tracking-wider"
-          style={{
-            background: "rgba(255,255,255,0.85)",
-            border: "1px solid var(--sr-border-gold)",
-            color: "var(--sr-gold)",
-            fontFamily: "var(--font-inter)",
-            backdropFilter: "blur(8px)",
-          }}
-        >
-          {aircraft.category}
-        </div>
-      </div>
-
-      {/* Content */}
-      <div className="p-4 space-y-4">
-        {/* Name + year */}
-        <div>
-          <h3
-            className="text-base font-medium leading-tight"
-            style={{
-              color: "var(--sr-text)",
-              fontFamily: "var(--font-inter)",
-            }}
-          >
-            {aircraft.name}
-          </h3>
-          <p
-            className="text-xs mt-0.5"
-            style={{
-              color: "var(--sr-text-dim)",
-              fontFamily: "var(--font-inter)",
-            }}
-          >
-            {aircraft.year} &middot; S/N {aircraft.serialNumber}
-          </p>
-        </div>
-
-        {/* Specs mini grid */}
-        <div
-          className="grid grid-cols-2 gap-x-4 gap-y-2"
-          style={{ fontFamily: "var(--font-inter)" }}
-        >
-          <SpecItem label="Range" value={formatRange(aircraft.specs.range_nm)} />
-          <SpecItem
-            label="Passengers"
-            value={pax != null ? String(pax) : "N/A"}
-          />
-          <SpecItem
-            label="Speed"
-            value={formatSpeed(aircraft.specs.cruiseSpeed_ktas)}
-          />
-          <SpecItem
-            label="Price"
-            value={
-              aircraft.pricing.showPrice
-                ? formatPrice(aircraft.pricing.askingPrice)
-                : "On Request"
-            }
-            gold
-          />
-        </div>
-
-        {/* Feature pills */}
-        {featurePills.length > 0 && (
-          <div className="flex flex-wrap gap-1.5">
-            {featurePills.map((f) => (
-              <span
-                key={f}
-                className="px-2 py-0.5 rounded text-[10px]"
-                style={{
-                  background: "rgba(0,0,0,0.04)",
-                  color: "var(--sr-text-dim)",
-                  fontFamily: "var(--font-inter)",
-                }}
-              >
-                {f}
-              </span>
-            ))}
-          </div>
-        )}
-
-        {/* View Details button */}
-        <button
-          onClick={onViewDetails}
-          className="w-full py-2.5 rounded-lg text-sm transition-all duration-200"
-          style={{
-            border: "1px solid var(--sr-border-gold)",
-            color: "var(--sr-gold)",
-            fontFamily: "var(--font-inter)",
-            fontWeight: 500,
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.background = "rgba(200,164,78,0.1)";
-            e.currentTarget.style.borderColor = "var(--sr-gold)";
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.background = "transparent";
-            e.currentTarget.style.borderColor = "var(--sr-border-gold)";
-          }}
-        >
-          View Details
-        </button>
-      </div>
-    </div>
-  );
-}
-
-// ── SpecItem (card sub-component) ──────────────────────────────────────────
-
-function SpecItem({
-  label,
-  value,
-  gold = false,
-}: {
-  label: string;
-  value: string;
-  gold?: boolean;
-}) {
-  return (
-    <div>
-      <p
-        className="text-[10px] uppercase tracking-wider"
-        style={{
-          color: "var(--sr-text-dim)",
-          fontFamily: "var(--font-inter)",
-        }}
-      >
-        {label}
-      </p>
-      <p
-        className="text-sm tabular-nums"
-        style={{
-          color: gold ? "var(--sr-gold)" : "var(--sr-text)",
-          fontFamily: "var(--font-inter)",
-        }}
-      >
-        {value}
-      </p>
-    </div>
-  );
-}
-
-// AircraftDetail is now imported from @/components/showroom/AircraftDetail.tsx
