@@ -19,7 +19,6 @@ export default function IntroSplash({ onComplete }: IntroSplashProps) {
   const path2Ref = useRef<SVGPathElement>(null);
   const [done, setDone] = useState(false);
 
-  // Pre-calculate path lengths before paint — avoids layout thrashing during animation
   useLayoutEffect(() => {
     const p1 = path1Ref.current;
     const p2 = path2Ref.current;
@@ -45,34 +44,34 @@ export default function IntroSplash({ onComplete }: IntroSplashProps) {
       const tl = gsap.timeline();
 
       // Fade in SVG
-      tl.to(svg, { opacity: 1, duration: 0.25, ease: "power2.out" }, 0.1);
+      tl.to(svg, { opacity: 1, duration: 0.4, ease: "power2.out" }, 0.3);
 
-      // Draw both paths (faster, overlapping)
-      tl.to(p1, { strokeDashoffset: 0, duration: 0.8, ease: "power2.inOut" }, 0.15);
-      tl.to(p2, { strokeDashoffset: 0, duration: 0.8, ease: "power2.inOut" }, 0.25);
+      // Draw both paths
+      tl.to(p1, { strokeDashoffset: 0, duration: 1.2, ease: "power2.inOut" }, 0.4);
+      tl.to(p2, { strokeDashoffset: 0, duration: 1.2, ease: "power2.inOut" }, 0.6);
 
-      // Flash glow behind logo
-      tl.to(glow, { opacity: 1, duration: 0.08, ease: "power2.in" }, 1.0);
-      tl.to(glow, { opacity: 0, duration: 0.3, ease: "power2.out" }, 1.08);
+      // Flash glow
+      tl.to(glow, { opacity: 1, duration: 0.12, ease: "power2.in" }, 1.9);
+      tl.to(glow, { opacity: 0, duration: 0.5, ease: "power2.out" }, 2.0);
 
       // Fill paths + hide stroke
-      tl.to([p1, p2], { fill: "rgba(184,151,106,0.9)", duration: 0.2, ease: "power1.in" }, 1.0);
-      tl.to([p1, p2], { stroke: "transparent", duration: 0.15 }, 1.15);
+      tl.to([p1, p2], { fill: "rgba(184,151,106,0.9)", duration: 0.3, ease: "power1.in" }, 1.9);
+      tl.to([p1, p2], { stroke: "transparent", duration: 0.2 }, 2.15);
 
-      // Zoom + fade out logo
+      // Hold, then zoom + fade out
       tl.to(svg, {
-        scale: 15,
+        scale: 18,
         opacity: 0,
-        duration: 0.5,
+        duration: 0.7,
         ease: "expo.in",
-      }, 1.3);
+      }, 2.8);
 
       // Overlay fades
       tl.to(overlay, {
         opacity: 0,
-        duration: 0.3,
+        duration: 0.4,
         onComplete: () => { setDone(true); onComplete?.(); },
-      }, 1.55);
+      }, 3.2);
     }, overlayRef);
 
     return () => ctx.revert();
@@ -86,7 +85,6 @@ export default function IntroSplash({ onComplete }: IntroSplashProps) {
       className="fixed inset-0 z-[100] flex items-center justify-center"
       style={{ background: "#0a0c14" }}
     >
-      {/* Glow flash — static radial gradient, just animate opacity */}
       <div
         ref={glowRef}
         className="absolute inset-0 pointer-events-none"

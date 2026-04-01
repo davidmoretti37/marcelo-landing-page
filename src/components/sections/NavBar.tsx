@@ -17,9 +17,14 @@ export default function NavBar() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
+  const [visible, setVisible] = useState(false);
+
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY >= 40);
+      const y = window.scrollY;
+      setScrolled(y >= 40);
+      // Hide nav during hero zoom phase — show once zoomed into sky
+      setVisible(y > window.innerHeight * 1.2);
     };
     window.addEventListener("scroll", handleScroll, { passive: true });
     handleScroll();
@@ -47,6 +52,8 @@ export default function NavBar() {
           WebkitBackdropFilter: scrolled ? "blur(12px)" : "none",
           borderBottom: scrolled ? "1px solid #EFEDE8" : "1px solid transparent",
           transition: "all 400ms ease",
+          opacity: visible ? 1 : 0,
+          pointerEvents: visible ? "auto" : "none",
         }}
       >
         {/* Logo */}

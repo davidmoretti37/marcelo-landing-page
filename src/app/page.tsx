@@ -10,7 +10,7 @@ const HeroSection = dynamic(() => import("@/components/sections/HeroSection"));
 const ScrollProgress = dynamic(() => import("@/components/ui/ScrollProgress"));
 const DescentSection = dynamic(() => import("@/components/sections/DescentSection"));
 const GlobeSection = dynamic(() => import("@/components/sections/GlobeSection"));
-const HangarSection = dynamic(() => import("@/components/sections/HangarSection"));
+const HangarSection = dynamic(() => import("@/components/sections/HangarSection"), { ssr: false });
 const ShowroomInline = dynamic(() => import("@/components/sections/ShowroomInline"));
 
 export default function Home() {
