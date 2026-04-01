@@ -15,7 +15,7 @@ export default function HeroSection({ ready = false }: { ready?: boolean }) {
   const scrollLineRef = useRef<HTMLDivElement>(null);
   const spacerRef = useRef<HTMLDivElement>(null);
 
-  // Intro fade-in
+  // Intro fade-in + turbulence
   useEffect(() => {
     if (!ready) return;
     const frame = frameRef.current;
@@ -28,6 +28,8 @@ export default function HeroSection({ ready = false }: { ready?: boolean }) {
         { scaleY: 0 },
         { scaleY: 1, duration: 1.4, ease: "power1.inOut", yoyo: true, repeat: -1, transformOrigin: "top center", delay: 3.5 },
       );
+
+
     }, sectionRef);
 
     return () => ctx.revert();
@@ -237,15 +239,15 @@ export default function HeroSection({ ready = false }: { ready?: boolean }) {
           </div>
 
 
-          {/* Crystal logo — left side of cabin */}
+          {/* Crystal logo — left side of cabin (desktop) / top-left (mobile) */}
           <div
-            className="absolute hidden md:flex items-center justify-center pointer-events-none"
+            className="absolute flex items-center justify-center pointer-events-none"
             style={{
               left: "7%",
               top: "36%",
               transform: "translateY(-50%)",
               zIndex: 4,
-              width: "clamp(80px, 10vw, 140px)",
+              width: "clamp(60px, 10vw, 140px)",
             }}
           >
             <img
@@ -259,9 +261,9 @@ export default function HeroSection({ ready = false }: { ready?: boolean }) {
             />
           </div>
 
-          {/* Tagline — right side of cabin */}
+          {/* Tagline — right side (desktop) / bottom-right (mobile) */}
           <div
-            className="absolute hidden md:flex flex-col pointer-events-none"
+            className="absolute flex flex-col pointer-events-none"
             style={{
               right: "3%",
               bottom: "22%",
@@ -270,19 +272,19 @@ export default function HeroSection({ ready = false }: { ready?: boolean }) {
           >
             <span
               className="font-sans font-extralight leading-[1.3]"
-              style={{ fontSize: "clamp(28px, 3vw, 42px)", color: "#4a3a2a", letterSpacing: "0.35em" }}
+              style={{ fontSize: "clamp(20px, 3vw, 42px)", color: "#4a3a2a", letterSpacing: "0.35em" }}
             >
               SPARK
             </span>
             <span
               className="font-sans font-extralight leading-[1.3]"
-              style={{ fontSize: "clamp(28px, 3vw, 42px)", color: "#4a3a2a", letterSpacing: "0.35em", paddingLeft: "2em" }}
+              style={{ fontSize: "clamp(20px, 3vw, 42px)", color: "#4a3a2a", letterSpacing: "0.35em", paddingLeft: "2em" }}
             >
               JETS
             </span>
             <ShinyText
               text="Your Private Jet Broker"
-              className="font-sans text-[11px] tracking-[0.25em] uppercase mt-5"
+              className="font-sans text-[9px] md:text-[11px] tracking-[0.25em] uppercase mt-3 md:mt-5"
               speed={3}
               delay={1}
               color="#8a7a6a"

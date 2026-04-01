@@ -22,9 +22,8 @@ export default function NavBar() {
   useEffect(() => {
     const handleScroll = () => {
       const y = window.scrollY;
-      setScrolled(y >= 40);
-      // Hide nav during hero zoom phase — show once zoomed into sky
-      setVisible(y > window.innerHeight * 1.2);
+      setScrolled(y > window.innerHeight * 4);
+      setVisible(true);
     };
     window.addEventListener("scroll", handleScroll, { passive: true });
     handleScroll();
@@ -73,12 +72,12 @@ export default function NavBar() {
               key={link.label}
               href={link.href}
               className="relative font-sans text-[12px] tracking-[0.12em] transition-colors duration-200 pb-1 group"
-              style={{ color: scrolled ? "#6B6860" : "#8A8680" }}
+              style={{ color: scrolled ? "#6B6860" : "#F5F2EC" }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.color = scrolled ? "#0F0F0D" : "#F5F2EC";
+                e.currentTarget.style.color = scrolled ? "#0F0F0D" : "#ffffff";
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.color = scrolled ? "#6B6860" : "#8A8680";
+                e.currentTarget.style.color = scrolled ? "#6B6860" : "#F5F2EC";
               }}
             >
               {link.label}

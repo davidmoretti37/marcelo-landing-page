@@ -103,10 +103,10 @@ export default function GlobeSection() {
     <section ref={sectionRef} className="h-[300vh] relative">
       <div className="sticky top-0 h-screen bg-[#F8F7F4] overflow-hidden">
         {/* 3-column layout: text | globe | clocks */}
-        <div className="relative z-10 h-full grid grid-cols-[1fr_auto_1fr] items-center">
+        <div className="relative z-10 h-full grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] items-center">
           {/* Left — text */}
-          <div className="flex items-center justify-center px-6 md:px-12">
-            <div className="space-y-5 max-w-[260px]">
+          <div className="flex items-center justify-center px-6 md:px-12 order-2 md:order-none">
+            <div className="space-y-5 max-w-[260px] text-center md:text-left">
               <p
                 ref={labelRef}
                 className="font-sans text-[10px] tracking-[0.3em] uppercase text-[#C8A96E] opacity-0"
@@ -143,12 +143,12 @@ export default function GlobeSection() {
           </div>
 
           {/* Center — globe */}
-          <div className="w-[min(80vh,55vw)] h-[min(80vh,55vw)]">
+          <div className="w-[min(50vh,85vw)] h-[min(50vh,85vw)] md:w-[min(80vh,55vw)] md:h-[min(80vh,55vw)] mx-auto order-1 md:order-none">
             <GlobeCanvas scrollProgress={scrollProgressRef} />
           </div>
 
           {/* Right — clocks, each one by one */}
-          <div className="flex items-center justify-center px-6 md:px-12">
+          <div className="hidden md:flex items-center justify-center px-6 md:px-12 order-3 md:order-none">
             <div className="flex flex-col gap-8">
               {WORLD_CLOCKS.map((clock, i) => (
                 <ClockItem

@@ -187,7 +187,7 @@ export default function DescentSection() {
           <div
             ref={attributionRef}
             className="absolute left-0 right-0 text-center font-sans text-[12px] tracking-[0.2em] uppercase opacity-0"
-            style={{ top: "calc(50% + 120px)", color: "rgba(255,255,255,0.5)" }}
+            style={{ top: "calc(50% + 120px)", color: "rgba(255,255,255,0.85)" }}
           >
             Marcelo Borin &mdash; Founder, Spark Aviation
           </div>
